@@ -44,7 +44,7 @@ public class TreZeri
                     break;
             }
         }
-        return state == 3;
+       return state == 3;
     }
 
     public static void main(String[] args)
