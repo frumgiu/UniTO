@@ -105,6 +105,6 @@ public class Es1_4
     public static void main(String[] args) {
         System.out.println(turnoBis(" 12 De Marchi") ? "OK" : "NOPE");  //Ok
         System.out.println(turnoBis("123 Rossi") ? "OK" : "NOPE");   //Ok
-        System.out.println(turnoBis("012") ? "OK" : "NOPE");   //Nope
+        System.out.println(turnoBis("01 2 Frumento") ? "OK" : "NOPE");   //Nope
     }
 }

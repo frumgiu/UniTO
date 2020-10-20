@@ -21,9 +21,9 @@ public class Es1_5
                     if (elem >= 'a' && elem <= 'z')
                         stato = 1;
                     else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
-                        stato = 3;
+                        stato = 5;
                     else if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
-                        stato = 1;
+                        stato = 3;
                     else
                         stato = -1;
                     break;
@@ -31,36 +31,48 @@ public class Es1_5
                     if (elem >= 'a' && elem <= 'z')
                         stato = 2;
                     else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
-                        stato = 2;
-                    else if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
                         stato = 4;
+                    else if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
+                        stato = 6;
                     else
                         stato = -1;
                     break;
-                case 3:// Matricola pari non va bene per L-Z
+                case 3: //Prima cifra dispari
                     if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
-                        stato = 1;
-                    else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
                         stato = 3;
+                    else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
+                        stato = 5;
+                    break;
+                case 4: //Prima cifra dispari
+                    if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
+                        stato = 6;
+                    else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
+                        stato = 4;
+                    break;
+                case 5:// Matricola pari non va bene per L-Z
+                    if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
+                        stato = 3;
+                    else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
+                        stato = 5;
                     else
                         stato = -1;
                     break;
-                case 4:// Matricola dispari non va bene per A-K
+                case 6:// Matricola dispari non va bene per A-K
                     if (elem == '1' || elem == '3' || elem == '5' || elem == '7' || elem == '9')
-                    stato = 4;
+                    stato = 6;
                     else if (elem == '0' || elem == '2' || elem == '4' || elem == '6' || elem == '8')
-                    stato = 2;
+                    stato = 4;
                 else
                     stato = -1;
                     break;
             }
         }
-        return stato == 1 || stato == 2;
+        return stato == 3 || stato == 4;
     }
     public static void main(String[] args)
     {
         System.out.println(scan("Bianchi456") ? "OK" : "NOPE");  //Ok
         System.out.println(scan("Rossi123") ? "OK" : "NOPE");    //Ok
-        System.out.println(scan("123Rossi") ? "OK" : "NOPE");           //Nope
+        System.out.println(scan("123Rossi") ? "OK" : "NOPE");    //Nope
     }
 }
