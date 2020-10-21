@@ -1,4 +1,4 @@
-public class Es1_6
+public class Es1_6 //Risolto
 {
     public static boolean check(String s)
     {

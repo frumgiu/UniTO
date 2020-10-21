@@ -1,4 +1,4 @@
-public class Es1_9
+public class Es1_9 //Risolto
 {
     public static boolean scan(String s)
     {
@@ -38,11 +38,9 @@ public class Es1_9
                     else
                         stato = -1;
                     break;
-                case 4:
-                    if (i != s.length() - 1)
-                        stato = -1;
-                    else
-                        stato = 4;
+                case 4: //Se entra nello stato 4 vuol dire che la stringa non e' finita ma il commento si
+                        //ma non posso avere altro dopo '*/' --> non va bene
+                    stato = -1;
                     break;
                 case 5:
                     if (c == 'a' || c == '/')
@@ -60,8 +58,8 @@ public class Es1_9
     public static void main(String[] args)
     {
         System.out.println(scan("/**/") ? "OK" : "NOPE");  //Ok
-        System.out.println(scan("/*/") ? "OK" : "NOPE");  //Nope
         System.out.println(scan("/*aa*a*/") ? "OK" : "NOPE");  //Ok
+        System.out.println(scan("/**/**") ? "OK" : "NOPE");  //Nope
         System.out.println(scan("/**/a*/") ? "OK" : "NOPE");  //Nope
     }
 }
