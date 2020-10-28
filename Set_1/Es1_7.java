@@ -1,4 +1,6 @@
-public class Es1_6 //Risolto
+package Set_1;
+
+public class Es1_7 //Risolto
 {
     public static boolean check(String s)
     {
@@ -9,16 +11,16 @@ public class Es1_6 //Risolto
             switch (stato)
             {
                 case 0:
-                    if (c == 'a')
-                        stato = 3;
-                    else if (c == 'b')
+                    if (c == 'b')
+                        stato = 0;
+                    else if (c == 'a')
                         stato = 1;
                     else
                         stato = -1;
                     break;
                 case 1:
                     if (c == 'a')
-                        stato = 3;
+                        stato = 1;
                     else if (c == 'b')
                         stato = 2;
                     else
@@ -26,25 +28,29 @@ public class Es1_6 //Risolto
                     break;
                 case 2:
                     if (c == 'a')
+                        stato = 1;
+                    else if (c == 'b')
                         stato = 3;
                     else
                         stato = -1;
                     break;
                 case 3:
-                    if ((c == 'a') || (c == 'b'))
-                        stato = 3;
+                    if (c == 'a')
+                        stato = 1;
+                    else if (c == 'b')
+                        stato = 0;
                     else
                         stato = -1;
                     break;
             }
         }
-        return stato == 3;
+        return stato == 1 || stato == 2 || stato == 3;
     }
-    public static void main(String[] args)
-    {
-        System.out.println(check("ababbbaab") ? "OK" : "NOPE");  //Ok
-        System.out.println(check("bbba") ? "OK" : "NOPE");  //Nope
+
+    public static void main(String[] args) {
+        System.out.println(check("bbbab") ? "OK" : "NOPE");  //Ok
         System.out.println(check("a") ? "OK" : "NOPE");  //Ok
-        System.out.println(check("ababc") ? "OK" : "NOPE");  //Nope
+        System.out.println(check("bababbbb") ? "OK" : "NOPE");  //Nope
+        System.out.println(check("ababbb") ? "OK" : "NOPE");  //Nope
     }
 }

@@ -1,3 +1,5 @@
+package Set_1;
+
 public class Es1_8 //Risolto e corretto
 {
     public static boolean scan (String s)
