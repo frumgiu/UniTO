@@ -22,39 +22,23 @@ public class Es1_10 //Risolto
                     else if (c == 'a')
                         stato = 0;
                     else if (c == '/')
-                        stato = 4;
+                        stato = 1;
                     else
                         stato = -1;
                     break;
                 case 2:
                     if (c == '*')
                         stato = 3;
-                    else if (c == 'a')
-                        stato = 5;
+                    else if (c == 'a' || c == '/')
+                        stato = 2;
                     else
                         stato = -1;
                     break;
                 case 3:
                     if (c == '/')
-                        stato = 4;
-                    else if (c == 'a')
-                        stato = 5;
-                    else if (c == '*')
-                        stato = 3;
-                    else
-                        stato = -1;
-                    break;
-                case 4:
-                    if (c == 'a' || c == '/')
                         stato = 0;
-                    else if (c == '*')
+                    else if (c == 'a')
                         stato = 2;
-                    else
-                        stato = -1;
-                    break;
-                case 5:
-                    if (c == 'a' || c == '/')
-                        stato = 5;
                     else if (c == '*')
                         stato = 3;
                     else
@@ -62,13 +46,13 @@ public class Es1_10 //Risolto
                     break;
             }
         }
-        return stato == 4 || stato == 0;
+        return stato == 3 || stato == 1 || stato == 0;
     }
-
+    
     public static void main(String[] args)
     {
         System.out.println(scan("/**/") ? "OK" : "NOPE");  //Ok
-        System.out.println(scan("/*aa*/aa") ? "OK" : "NOPE");  //Ok
+        System.out.println(scan("/*aa*/aa/**/") ? "OK" : "NOPE");  //Ok
         System.out.println(scan("/*/") ? "OK" : "NOPE");  //Nope
         System.out.println(scan("/**/a/*a") ? "OK" : "NOPE");  //Nope
     }

@@ -23,8 +23,8 @@ public class Es1_9 //Risolto
                 case 2:
                     if (c == '*')
                         stato = 3;
-                    else if (c == 'a')
-                        stato = 5;
+                    else if (c == 'a' || c == '/')
+                        stato = 2;
                     else
                         stato = -1;
                     break;
@@ -32,7 +32,7 @@ public class Es1_9 //Risolto
                     if (c == '/')
                         stato = 4;
                     else if (c == 'a')
-                        stato = 5;
+                        stato = 2;
                     else if (c == '*')
                         stato = 3;
                     else
@@ -41,14 +41,6 @@ public class Es1_9 //Risolto
                 case 4: //Se entra nello stato 4 vuol dire che la stringa non e' finita ma il commento si
                         //ma non posso avere altro dopo '*/' --> non va bene
                     stato = -1;
-                    break;
-                case 5:
-                    if (c == 'a' || c == '/')
-                        stato = 5;
-                    else if (c == '*')
-                        stato = 3;
-                    else
-                        stato = -1;
                     break;
             }
         }

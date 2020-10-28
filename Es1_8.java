@@ -1,4 +1,4 @@
-public class Es1_8 //Risolto
+public class Es1_8 //Risolto e corretto
 {
     public static boolean scan (String s)
     {
@@ -18,31 +18,28 @@ public class Es1_8 //Risolto
                     if (c == 'i')
                         stato = 2;
                     else
-                        stato = 12;
+                        stato = 8;
                     break;
                 case 2:
                     if (c == 'u')
                         stato = 3;
                     else
-                        stato = 16;
+                        stato = 9;
                     break;
                 case 3:
                     if (c == 'l')
                         stato = 4;
                     else
-                        stato = 19;
+                        stato = 10;
                     break;
                 case 4:
                     if (c == 'i')
                         stato = 5;
                     else
-                        stato = 21;
+                        stato = 11;
                     break;
                 case 5:
-                    if (c == 'a')
-                        stato = 6;
-                    else
-                        stato = 22; //L'ultima lettera e' diversa da 'a'
+                    stato = 6;
                     break;
                 case 7: //La prima lettera e' diversa da 'G'
                     if (c == 'i')
@@ -74,69 +71,9 @@ public class Es1_8 //Risolto
                     else
                         stato = -1;
                     break;
-                case 12: //La seconda lettera e' diversa da 'i'
-                    if (c == 'u')
-                        stato = 13;
-                    else
-                        stato = -1;
-                    break;
-                case 13:
-                    if (c == 'l')
-                        stato = 14;
-                    else
-                        stato = -1;
-                    break;
-                case 14:
-                    if (c == 'i')
-                        stato = 15;
-                    else
-                        stato = -1;
-                    break;
-                case 15:
-                    if (c == 'a')
-                        stato = 6;
-                    else
-                        stato = -1;
-                    break;
-                case 16: //La terza lettera e' diversa da 'u'
-                    if (c == 'l')
-                        stato = 17;
-                    else
-                        stato = -1;
-                    break;
-                case 17:
-                    if (c == 'i')
-                        stato = 18;
-                    else
-                        stato = -1;
-                    break;
-                case 18:
-                    if (c == 'a')
-                        stato = 6;
-                    else
-                        stato = -1;
-                    break;
-                case 19: //La quarta lettera e' diversa da 'l'
-                    if (c == 'i')
-                        stato = 20;
-                    else
-                        stato = -1;
-                    break;
-                case 20:
-                    if (c == 'a')
-                        stato = 6;
-                    else
-                        stato = -1;
-                    break;
-                case 21: //La quinta lettera e' diversa da 'i'
-                    if (c == 'a')
-                        stato = 6;
-                    else
-                        stato = -1;
-                    break;
             }
         }
-        return stato == 6 || stato == 22;
+        return stato == 6;
     }
 
     public static void main(String[] args)
