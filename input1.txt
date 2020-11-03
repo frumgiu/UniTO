@@ -1,1 +1,1 @@
-case when (* 5 a) Abc4;
+123Ab0=30 print < ;

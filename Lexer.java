@@ -1,12 +1,12 @@
 import java.io.*;
-import java.util.*;
 
 public class Lexer
 {
     public static int line = 1;
     private char peek = ' ';
 
-    private void readch(BufferedReader br) {
+    private void readch(BufferedReader br)
+    {
         try {
             peek = (char) br.read();
         } catch (IOException exc) {
@@ -74,49 +74,41 @@ public class Lexer
                     peek = ' ';
                     return Word.or;
                 } else {
-                    System.err.println("Erroneous character"
-                            + " after | : "  + peek );
+                    System.err.println("Erroneous character" + " after | : "  + peek );
                     return null;
                 }
             case '<':
                 readch(br);
-                if (peek == ' ')
-                    return Word.lt;
-                else if (peek == '=')
+                if (peek == '=')
                 {
                     peek = ' ';
-                    return Word.le;
-                } else {
-                    System.err.println("Erroneous character"
-                            + " after < : "  + peek );
-                    return null;
+                    return Word.ne;
                 }
+                else if (peek == '>')
+                {
+                    readch(br);
+                    return Word.le;
+                }
+                else
+                { return Word.lt; }
             case '>':
                 readch(br);
-                if (peek == ' ')
-                    return Word.gt;
-                else if (peek == '=')
+                if (peek == '=')
                 {
-                    peek = ' ';
+                    readch(br);
                     return Word.ge;
                 } else {
-                    System.err.println("Erroneous character"
-                            + " after > : "  + peek );
-                    return null;
+                    return Word.gt;
                 }
             case '=':
                 readch(br);
-                if (peek == ' ')
-                    return Token.assign;
-                else if (peek == '=')
+                if (peek == '=')
                 {
-                    peek = ' ';
+                    readch(br);
                     return Word.eq;
-                } else {
-                    System.err.println("Erroneous character"
-                            + " after = : "  + peek );
-                    return null;
                 }
+                else
+                { return Word.assign; }
 
             case (char)-1:
                 return new Token(Tag.EOF);
@@ -130,32 +122,43 @@ public class Lexer
                         raccogli = raccogli + peek;
                         readch(br);
                     }
-                    Token token = identifyWord(raccogli);
+                    Token token = keywordWord(raccogli);
                     if (token == null)
                         return new Word(Tag.ID, raccogli);
                         //Identificatore
                     else
                         return token;
                     //Parola chiave
-                    // ... gestire il caso degli identificatori e delle parole chiave //
                 } else if (Character.isDigit(peek)) {
-                    String numero = "";
-                    while(Character.isDigit(peek))
+                    if(peek == '0') //0 non puo' avere numeri che lo seguono
                     {
-                        numero = numero + peek;
                         readch(br);
+                        if(Character.isDigit(peek))
+                        {
+                            System.err.println("Lo 0 non puo' essere seguito da altri numeri: " + peek );
+                            return null;
+                        }
+                        else
+                            return new NumberTok(Tag.NUM, "0");
                     }
-                    return new NumberTok(Tag.NUM, numero);
-                    // ... gestire il caso dei numeri ... //
+                    else
+                    {
+                        String numero = "";
+                        while(Character.isDigit(peek))
+                        {
+                            numero = numero + peek;
+                            readch(br);
+                        }
+                        return new NumberTok(Tag.NUM, numero);
+                    }
                 } else {
-                    System.err.println("Erroneous character: "
-                            + peek );
+                    System.err.println("Erroneous character: " + peek );
                     return null;
                 }
         }
     }
 
-    private Token identifyWord(String s) {
+    private Token keywordWord(String s) {
         if(s.equals(Word.casetok.lexeme))
             return Word.casetok;
         else if(s.equals(Word.dotok.lexeme))
@@ -168,7 +171,12 @@ public class Lexer
             return Word.when;
         else if(s.equals(Word.whiletok.lexeme))
             return Word.whiletok;
-        return null;
+        else if(s.equals(Word.print.lexeme))
+            return Word.print;
+        else if(s.equals(Word.read.lexeme))
+            return Word.read;
+        else
+            return null;
     }
 
     public static void main(String[] args)
