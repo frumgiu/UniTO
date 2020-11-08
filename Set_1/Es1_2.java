@@ -11,21 +11,23 @@ public class Es1_2
             switch (state)
             {
                 case 0:
-                    if ((valore == '_') || (valore >= 'a' && valore <= 'z'))
+                    if ((valore == '_'))
                         state = 1;
+                    else if ((valore >= 'a' && valore <= 'z') || (valore >= 'A' && valore <= 'Z'))
+                        state = 2;
                     else
                         state = -1;
                     break;
                 case 1:
                     if (valore == '_')
                         state = 1;
-                    else if ((valore >= '0' && valore <= '9') || (valore >= 'a' && valore <= 'z'))
+                    else if ((valore >= '0' && valore <= '9') || (valore >= 'a' && valore <= 'z')|| (valore >= 'A' && valore <= 'Z'))
                         state = 2;
                     else
                         state = -1;
                     break;
                 case 2:
-                    if ((valore == '_') || (valore >= '0' && valore <= '9') || (valore >= 'a' && valore <= 'z'))
+                    if ((valore == '_') || (valore >= '0' && valore <= '9') || (valore >= 'a' && valore <= 'z')|| (valore >= 'A' && valore <= 'Z'))
                         state = 2;
                     else
                         state = -1;
@@ -36,9 +38,7 @@ public class Es1_2
     }
     public static void main(String[] args)
     {
-        System.out.println("La stringa e' valida? ");
-        System.out.println(check("a1_b") ? "OK" : "NOPE");  //Ok
-        System.out.println(check("___") ? "OK" : "NOPE");   //Nope
-        System.out.println(check("123") ? "OK" : "NOPE");   //Nope
+        System.out.println(check(args[0]) ? "OK" : "NOPE");  //Ok
+
     }
 }

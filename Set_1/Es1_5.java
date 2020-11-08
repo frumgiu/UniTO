@@ -73,8 +73,7 @@ public class Es1_5
     }
     public static void main(String[] args)
     {
-        System.out.println(scan("Bianchi456") ? "OK" : "NOPE");  //Ok
-        System.out.println(scan("Rossi123") ? "OK" : "NOPE");    //Ok
-        System.out.println(scan("123Rossi") ? "OK" : "NOPE");    //Nope
+        System.out.println(scan(args[0]) ? "OK" : "NOPE");  //Ok
+
     }
 }

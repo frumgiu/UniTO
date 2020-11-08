@@ -44,9 +44,6 @@ public class Es1_6 //Risolto
     }
     public static void main(String[] args)
     {
-        System.out.println(check("ababbbaab") ? "OK" : "NOPE");  //Ok
-        System.out.println(check("bbba") ? "OK" : "NOPE");  //Nope
-        System.out.println(check("a") ? "OK" : "NOPE");  //Ok
-        System.out.println(check("ababc") ? "OK" : "NOPE");  //Nope
+        System.out.println(check(args[0]) ? "OK" : "NOPE");  //Ok
     }
 }

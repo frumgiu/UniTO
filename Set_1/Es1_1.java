@@ -51,7 +51,6 @@ public class Es1_1
 
     public static void main(String[] args)
     {
-        System.out.println(scan_opposta("101") ? "OK" : "NOPE");    //Ok
-        System.out.println(scan_opposta("1000101") ? "OK" : "NOPE");//Nope
+        System.out.println(scan_opposta(args[0]) ? "OK" : "NOPE");    //Ok
     }
 }

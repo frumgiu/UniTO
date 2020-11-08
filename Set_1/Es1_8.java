@@ -80,10 +80,6 @@ public class Es1_8 //Risolto e corretto
 
     public static void main(String[] args)
     {
-        System.out.println(scan("Giulia") ? "Ok" : "Nope"); //Ok
-        System.out.println(scan("Giul*a") ? "Ok" : "Nope"); //Ok
-        System.out.println(scan("*iu*ia") ? "Ok" : "Nope"); //Nope
-        System.out.println(scan("Gi*lea") ? "Ok" : "Nope"); //Nope
-
+        System.out.println(scan(args[0]) ? "Ok" : "Nope"); //Ok
     }
 }

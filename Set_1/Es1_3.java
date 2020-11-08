@@ -56,8 +56,6 @@ public class Es1_3
     }
     public static void main (String[] args)
     {
-        System.out.println(turno("12345Bianchi") ? "OK" : "NOPE");  //Ok
-        System.out.println(turno("23456Rossi") ? "OK" : "NOPE");    //Ok
-        System.out.println(turno("123") ? "OK" : "NOPE");           //Nope
+        System.out.println(turno(args[0]) ? "OK" : "NOPE");  //Ok
     }
 }

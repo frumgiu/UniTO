@@ -53,9 +53,7 @@ public class Es1_10 //Risolto
     
     public static void main(String[] args)
     {
-        System.out.println(scan("/**/") ? "OK" : "NOPE");  //Ok
-        System.out.println(scan("/*aa*/aa/**/") ? "OK" : "NOPE");  //Ok
-        System.out.println(scan("/*/") ? "OK" : "NOPE");  //Nope
-        System.out.println(scan("/**/a/*a") ? "OK" : "NOPE");  //Nope
+        System.out.println(scan(args[0]) ? "OK" : "NOPE");  //Ok
+
     }
 }

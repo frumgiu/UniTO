@@ -1,5 +1,6 @@
 import java.io.*;
-
+//OK: 2.1, 2.2
+//Finire: 2.3
 public class Lexer
 {
     public static int line = 1;
@@ -49,13 +50,33 @@ public class Lexer
             case '*':
                 peek = ' ';
                 return Token.mult;
-            case '/':
-                peek = ' ';
-                return Token.div;
+            case '/': //Nuovi casi, e' un commento (// o /*)
+                readch(br);
+                if (peek == '/') //Salto tutta la riga
+                {
+                    while(peek != '\n') //Consumo caratteri finche' non finisce la riga
+                    {
+                        readch(br);
+                    }
+                    return lexical_scan(br);
+                }
+                else if (peek == '*') //Salto fino a '*/'
+                {
+                    if(!commento(br)){
+                        System.err.println("Il commento non si chiude dopo averlo aperto con /*");
+                        return null;
+                    }
+                    peek = ' ';
+                    return lexical_scan(br);
+                }
+               else
+               {
+                    peek = ' ';
+                    return Token.div;
+               }
             case ';':
                 peek = ' ';
                 return Token.semicolon;
-
             case '&':
                 readch(br);
                 if (peek == '&')
@@ -63,8 +84,7 @@ public class Lexer
                     peek = ' ';
                     return Word.and;
                 } else {
-                    System.err.println("Erroneous character"
-                            + " after & : "  + peek );
+                    System.err.println("Erroneous character" + " after & : "  + peek );
                     return null;
                 }
             case '|':
@@ -115,21 +135,31 @@ public class Lexer
 
             default:
 
-                if (Character.isLetter(peek)) {
+                if (Character.isLetter(peek) || peek == '_')
+                {
                     String raccogli = "";
-                    while(Character.isLetter(peek) || Character.isDigit(peek))
+                    while(Character.isLetter(peek) || Character.isDigit(peek) || peek == '_')
                     {
                         raccogli = raccogli + peek;
                         readch(br);
                     }
                     Token token = keywordWord(raccogli);
-                    if (token == null)
-                        return new Word(Tag.ID, raccogli);
-                        //Identificatore
-                    else
+                    if (token == null) //Identificatore
+                    {
+                        if (wordID(raccogli)) //True, ho un ID valido secondo le nuove direttive
+                            return new Word(Tag.ID, raccogli);
+                        else
+                        {
+                            System.err.println("Non e' un identificatore: " + raccogli );
+                            return null;
+                        }
+                    }
+
+                    else //Parola chiave
                         return token;
-                    //Parola chiave
-                } else if (Character.isDigit(peek)) {
+                }
+                else if (Character.isDigit(peek))
+                {
                     if(peek == '0') //0 non puo' avere numeri che lo seguono
                     {
                         readch(br);
@@ -139,7 +169,7 @@ public class Lexer
                             return null;
                         }
                         else
-                            return new NumberTok(Tag.NUM, "0");
+                            return new NumberTok(Tag.NUM, 0);
                     }
                     else
                     {
@@ -149,34 +179,94 @@ public class Lexer
                             numero = numero + peek;
                             readch(br);
                         }
-                        return new NumberTok(Tag.NUM, numero);
+                        return new NumberTok(Tag.NUM, Integer.parseInt(numero));
                     }
-                } else {
+                }
+                else
+                {
                     System.err.println("Erroneous character: " + peek );
                     return null;
                 }
         }
     }
 
-    private Token keywordWord(String s) {
-        if(s.equals(Word.casetok.lexeme))
-            return Word.casetok;
-        else if(s.equals(Word.dotok.lexeme))
-            return Word.dotok;
-        else if(s.equals(Word.elsetok.lexeme))
-            return Word.elsetok;
-        else if(s.equals(Word.then.lexeme))
-            return Word.then;
-        else if(s.equals(Word.when.lexeme))
-            return Word.when;
-        else if(s.equals(Word.whiletok.lexeme))
-            return Word.whiletok;
-        else if(s.equals(Word.print.lexeme))
-            return Word.print;
-        else if(s.equals(Word.read.lexeme))
-            return Word.read;
-        else
-            return null;
+//Esercizio 1.2
+//Se e' un identificatore valido
+    private boolean wordID(String s)
+    {
+        int state = 0;
+        for(int i = 0; i < s.length() && state >= 0; i++)
+        {
+            char valore = s.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    if ((valore == '_'))
+                        state = 1;
+                    else if (Character.isLetter(valore))
+                        state = 2;
+                    else
+                        state = -1;
+                    break;
+                case 1:
+                    if (valore == '_')
+                        state = 1;
+                    else if (Character.isDigit(valore) || Character.isLetter(valore))
+                        state = 2;
+                    else
+                        state = -1;
+                    break;
+                case 2:
+                    if ((valore == '_') || Character.isDigit(valore) || Character.isLetter(valore))
+                        state = 2;
+                    else
+                        state = -1;
+                    break;
+            }
+        }
+        return state == 2;
+    }
+//Viene chiamato solo nel caso legga /*
+//Consumo caratteri finche' non si chiude il commento o finisce il testo (commento non viene chiuso)
+    private boolean commento(BufferedReader br)
+    {
+        boolean exit = false;
+        while(!exit && peek != (char)-1) // exit == false
+        {
+            readch(br);
+            if (peek == '*')
+            {
+                readch(br);
+                if (peek == '/') //Se falso, vado avanti a leggere
+                    exit = true;
+            }
+        }
+        return exit;
+    }
+//Se la string araccolta e' una parola chiave riconoscibile
+    private Token keywordWord(String s)
+    {
+        switch (s)
+        {
+            case "cond":
+                return Word.cond;
+            case "dotok":
+                return Word.dotok;
+            case "elsetok":
+                return Word.elsetok;
+            case "then":
+                return Word.then;
+            case "when":
+                return Word.when;
+            case "whiletok":
+                return Word.whiletok;
+            case "print":
+                return Word.print;
+            case "read":
+                return Word.read;
+            default:
+                return null;
+        }
     }
 
     public static void main(String[] args)

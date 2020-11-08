@@ -1,7 +1,7 @@
 public class NumberTok extends Token
 {
-    public String lexenum = "";
+    public int lexenum = 0;
 
-    public NumberTok(int t, String s) { super(t); lexenum = s; }
+    public NumberTok(int tag, int num) { super(tag); lexenum = num; }
     public String toString() { return "< " + tag + ", " + lexenum + " >"; }
 }

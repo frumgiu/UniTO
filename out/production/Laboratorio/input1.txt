@@ -1,1 +1,5 @@
-123Ab0=30 print < ;
+/* calcolare velocita' */
+t = 26; //tempo
+d = 3; //distanza
+(print * t d)
+))))
