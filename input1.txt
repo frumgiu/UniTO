@@ -1,4 +1,4 @@
-/* calcolare velocita' */
-t = 26; //tempo
+/*fd*hs/jdh**/
+t__ = 26; //tempo
 d = 3; //distanza
 (print * t d)

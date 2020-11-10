@@ -1,6 +1,6 @@
 import java.io.*;
-//OK: 2.1, 2.2
-//Finire: 2.3
+//OK: 2.1, 2.2, 2.3
+
 public class Lexer
 {
     public static int line = 1;
@@ -54,7 +54,7 @@ public class Lexer
                 readch(br);
                 if (peek == '/') //Salto tutta la riga
                 {
-                    while(peek != '\n') //Consumo caratteri finche' non finisce la riga
+                    while(peek != '\n' && peek != (char)-1) //Consumo caratteri finche' non finisce la riga o il testo
                     {
                         readch(br);
                     }
@@ -230,20 +230,31 @@ public class Lexer
 //Consumo caratteri finche' non si chiude il commento o finisce il testo (commento non viene chiuso)
     private boolean commento(BufferedReader br)
     {
-        boolean exit = false;
-        while(!exit && peek != (char)-1) // exit == false
+        int stato = 0;
+        while(peek != (char)-1 && stato != 2)
         {
-            readch(br);
-            if (peek == '*')
+            switch (stato)
             {
-                readch(br);
-                if (peek == '/') //Se falso, vado avanti a leggere
-                    exit = true;
+                case 0:
+                    if (peek == '*')
+                        stato = 1;
+                    else
+                        stato = 0;
+                    break;
+                case 1:
+                    if (peek == '/')
+                        stato = 2;
+                    else if (peek == '*')
+                        stato = 1;
+                    else
+                        stato = 0;
+                    break;
             }
+            readch(br);
         }
-        return exit;
+        return stato == 2;
     }
-//Se la string araccolta e' una parola chiave riconoscibile
+//Se la stringa raccolta e' una parola chiave riconoscibile
     private Token keywordWord(String s)
     {
         switch (s)
