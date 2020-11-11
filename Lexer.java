@@ -226,6 +226,7 @@ public class Lexer
         }
         return state == 2;
     }
+//Usato esrcizio 1.9
 //Viene chiamato solo nel caso legga /*
 //Consumo caratteri finche' non si chiude il commento o finisce il testo (commento non viene chiuso)
     private boolean commento(BufferedReader br)
