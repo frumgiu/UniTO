@@ -1,5 +1,2 @@
 /*fd*hs/jdh**/
-t__ = 26; //tempo
-/***
-d = 3; //distanza
-(print * t d)
+2++ //tempo

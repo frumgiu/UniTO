@@ -17,10 +17,34 @@ public class Lexer
 
     public Token lexical_scan(BufferedReader br)
     {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r')
+        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r' || peek == '/')
         {
             if (peek == '\n')
                 line++;
+            if (peek == '/')
+            {
+                readch(br);
+                if (peek == '/') //Salto tutta la riga
+                {
+                    while(peek != '\n' && peek != (char)-1) //Consumo caratteri finche' non finisce la riga o il testo
+                    {
+                        readch(br);
+                    }
+                }
+                else if (peek == '*') //Salto fino a '*/'
+                {
+                    if(!commento(br)){
+                        System.err.println("Il commento non si chiude dopo averlo aperto con /*");
+                        return null;
+                    }
+                    peek = ' ';
+                }
+                else
+                {
+                    peek = ' ';
+                    return Token.div;
+                }
+            }
             readch(br);
         }
 
@@ -50,30 +74,6 @@ public class Lexer
             case '*':
                 peek = ' ';
                 return Token.mult;
-            case '/': //Nuovi casi, e' un commento (// o /*)
-                readch(br);
-                if (peek == '/') //Salto tutta la riga
-                {
-                    while(peek != '\n' && peek != (char)-1) //Consumo caratteri finche' non finisce la riga o il testo
-                    {
-                        readch(br);
-                    }
-                    return lexical_scan(br);
-                }
-                else if (peek == '*') //Salto fino a '*/'
-                {
-                    if(!commento(br)){
-                        System.err.println("Il commento non si chiude dopo averlo aperto con /*");
-                        return null;
-                    }
-                    peek = ' ';
-                    return lexical_scan(br);
-                }
-               else
-               {
-                    peek = ' ';
-                    return Token.div;
-               }
             case ';':
                 peek = ' ';
                 return Token.semicolon;

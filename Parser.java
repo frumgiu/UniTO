@@ -35,35 +35,99 @@ public class Parser
 
     public void start()
     {
-        // ... completare ...
-        expr();
-        match(Tag.EOF);
-        // ... completare ...
+        switch(look.tag)
+        {
+            case Tag.NUM:
+            case '(':
+                expr();
+                match(Tag.EOF);
+                break;
+            default:
+                error("Errore in start");
+        }
     }
 
     private void expr()
     {
-        // ... completare ...
+        switch(look.tag)
+        {
+            case Tag.NUM:
+            case '(':
+                term();
+                exprp();
+                break;
+            default:
+                error("Errore in expr");
+        }
+
     }
 
     private void exprp() {
-        switch (look.tag)
+        switch(look.tag)
         {
             case '+':
-                // ... completare ...
+            case '-':
+                System.out.println("Sono in exprp");
+                move();
+                term();
+                exprp();
+                break;
+            case Tag.EOF:
+//            case '(':
+//            case ')':
+                break;
+            default:
+                error("Errore in exprp");
         }
     }
 
     private void term() {
-        // ... completare ...
+        switch (look.tag)
+        {
+            case Tag.NUM:
+            case '(':
+                System.out.println("Sono in term");
+                fact();
+                termp();
+                break;
+            default:
+                error("Errore in term");
+        }
     }
 
     private void termp() {
-        // ... completare ...
+        switch(look.tag)
+        {
+            case '*':
+            case '/':
+                move();
+                fact();
+                termp();
+                break;
+            case '+':
+            case '-':
+            case Tag.EOF:
+                break;
+            default:
+                error("Errore in termp");
+        }
     }
 
     private void fact() {
-        // ... completare ...
+        switch(look.tag)
+        {
+            case Tag.NUM:
+                System.out.println("Sono in fact con NUM");
+                move();
+                break;
+            case'(':
+                System.out.println("Sono in fact con (");
+                move();
+                expr();
+                break;
+            default:
+                error("Errore in fact");
+        }
     }
 
     public static void main(String[] args)
