@@ -1,5 +1,6 @@
 import java.io.*;
 
+//Problema lexer spazio con il /
 public class Parser
 {
     private Lexer lex;
@@ -53,11 +54,9 @@ public class Parser
         switch(look.tag)
         {
             case Tag.NUM:
-            case '(':
+            case '(': //expr --> temp exprp
                 term();
                 exprp();
-                break;
-            case Tag.EOF:
                 break;
             default:
                 error("Errore in expr");
@@ -67,26 +66,18 @@ public class Parser
     private void exprp() {
         switch(look.tag)
         {
-            case '+':
-            case '-':
-                move();
+            case '+':  //exprp --> + temp exprp
+                match('+');
                 term();
                 exprp();
                 break;
-            case Tag.NUM:
-                match(Tag.NUM);
+            case '-': //exprp --> - temp exprp
+                match('-');
+                term();
+                exprp();
                 break;
-            case Tag.EOF:
-                match(Tag.EOF);
-                break;
+            case Tag.EOF: //exprp --> epsilon
             case ')':
-                if(conta > 0)
-                {
-                    conta--;
-                    move();
-                }
-                else
-                    error("parentesi");
                 break;
             default:
                 error("Errore in exprp");
@@ -97,13 +88,9 @@ public class Parser
         switch (look.tag)
         {
             case Tag.NUM:
-            case '(':
+            case '(': // term --> fact termp
                 fact();
                 termp();
-                break;
-            case Tag.EOF:
-            case '+':
-            case '-':
                 break;
             default:
                 error("Errore in term");
@@ -113,24 +100,20 @@ public class Parser
     private void termp() {
         switch(look.tag)
         {
-            case '*':
-            case '/':
-                move();
+            case '*': //termp --> * fact termp
+                match('*');
                 fact();
                 termp();
                 break;
-            case Tag.EOF:
+            case '/': //termp --> / fact termp
+                match('/');
+                fact();
+                termp();
+                break;
+            case Tag.EOF: // termp --> epsilon
             case '+':
             case '-':
-                break;
             case ')':
-                if(conta > 0)
-                {
-                    conta--;
-                    move();
-                }
-                else
-                    error("parentesi");
                 break;
             default:
                 error("Errore in termp");
@@ -145,23 +128,8 @@ public class Parser
                 break;
             case'(':
                 match('(');
-                conta =+ 1;
                 expr();
-                break;
-            case ')':
-                if(conta > 0)
-                {
-                    conta--;
-                    move();
-                }
-                else
-                    error("parentesi");
-                break;
-            case Tag.EOF:
-            case '+':
-            case '-':
-            case '*':
-            case '/':
+                match(')');
                 break;
             default:
                 error("Errore in fact");

@@ -5,6 +5,9 @@ public class Lexer
 {
     public static int line = 1;
     private char peek = ' ';
+    private char supporto = ' '; //Mi serve perche' senno' genera un problema con il / nel parsen
+    /* il controllo che uso per i commenti mi fa saltare un carattere, che puo' compromettere la riuscita del parser
+    dopo, se c'e' un / con un numero SENZA SPAZIO tra i due */
 
     private void readch(BufferedReader br)
     {
@@ -41,7 +44,6 @@ public class Lexer
                 }
                 else
                 {
-                    peek = ' ';
                     return Token.div;
                 }
             }
