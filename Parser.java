@@ -5,6 +5,7 @@ public class Parser
     private Lexer lex;
     private BufferedReader pbr;
     private Token look;
+    private int conta = 0; //Aumenta quando apre una parentesi
 
     public Parser(Lexer l, BufferedReader br) //Costruttore
     {
@@ -22,7 +23,7 @@ public class Parser
     void error(String s) {
         throw new Error("near line " + lex.line + ": " + s);
     }
-    //
+
     void match(int t)
     {
         if (look.tag == t)
@@ -56,10 +57,11 @@ public class Parser
                 term();
                 exprp();
                 break;
+            case Tag.EOF:
+                break;
             default:
                 error("Errore in expr");
         }
-
     }
 
     private void exprp() {
@@ -67,14 +69,24 @@ public class Parser
         {
             case '+':
             case '-':
-                System.out.println("Sono in exprp");
                 move();
                 term();
                 exprp();
                 break;
+            case Tag.NUM:
+                match(Tag.NUM);
+                break;
             case Tag.EOF:
-//            case '(':
-//            case ')':
+                match(Tag.EOF);
+                break;
+            case ')':
+                if(conta > 0)
+                {
+                    conta--;
+                    move();
+                }
+                else
+                    error("parentesi");
                 break;
             default:
                 error("Errore in exprp");
@@ -86,9 +98,12 @@ public class Parser
         {
             case Tag.NUM:
             case '(':
-                System.out.println("Sono in term");
                 fact();
                 termp();
+                break;
+            case Tag.EOF:
+            case '+':
+            case '-':
                 break;
             default:
                 error("Errore in term");
@@ -104,9 +119,18 @@ public class Parser
                 fact();
                 termp();
                 break;
+            case Tag.EOF:
             case '+':
             case '-':
-            case Tag.EOF:
+                break;
+            case ')':
+                if(conta > 0)
+                {
+                    conta--;
+                    move();
+                }
+                else
+                    error("parentesi");
                 break;
             default:
                 error("Errore in termp");
@@ -117,13 +141,27 @@ public class Parser
         switch(look.tag)
         {
             case Tag.NUM:
-                System.out.println("Sono in fact con NUM");
-                move();
+                match(Tag.NUM);
                 break;
             case'(':
-                System.out.println("Sono in fact con (");
-                move();
+                match('(');
+                conta =+ 1;
                 expr();
+                break;
+            case ')':
+                if(conta > 0)
+                {
+                    conta--;
+                    move();
+                }
+                else
+                    error("parentesi");
+                break;
+            case Tag.EOF:
+            case '+':
+            case '-':
+            case '*':
+            case '/':
                 break;
             default:
                 error("Errore in fact");

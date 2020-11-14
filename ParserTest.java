@@ -22,7 +22,7 @@ class ParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"2+3", "2+(2+3)", "(2)+(3)"})
+    @ValueSource(strings = {"(2+3)/2", "(2/3)+2", "(2-3)", "(2)+(3)", "2+3*1"})
     void testok(String input){
         String path = "input1.txt"; // il percorso del file da leggere
         BufferedReader br = new BufferedReader(new StringReader(input));
@@ -40,6 +40,19 @@ class ParserTest {
             parser.start(); //Controllare debug
         } catch(Error e) {
             Assertions.assertEquals("near line 1: Errore in expr", e.getMessage());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"2+1("})
+    void testNotOkTermp(String input) {
+        String path = "input1.txt"; // il percorso del file da leggere
+        BufferedReader br = new BufferedReader(new StringReader(input));
+        Parser parser = new Parser(lex, br);
+        try{
+            parser.start(); //Controllare debug
+        } catch(Error e) {
+            Assertions.assertEquals("near line 1: Errore in termp", e.getMessage());
         }
     }
 
