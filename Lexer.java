@@ -5,10 +5,11 @@ public class Lexer
 {
     public static int line = 1;
     private char peek = ' ';
-    private char supporto = ' '; //Mi serve perche' senno' genera un problema con il / nel parsen
     /* il controllo che uso per i commenti mi fa saltare un carattere, che puo' compromettere la riuscita del parser
     dopo, se c'e' un / con un numero SENZA SPAZIO tra i due */
+    //RISOLTO
 
+//Legge un carattere dal testo di input, caricato nel BufferReader
     private void readch(BufferedReader br)
     {
         try {
@@ -17,7 +18,7 @@ public class Lexer
             peek = (char) -1; // ERROR
         }
     }
-
+//Tokenizza il carattere letto
     public Token lexical_scan(BufferedReader br)
     {
         while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r' || peek == '/')
@@ -44,6 +45,7 @@ public class Lexer
                 }
                 else
                 {
+                   // peek = ' '; Va tolto, senno' mi fa saltare il carattere subito dopo il diviso
                     return Token.div;
                 }
             }

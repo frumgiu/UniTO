@@ -22,7 +22,7 @@ class ParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"(2+3)/2", "(2/3)+2", "(2-3)", "(2)+(3)", "2+3*1"})
+    @ValueSource(strings = {"(2+3)/2", "(2/3)+2", "(2-3)", "(2)+(3)", "2+3*1", "((2*1) - (3+6))"})
     void testok(String input){
         String path = "input1.txt"; // il percorso del file da leggere
         BufferedReader br = new BufferedReader(new StringReader(input));

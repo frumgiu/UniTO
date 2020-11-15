@@ -1,12 +1,15 @@
 import java.io.*;
+//Grammatica LL(1)
+//Varibili: start, expr, exprp, term, termp, fact
+//Terminali: 0,...,9, +, -, *, /, (, ) (3.1)
+//Produzioni: scritte sotto vicino ai metodi
 
-//Problema lexer spazio con il /
+//Problema lexer spazio con il /. RISOLTO
 public class Parser
 {
     private Lexer lex;
     private BufferedReader pbr;
     private Token look;
-    private int conta = 0; //Aumenta quando apre una parentesi
 
     public Parser(Lexer l, BufferedReader br) //Costruttore
     {
@@ -25,6 +28,7 @@ public class Parser
         throw new Error("near line " + lex.line + ": " + s);
     }
 
+    //Verifica che il Token che ho sia quello giusto
     void match(int t)
     {
         if (look.tag == t)
@@ -34,7 +38,7 @@ public class Parser
         }
         else error("syntax error");
     }
-
+    //Primo simbolo della grammatica
     public void start()
     {
         switch(look.tag)
@@ -48,7 +52,7 @@ public class Parser
                 error("Errore in start");
         }
     }
-
+    //Sotto seguono un metodo per ogni variabile della grammatica
     private void expr()
     {
         switch(look.tag)
@@ -62,7 +66,7 @@ public class Parser
                 error("Errore in expr");
         }
     }
-
+    //Questa variabile e' annullabile, NULL(exprp)
     private void exprp() {
         switch(look.tag)
         {
@@ -96,7 +100,7 @@ public class Parser
                 error("Errore in term");
         }
     }
-
+    //Questa variabile e' annullabile, NULL(termp)
     private void termp() {
         switch(look.tag)
         {
