@@ -44,7 +44,7 @@ class ParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"2+1("})
+    @ValueSource(strings = {"2+1(", "1243("})
     void testNotOkTermp(String input) {
         String path = "input1.txt"; // il percorso del file da leggere
         BufferedReader br = new BufferedReader(new StringReader(input));

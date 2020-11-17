@@ -25,7 +25,7 @@ public class Lexer
         {
             if (peek == '\n')
                 line++;
-            if (peek == '/')
+           if (peek == '/')
             {
                 readch(br);
                 if (peek == '/') //Salto tutta la riga

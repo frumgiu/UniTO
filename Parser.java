@@ -2,7 +2,7 @@ import java.io.*;
 //Grammatica LL(1)
 //Varibili: start, expr, exprp, term, termp, fact
 //Terminali: 0,...,9, +, -, *, /, (, ) (3.1)
-//Produzioni: scritte sotto vicino ai metodi
+//Produzioni: in ogno metodo c'e' la sua produzione
 
 //Problema lexer spazio con il /. RISOLTO
 public class Parser
