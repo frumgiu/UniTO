@@ -1,2 +1,8 @@
-//Casi giusti (2+3)/2 (2/3)+2 //(2-3) (2)+(3) 2+3*1 ((2*1) - (3+6))
-ciao 39009
+read(x);
+read(y);
+cond
+  when (> x y) do print (x) else print(y);
+while (> x 0) {
+        = x - x 1;
+        print(x)
+}

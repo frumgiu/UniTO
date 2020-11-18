@@ -266,20 +266,21 @@ public class Lexer
         {
             case "cond":
                 return Word.cond;
-            case "dotok":
+            case "do":
                 return Word.dotok;
-            case "elsetok":
+            case "else":
                 return Word.elsetok;
             case "then":
                 return Word.then;
             case "when":
                 return Word.when;
-            case "whiletok":
+            case "while":
                 return Word.whiletok;
             case "print":
                 return Word.print;
             case "read":
                 return Word.read;
+
             default:
                 return null;
         }
