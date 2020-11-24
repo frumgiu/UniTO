@@ -31,68 +31,141 @@ public class Valutatore
         else error("syntax error");
     }
 
-    public void start() {
+    public void start()
+    {
         int expr_val;
-
-        // ... completare ...
-
-        expr_val = expr();
-        match(Tag.EOF);
-
-        System.out.println(expr_val);
-
-        // ... completare ...
+        //Parte dell'insieme guida
+        switch (look.tag)
+        {
+            case Tag.NUM:
+            case '(':
+                expr_val = expr();
+                match(Tag.EOF);
+                System.out.println(expr_val);
+                break;
+            case Tag.EOF:
+                break;
+            default:
+                error("Errore in start");
+        }
     }
 
-    private int expr() {
-        int term_val, exprp_val;
-
-        // ... completare ...
-
-        term_val = term();
-        exprp_val = exprp(term_val);
-
-        // ... completare ...
-        return exprp_val;
+    private int expr()
+    {
+        int term_val, exprp_val = 0;
+        switch (look.tag)
+        {
+            case Tag.NUM:
+            case '(':
+                term_val = term();
+                //exprp_i = term_val
+                //exprp_val =exprp(exprp_i)
+                //expr_val = exprp_val
+                exprp_val = exprp(term_val);
+                break;
+            default:
+                error("Errore in expr");
+        }
+        //return expr_val
+        return exprp_val; // simbolo non terminale sintetizzato
     }
 
-    private int exprp(int exprp_i) {
-        int term_val, exprp_val;
+    private int exprp(int exprp_i)//Come parametro l'attributo ereditato
+    {
+        int term_val, exprp_val = 0;
         switch (look.tag)
         {
             case '+':
                 match('+');
                 term_val = term();
+                //exprp1_i = exprp_i + term_val
+                //exprp1_val = exprp(exprp1_i)
+                //exprp_val = exprp1_val
                 exprp_val = exprp(exprp_i + term_val);
                 break;
-
-            // ... completare ...
+            case '-':
+                match('-');
+                term_val = term();
+                exprp_val = exprp(exprp_i + term_val);
+                break;
+            case Tag.EOF: //exprp --> epsilon
+            case ')':
+                exprp_val = exprp_i;
+                break;
+            default:
+                error("Errore in exprp");
         }
-        return exprp_val;
+        return exprp_val; //Come return l'attributo sintetizzato
     }
 
     private int term()
     {
-        // ... completare ...
-        return 0;
+        int fact_val, termp_val = 0;
+        switch (look.tag)
+        {
+            case Tag.NUM:
+            case '(': // term --> fact termp
+                fact_val = fact();
+                termp_val = termp(fact_val);
+                break;
+            default:
+                error("Errore in term");
+        }
+        return termp_val;
     }
 
     private int termp(int termp_i)
     {
-        // ... completare ...
-        return 0;
+        int fact_val, termp_val = 0;
+        switch(look.tag)
+        {
+            case '*': //termp --> * fact termp
+                match('*');
+                fact_val = fact();
+                termp_val = (termp_i * fact_val);
+                break;
+            case '/': //termp --> / fact termp
+                match('/');
+                fact_val = fact();
+                termp_val = termp(termp_i / fact_val);
+                break;
+            case Tag.EOF: // termp --> epsilon
+            case '+':
+            case '-':
+            case ')':
+                termp_val = termp_i;
+                break;
+            default:
+                error("Errore in termp");
+        }
+        return termp_val;
     }
 
     private int fact()
     {
-        // ... completare ...
-        return 0;
+        int fact_val = 0;
+        switch(look.tag)
+        {
+            case Tag.NUM:
+                NumberTok numero = (NumberTok) look;
+                match(Tag.NUM);
+                fact_val = numero.lexenum;//Va bene il cast?
+                break;
+            case'(':
+                match('(');
+                fact_val = expr();
+                match(')');
+                break;
+            default:
+                error("Errore in fact");
+        }
+        return fact_val;
     }
 
     public static void main(String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "input1.txt"; // il percorso del file da leggere
+        String path = "test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Valutatore valutatore = new Valutatore(lex, br);

@@ -2,7 +2,7 @@ public class Token
 {
     //Rappresenta i token
     public final int tag;
-    public Token(int t) { tag = t;  }
+    public Token(int t) { tag = t; }
     public String toString() {return "< " + tag + " >";}
     public static final Token
             not = new Token('!'),

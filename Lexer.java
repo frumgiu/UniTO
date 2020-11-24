@@ -45,7 +45,7 @@ public class Lexer
                 }
                 else
                 {
-                   // peek = ' '; Va tolto, senno' mi fa saltare il carattere subito dopo il diviso
+                   //peek = ' '; Va tolto, senno' mi fa saltare il carattere subito dopo il diviso
                     return Token.div;
                 }
             }
@@ -289,7 +289,7 @@ public class Lexer
     public static void main(String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "input1.txt"; // il percorso del file da leggere
+        String path = "test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Token tok;

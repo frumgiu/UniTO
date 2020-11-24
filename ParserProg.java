@@ -39,7 +39,7 @@ public class ParserProg
         switch(look.tag)
         {
             case '{':
-            case '=':
+            case Tag.ASSIGN:
             case Tag.PRINT:
             case Tag.READ:
             case Tag.CASE:
@@ -259,7 +259,7 @@ public class ParserProg
     public static void main(String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "input1.txt"; // il percorso del file da leggere
+        String path = "testParserProg.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             ParserProg parser = new ParserProg(lex, br);

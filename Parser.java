@@ -17,7 +17,6 @@ public class Parser
         pbr = br;
         move();
     }
-
     void move()//look prende un token alla volta
     {
         look = lex.lexical_scan(pbr);
@@ -43,6 +42,7 @@ public class Parser
     {
         switch(look.tag)
         {
+            case Tag.EOF:
             case Tag.NUM:
             case '(':
                 expr();
@@ -58,7 +58,7 @@ public class Parser
         switch(look.tag)
         {
             case Tag.NUM:
-            case '(': //expr --> temp exprp
+            case '(': //expr --> term exprp
                 term();
                 exprp();
                 break;
@@ -67,7 +67,8 @@ public class Parser
         }
     }
     //Questa variabile e' annullabile, NULL(exprp)
-    private void exprp() {
+    private void exprp()
+    {
         switch(look.tag)
         {
             case '+':  //exprp --> + temp exprp
@@ -87,8 +88,8 @@ public class Parser
                 error("Errore in exprp");
         }
     }
-
-    private void term() {
+    private void term()
+    {
         switch (look.tag)
         {
             case Tag.NUM:
@@ -101,7 +102,8 @@ public class Parser
         }
     }
     //Questa variabile e' annullabile, NULL(termp)
-    private void termp() {
+    private void termp()
+    {
         switch(look.tag)
         {
             case '*': //termp --> * fact termp
@@ -123,8 +125,8 @@ public class Parser
                 error("Errore in termp");
         }
     }
-
-    private void fact() {
+    private void fact()
+    {
         switch(look.tag)
         {
             case Tag.NUM:
@@ -143,7 +145,7 @@ public class Parser
     public static void main(String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "input1.txt"; // il percorso del file da leggere
+        String path = "test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Parser parser = new Parser(lex, br);
