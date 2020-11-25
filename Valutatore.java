@@ -147,9 +147,9 @@ public class Valutatore
         switch(look.tag)
         {
             case Tag.NUM:
-                NumberTok numero = (NumberTok) look;
+                if (look instanceof NumberTok) //Devo fare il controllo prima del downcast
+                    fact_val = ((NumberTok)look).lexenum;//Va bene il cast?
                 match(Tag.NUM);
-                fact_val = numero.lexenum;//Va bene il cast?
                 break;
             case'(':
                 match('(');

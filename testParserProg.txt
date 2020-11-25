@@ -1,4 +1,6 @@
 read(x);
+read(z)
+/*
 read(y);
 cond
   when (> x y) do print (x) else print(y);
@@ -6,3 +8,4 @@ while (> x 0) {
         = x - x 1;
         print(x)
 }
+*/
