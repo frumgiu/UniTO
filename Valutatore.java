@@ -59,7 +59,7 @@ public class Valutatore
             case '(':
                 term_val = term();
                 //exprp_i = term_val
-                //exprp_val =exprp(exprp_i)
+                //exprp_val = exprp(exprp_i)
                 //expr_val = exprp_val
                 exprp_val = exprp(term_val);
                 break;
@@ -67,7 +67,7 @@ public class Valutatore
                 error("Errore in expr");
         }
         //return expr_val
-        return exprp_val; // simbolo non terminale sintetizzato
+        return exprp_val; //Simbolo non terminale sintetizzato
     }
 
     private int exprp(int exprp_i)//Come parametro l'attributo ereditato
@@ -86,7 +86,7 @@ public class Valutatore
             case '-':
                 match('-');
                 term_val = term();
-                exprp_val = exprp(exprp_i + term_val);
+                exprp_val = exprp(exprp_i - term_val);
                 break;
             case Tag.EOF: //exprp --> epsilon
             case ')':

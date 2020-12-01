@@ -22,7 +22,6 @@ public class ParserProg
     void error(String s) {
         throw new Error("near line " + lex.line + ": " + s);
     }
-
     //Verifica che il Token che ho sia quello giusto
     void match(int t)
     {

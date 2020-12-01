@@ -1,33 +1,31 @@
 import java.util.LinkedList;
 import java.io.*;
-
-public class CodeGenerator {
-
+//Serve per memorizzare in una apposita struttura la lista delle istruzioni generate dal parser
+public class CodeGenerator
+{
     LinkedList <Instruction> instructions = new LinkedList <Instruction>();
 
-    int label=0;
-
+    int label = 0;
+//Metodi emit usati per aggiungere istruzioni o etichette salto nel codice
     public void emit(OpCode opCode) {
         instructions.add(new Instruction(opCode));
     }
-
-    public void emit(OpCode opCode , int operand) {
+    public void emit(OpCode opCode, int operand) {
         instructions.add(new Instruction(opCode, operand));
     }
-
     public void emitLabel(int operand) {
         emit(OpCode.label, operand);
     }
-
     public int newLabel() {
         return label++;
     }
-
-    public void toJasmin() throws IOException{
+    public void toJasmin() throws IOException
+    {
         PrintWriter out = new PrintWriter(new FileWriter("Output.j"));
         String temp = "";
         temp = temp + header;
-        while(instructions.size() > 0){
+        while(instructions.size() > 0)
+        {
             Instruction tmp = instructions.remove();
             temp = temp + tmp.toJasmin();
         }
@@ -36,7 +34,7 @@ public class CodeGenerator {
         out.flush();
         out.close();
     }
-
+//Definisce preambolo del codice generato
     private static final String header = ".class public Output \n"
         + ".super java/lang/Object\n"
         + "\n"
@@ -69,7 +67,7 @@ public class CodeGenerator {
         + ".method public static run()V\n"
         + " .limit stack 1024\n"
         + " .limit locals 256\n";
-
+//Epilogo del codice generato
     private static final String footer = " return\n"
         + ".end method\n"
         + "\n"
