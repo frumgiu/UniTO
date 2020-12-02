@@ -9,7 +9,7 @@ public class Translator
     
     SymbolTable st = new SymbolTable();
     CodeGenerator code = new CodeGenerator();
-    int count = 0;
+    int count = 0; //La uso per stabilire gli indirizzi degli ID
 
     public Translator(Lexer l, BufferedReader br)
     {
@@ -34,20 +34,30 @@ public class Translator
 
     public void prog()
     {
-	// ... completare ...
-        int lnext_prog = code.newLabel();
-        statlist(lnext_prog);
-        code.emitLabel(lnext_prog);
-        match(Tag.EOF);
-        try {
-        	code.toJasmin();
+        switch (look.tag)
+        {
+            case '{':
+            case Tag.ASSIGN:
+            case Tag.PRINT:
+            case Tag.READ:
+            case Tag.CASE:
+            case Tag.WHILE:
+                int lnext_prog = code.newLabel();
+                statlist(/*lnext_prog*/);
+                code.emitLabel(lnext_prog);
+                match(Tag.EOF);
+                try {
+                    code.toJasmin();
+                }
+                catch(java.io.IOException e) {
+                    System.out.println("IO error\n");
+                }
+                break;
+            default:
+                error("Errore in prog");
         }
-        catch(java.io.IOException e) {
-        	System.out.println("IO error\n");
-        };
-	// ... completare ...
     }
-    private void statlist()
+    private void statlist(/*int next*/)
     {
         switch (look.tag)
         {
@@ -57,7 +67,7 @@ public class Translator
             case Tag.READ:
             case Tag.CASE:
             case Tag.WHILE:
-                stat();
+                stat(/*next*/);
                 statlistp();
                 break;
             default:
@@ -70,7 +80,7 @@ public class Translator
         {
             case ';':
                 match(';');
-                stat();
+                stat(/*next*/);
                 statlistp();
                 break;
             case '}':
@@ -80,31 +90,68 @@ public class Translator
                 error("Errore in statlistp");
         }
     }
-    public void stat( /* completare */ )
+    public void stat( /* int next */ )
     {
         switch(look.tag)
         {
-	// ... completare ...
-            case Tag.READ:
+            case Tag.ASSIGN:
+                match(Tag.ASSIGN);
+                int id_addr = st.lookupAddress(((Word)look).lexeme);
+                if (id_addr == -1)
+                {
+                    id_addr = count;
+                    st.insert(((Word)look).lexeme, count++);
+                }
+                match(Tag.ID);
+                expr();
+                code.emit(OpCode.istore, id_addr);
+                break;
+            case Tag.PRINT:
+                match(Tag.PRINT);
+                match('(');
+                exprlist();
+                match(')');
+                code.emit(OpCode.invokestatic, 1);
+                break;
+            case Tag.READ: //Gia' fatto
                 match(Tag.READ);
                 match('(');
                 if (look.tag == Tag.ID)
                 {
-                    int id_addr = st.lookupAddress(((Word)look).lexeme);
-                    if (id_addr == -1)
+                    id_addr = st.lookupAddress(((Word) look).lexeme);
+                    if (id_addr == -1) //Non e' caricata nella symbol table
                     {
                         id_addr = count;
                         st.insert(((Word)look).lexeme, count++); //Faccio un downcast di look per accedere al suo lexeme
                     }                    
                     match(Tag.ID);
                     match(')');
-                    code.emit(OpCode.invokestatic,0);
+                    code.emit(OpCode.invokestatic,0); //!= 1 e' la read
                     code.emit(OpCode.istore, id_addr);
                 }
                 else // Non rispetta le regole per essere un identificatore
                     error("Error in grammar (stat) after read( with " + look);
                 break;
-	// ... completare ...
+            case Tag.CASE:
+                match(Tag.CASE);
+                whenlist();
+                match(Tag.ELSE);
+                stat(/*next*/);
+                break;
+            case Tag.WHILE:
+                match(Tag.WHILE);
+                match('(');
+                bexpr();
+                match(')');
+                stat(/*next*/);
+                break;
+            case '{':
+                match('{');
+                statlist();
+                match('}');
+                break;
+            default:
+                error("Errore in stat");
         }
      }
     private void whenlist()
@@ -143,7 +190,7 @@ public class Translator
                 bexpr();
                 match(')');
                 match(Tag.DO);
-                stat();
+                stat(/*next*/);
                 break;
             default:
                 error("Errore in whenlist");
@@ -154,9 +201,40 @@ public class Translator
         switch(look.tag)
         {
             case Tag.RELOP:
+                Word relop = (Word)look;
                 match(Tag.RELOP);
                 expr();
                 expr();
+                int trueL = code.newLabel();
+                code.emitLabel(trueL);
+                int elseL = code.newLabel();
+                code.emitLabel(elseL);
+                switch(relop.lexeme)
+                {
+                    case "==":
+                        code.emit(OpCode.if_icmpeq, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                        break;
+                    case "<>":
+                        code.emit(OpCode.if_icmpne, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                        break;
+                    case "<":
+                        code.emit(OpCode.if_icmplt, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                        break;
+                    case "<=":
+                        code.emit(OpCode.if_icmple, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                    case ">":
+                        code.emit(OpCode.if_icmpgt, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                        break;
+                    case ">=":
+                        code.emit(OpCode.if_icmpge, trueL);
+                        code.emit(OpCode.GOto, elseL);
+                        break;
+                }
                 break;
             default:
                 error("Errore in bexpr");
@@ -164,15 +242,50 @@ public class Translator
     }
     private void expr( /* completare */ )
     {
-        switch(look.tag) {
-	// ... completare ...
+        switch(look.tag)
+        {
+            case '+':
+                match('+');
+                match('(');
+                exprlist();
+                match(')');
+                code.emit(OpCode.iadd);
+                break;
+            case '*':
+                match('*');
+                match('(');
+                exprlist();
+                match(')');
+                code.emit(OpCode.imul);
+                break;
             case '-':
                 match('-');
                 expr();
                 expr();
                 code.emit(OpCode.isub);
                 break;
-	// ... completare ...
+            case '/':
+                match('/');
+                expr();
+                expr();
+                code.emit(OpCode.idiv);
+                break;
+            case Tag.NUM:
+                code.emit(OpCode.ldc, ((NumberTok)look).lexenum); //Per prendere il valore numerico di look da caricare per l'assembly
+                match(Tag.NUM);
+                break;
+            case Tag.ID:
+                int id_addr = st.lookupAddress(((Word)look).lexeme);
+                if (id_addr == -1)
+                {
+                    id_addr = count;
+                    st.insert(((Word)look).lexeme, count++);
+                }
+                match(Tag.ID);
+                code.emit(OpCode.iload, id_addr);
+                break;
+            default:
+                error("Errore in expr");
         }
     }
     private void exprlist()
@@ -215,7 +328,7 @@ public class Translator
     public static void main (String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "testParserProg";
+        String path = "testParserProg.txt";
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Translator translator = new Translator(lex, br);

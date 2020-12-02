@@ -1,5 +1,12 @@
-read(x);
-read(z)
+//Funzionano read, assign, print,
+
+// { cond when (< 2 3) do print(2) else print(3) }
+
+{ = x 10;
+ print(x) }
+
+//{print(+(2 3))}
+
 /*
 read(y);
 cond
