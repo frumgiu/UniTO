@@ -41,7 +41,7 @@ public class ParserProg
             case Tag.ASSIGN:
             case Tag.PRINT:
             case Tag.READ:
-            case Tag.CASE:
+            case Tag.COND:
             case Tag.WHILE:
                 statlist();
                 match(Tag.EOF);
@@ -59,7 +59,7 @@ public class ParserProg
             case Tag.ASSIGN:
             case Tag.PRINT:
             case Tag.READ:
-            case Tag.CASE:
+            case Tag.COND:
             case Tag.WHILE:
                 stat();
                 statlistp();
@@ -105,8 +105,8 @@ public class ParserProg
                 match(Tag.ID);
                 match(')');
                 break;
-            case Tag.CASE:
-                match(Tag.CASE);
+            case Tag.COND:
+                match(Tag.COND);
                 whenlist();
                 match(Tag.ELSE);
                 stat();

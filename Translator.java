@@ -40,7 +40,7 @@ public class Translator
             case Tag.ASSIGN:
             case Tag.PRINT:
             case Tag.READ:
-            case Tag.CASE:
+            case Tag.COND:
             case Tag.WHILE:
                 int lnext_prog = code.newLabel();
                 statlist(/*lnext_prog*/);
@@ -65,7 +65,7 @@ public class Translator
             case Tag.ASSIGN:
             case Tag.PRINT:
             case Tag.READ:
-            case Tag.CASE:
+            case Tag.COND:
             case Tag.WHILE:
                 stat(/*next*/);
                 statlistp();
@@ -132,11 +132,15 @@ public class Translator
                 else // Non rispetta le regole per essere un identificatore
                     error("Error in grammar (stat) after read( with " + look);
                 break;
-            case Tag.CASE:
-                match(Tag.CASE);
+            case Tag.COND:
+               // int trueNext = code.newLabel();
+                match(Tag.COND);
                 whenlist();
+               // code.emitLabel(trueNext);
+               // int falseNext = code.newLabel();
+               // code.emitLabel(falseNext);
                 match(Tag.ELSE);
-                stat(/*next*/);
+                stat(/*falseNext*/);
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
@@ -196,7 +200,7 @@ public class Translator
                 error("Errore in whenlist");
         }
     }
-    private void bexpr()
+    private void bexpr(/*int elseL*/)
     {
         switch(look.tag)
         {
@@ -205,34 +209,33 @@ public class Translator
                 match(Tag.RELOP);
                 expr();
                 expr();
-                int trueL = code.newLabel();
-                code.emitLabel(trueL);
-                int elseL = code.newLabel();
-                code.emitLabel(elseL);
                 switch(relop.lexeme)
                 {
                     case "==":
+                        int trueL = code.newLabel();
+                        code.emitLabel(trueL);
                         code.emit(OpCode.if_icmpeq, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        int falseL = code.newLabel();
+                        code.emitLabel(falseL);
+                        code.emit(OpCode.GOto, falseL);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        code.emit(OpCode.if_icmpne, code.label);
                         break;
+                        // >=
                     case "<":
-                        code.emit(OpCode.if_icmplt, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        code.emit(OpCode.if_icmplt, code.label);
                         break;
-                    case "<=":
-                        code.emit(OpCode.if_icmple, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        // >
+                     case "<=":
+                        code.emit(OpCode.if_icmple, code.label);
+                        // <=
                     case ">":
-                        code.emit(OpCode.if_icmpgt, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        code.emit(OpCode.if_icmpgt, code.label);
                         break;
+                        // <
                     case ">=":
-                        code.emit(OpCode.if_icmpge, trueL);
-                        code.emit(OpCode.GOto, elseL);
+                        code.emit(OpCode.if_icmpge, code.label);
                         break;
                 }
                 break;

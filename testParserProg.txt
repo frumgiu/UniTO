@@ -1,13 +1,16 @@
 //Funzionano read, assign, print,
+//print(+(5 - 7 3 10))
 
-// { cond when (< 2 3) do print(2) else print(3) }
+{ read(x);
+read(y);
+cond when(== x y) do print(x)
 
+   else print(y) }
+
+/*
 { = x 10;
  print(x) }
 
-//{print(+(2 3))}
-
-/*
 read(y);
 cond
   when (> x y) do print (x) else print(y);
