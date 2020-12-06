@@ -1,21 +1,15 @@
 import java.io.*;
-// da CFG a SDD della grammatica 3.2
-// lnext --> attributo ereditato
-// lcode --> attributo sintetizzato
-//Entrambi sono indirizzi di salto
 
-public class Translator
-{
+public class Translator {
     private Lexer lex;
     private BufferedReader pbr;
     private Token look;
-    
+
     SymbolTable st = new SymbolTable();
     CodeGenerator code = new CodeGenerator();
-    int count = 0; //La uso per stabilire gli indirizzi degli ID
+    int count=0;
 
-    public Translator(Lexer l, BufferedReader br)
-    {
+    public Translator(Lexer l, BufferedReader br) {
         lex = l;
         pbr = br;
         move();
@@ -25,7 +19,9 @@ public class Translator
         look = lex.lexical_scan(pbr);
         System.out.println("token = " + look);
     }
-    void error(String s) { throw new Error("near line " + lex.line + ": " + s); }
+    void error(String s) {
+        throw new Error("near line " + lex.line + ": " + s);
+    }
     void match(int t) {
         if (look.tag == t)
         {
@@ -37,7 +33,7 @@ public class Translator
 
     public void prog()
     {
-        switch (look.tag)
+        switch(look.tag)
         {
             case '{':
             case Tag.ASSIGN:
@@ -51,8 +47,7 @@ public class Translator
                 match(Tag.EOF);
                 try {
                     code.toJasmin();
-                }
-                catch(java.io.IOException e) {
+                } catch (java.io.IOException e) {
                     System.out.println("IO error\n");
                 }
                 break;
@@ -60,7 +55,7 @@ public class Translator
                 error("Errore in prog");
         }
     }
-    private void statlist(int next)
+    private void statlist(int sl_next)
     {
         switch (look.tag)
         {
@@ -70,23 +65,25 @@ public class Translator
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                stat(next);
-                code.emitLabel(next);
-                statlistp(next);
+                int s_next = code.newLabel();
+                stat(s_next); // s_next = newLabel()
+                code.emitLabel(s_next);
+                statlistp(sl_next);
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    private void statlistp(int next)
+    private void statlistp(int slp_next)
     {
         switch(look.tag)
         {
             case ';':
                 match(';');
-                stat(next);
-                next = code.newLabel();
-                statlistp(next);
+                int s_next = code.newLabel();
+                stat(s_next); // s_next = newLabel()
+                code.emitLabel(s_next);
+                statlistp(slp_next);
                 break;
             case '}':
             case Tag.EOF:
@@ -95,7 +92,7 @@ public class Translator
                 error("Errore in statlistp");
         }
     }
-    public void stat(  int next  )
+    public void stat(int s_next)
     {
         switch(look.tag)
         {
@@ -117,74 +114,85 @@ public class Translator
                 exprlist();
                 match(')');
                 code.emit(OpCode.invokestatic, 1);
-                code.emit(OpCode.GOto, next);
                 break;
-            case Tag.READ: //Gia' fatto
+            case Tag.READ:
                 match(Tag.READ);
                 match('(');
-                if (look.tag == Tag.ID)
+                if (look.tag==Tag.ID)
                 {
-                    id_addr = st.lookupAddress(((Word) look).lexeme);
-                    if (id_addr == -1) //Non e' caricata nella symbol table
+                    id_addr = st.lookupAddress(((Word)look).lexeme);
+                    if (id_addr==-1) //Non e' caricata nella symbol table
                     {
                         id_addr = count;
-                        st.insert(((Word)look).lexeme, count++); //Faccio un downcast di look per accedere al suo lexeme
-                    }                    
+                        st.insert(((Word)look).lexeme,count++);
+                    }
                     match(Tag.ID);
                     match(')');
-                    code.emit(OpCode.invokestatic,0); //!= 1 e' la read
-                    code.emit(OpCode.istore, id_addr);
-                    code.emit(OpCode.GOto, next);
+                    code.emit(OpCode.invokestatic,0);//!= 1 e' la read
+                    code.emit(OpCode.istore,id_addr);
                 }
                 else // Non rispetta le regole per essere un identificatore
                     error("Error in grammar (stat) after read( with " + look);
                 break;
             case Tag.COND:
                 match(Tag.COND);
-                int wlNext = next;
-                whenlist();
-               // code.emitLabel(trueNext);
-               // int falseNext = code.newLabel();
-               // code.emitLabel(falseNext);
+                //int wl_true = s_next;
+                int wl_false = code.newLabel();
+                whenlist(s_next, s_next, wl_false);
                 match(Tag.ELSE);
-                //stat(/*falseNext*/);
+                code.emit(OpCode.GOto, wl_false);
+                stat(s_next);
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
+                int be_true = code.newLabel();
+                int be_false = s_next;
+                code.emitLabel(code.newLabel()); //Sn label
                 bexpr();
+                code.emitLabel(be_true);
                 match(')');
-                //stat(/*next*/);
+                stat(s_next);
                 break;
             case '{':
                 match('{');
-                next = code.newLabel();
-                statlist(next);
+                statlist(s_next);
                 match('}');
                 break;
             default:
                 error("Errore in stat");
         }
      }
-    private void whenlist()
+    private void whenlist(int wl_next, int wl_true, int wl_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
-                whenitem();
-                whenlistp();
+                int wi_next = code.newLabel();
+                //int wi_true = wl_true;
+                //int wi_false = wl_false;
+                whenitem(wi_next, wl_true, wl_false);
+                code.emitLabel(wi_next);
+                //int wlp_next = wl_next;
+                //int wlp_true = wl_true;
+                //int wlp_false = wl_false;
+                whenlistp(wl_next, wl_true, wl_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void whenlistp()
+    private void whenlistp(int wlp_next, int wlp_true, int wlp_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
-                whenitem();
-                whenlistp();
+                int wi_next = code.newLabel();
+                int wi_true = wlp_true;
+                int wi_false = wlp_false;
+                whenitem(wi_next, wi_true, wi_false);
+                code.emitLabel(wi_next);
+                whenlistp(wlp_next, wlp_true, wlp_false);
                 break;
             case Tag.ELSE:
                 break;
@@ -192,17 +200,20 @@ public class Translator
                 error("Errore in whenlistp");
         }
     }
-    private void whenitem()
+    private void whenitem(int wi_next, int wi_true, int wi_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
                 match(Tag.WHEN);
                 match('(');
+                int be_true = code.newLabel();
+                int be_false = wi_next;
                 bexpr();
                 match(')');
                 match(Tag.DO);
-                //stat(/*next*/);
+                code.emitLabel(be_true);
+                stat(wi_true);
                 break;
             default:
                 error("Errore in whenlist");
@@ -213,35 +224,35 @@ public class Translator
         switch(look.tag)
         {
             case Tag.RELOP:
-                Word relop = (Word)look;
+                Word relop = (Word) look; //Mi serve per capire che simbolo RELOP c'e'
                 match(Tag.RELOP);
                 expr();
                 expr();
                 switch(relop.lexeme)
                 {
                     case "==":
-                        int trueL = code.newLabel();
-                        code.emit(OpCode.if_icmpeq, trueL);
-                        int falseL = code.newLabel();
-                        code.emit(OpCode.GOto, falseL);
+                        code.emit(OpCode.if_icmpeq);
+                        code.emit(OpCode.GOto);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne, code.label);
+                        code.emit(OpCode.if_icmpne);
+                        code.emit(OpCode.GOto);
                         break;
-                        // >=
                     case "<":
-                        code.emit(OpCode.if_icmplt, code.label);
+                        code.emit(OpCode.if_icmplt);
+                        code.emit(OpCode.GOto);
                         break;
-                        // >
-                     case "<=":
-                        code.emit(OpCode.if_icmple, code.label);
-                        // <=
+                    case "<=":
+                        code.emit(OpCode.if_icmple);
+                        code.emit(OpCode.GOto);
+                        break;
                     case ">":
-                        code.emit(OpCode.if_icmpgt, code.label);
+                        code.emit(OpCode.if_icmpgt);
+                        code.emit(OpCode.GOto);
                         break;
-                        // <
                     case ">=":
-                        code.emit(OpCode.if_icmpge, code.label);
+                        code.emit(OpCode.if_icmpge);
+                        code.emit(OpCode.GOto);
                         break;
                 }
                 break;

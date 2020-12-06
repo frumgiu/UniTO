@@ -2,11 +2,9 @@
 //print(+(5 - 7 3 10))
 
 { read(x);
-print(x) }
-
+read(y)}
 /*
 cond when(== x y) do print(x)
-
    else print(y) }
 
 { = x 10;
