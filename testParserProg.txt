@@ -2,12 +2,13 @@
 //print(+(5 - 7 3 10))
 
 { read(x);
-read(y);
+print(x) }
+
+/*
 cond when(== x y) do print(x)
 
    else print(y) }
 
-/*
 { = x 10;
  print(x) }
 

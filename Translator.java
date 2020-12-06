@@ -1,5 +1,8 @@
 import java.io.*;
 // da CFG a SDD della grammatica 3.2
+// lnext --> attributo ereditato
+// lcode --> attributo sintetizzato
+//Entrambi sono indirizzi di salto
 
 public class Translator
 {
@@ -43,7 +46,7 @@ public class Translator
             case Tag.COND:
             case Tag.WHILE:
                 int lnext_prog = code.newLabel();
-                statlist(/*lnext_prog*/);
+                statlist(lnext_prog);
                 code.emitLabel(lnext_prog);
                 match(Tag.EOF);
                 try {
@@ -57,7 +60,7 @@ public class Translator
                 error("Errore in prog");
         }
     }
-    private void statlist(/*int next*/)
+    private void statlist(int next)
     {
         switch (look.tag)
         {
@@ -67,21 +70,23 @@ public class Translator
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                stat(/*next*/);
-                statlistp();
+                stat(next);
+                code.emitLabel(next);
+                statlistp(next);
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    private void statlistp()
+    private void statlistp(int next)
     {
         switch(look.tag)
         {
             case ';':
                 match(';');
-                stat(/*next*/);
-                statlistp();
+                stat(next);
+                next = code.newLabel();
+                statlistp(next);
                 break;
             case '}':
             case Tag.EOF:
@@ -90,7 +95,7 @@ public class Translator
                 error("Errore in statlistp");
         }
     }
-    public void stat( /* int next */ )
+    public void stat(  int next  )
     {
         switch(look.tag)
         {
@@ -112,6 +117,7 @@ public class Translator
                 exprlist();
                 match(')');
                 code.emit(OpCode.invokestatic, 1);
+                code.emit(OpCode.GOto, next);
                 break;
             case Tag.READ: //Gia' fatto
                 match(Tag.READ);
@@ -128,30 +134,32 @@ public class Translator
                     match(')');
                     code.emit(OpCode.invokestatic,0); //!= 1 e' la read
                     code.emit(OpCode.istore, id_addr);
+                    code.emit(OpCode.GOto, next);
                 }
                 else // Non rispetta le regole per essere un identificatore
                     error("Error in grammar (stat) after read( with " + look);
                 break;
             case Tag.COND:
-               // int trueNext = code.newLabel();
                 match(Tag.COND);
+                int wlNext = next;
                 whenlist();
                // code.emitLabel(trueNext);
                // int falseNext = code.newLabel();
                // code.emitLabel(falseNext);
                 match(Tag.ELSE);
-                stat(/*falseNext*/);
+                //stat(/*falseNext*/);
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
                 bexpr();
                 match(')');
-                stat(/*next*/);
+                //stat(/*next*/);
                 break;
             case '{':
                 match('{');
-                statlist();
+                next = code.newLabel();
+                statlist(next);
                 match('}');
                 break;
             default:
@@ -194,13 +202,13 @@ public class Translator
                 bexpr();
                 match(')');
                 match(Tag.DO);
-                stat(/*next*/);
+                //stat(/*next*/);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr(/*int elseL*/)
+    private void bexpr()
     {
         switch(look.tag)
         {
@@ -213,10 +221,8 @@ public class Translator
                 {
                     case "==":
                         int trueL = code.newLabel();
-                        code.emitLabel(trueL);
                         code.emit(OpCode.if_icmpeq, trueL);
                         int falseL = code.newLabel();
-                        code.emitLabel(falseL);
                         code.emit(OpCode.GOto, falseL);
                         break;
                     case "<>":
