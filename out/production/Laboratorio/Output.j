@@ -30,24 +30,15 @@
 .method public static run()V
  .limit stack 1024
  .limit locals 256
- invokestatic Output/read()I
+ ldc 5
  istore 0
 L1:
- invokestatic Output/read()I
- istore 1
+ iload 0
+ ldc 2
+ ldc 1
+ iadd 
+ invokestatic Output/print(I)V
 L2:
- iload 0
- iload 1
- if_icmpeq L3
- goto L4
-L3:
- iload 0
- invokestatic Output/print(I)V
-L3:
- goto L4
- iload 1
- invokestatic Output/print(I)V
-L3:
 L0:
 L0:
  return

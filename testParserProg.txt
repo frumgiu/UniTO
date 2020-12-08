@@ -1,8 +1,7 @@
-//Funzionano read, assign, print,
 //print(+(5 - 7 3 10))
 
-{ read(x);
-read(y)}
+{ = x 5;
+print(+(+(x 2 1)))}
 /*
 cond when(== x y) do print(x)
    else print(y) }
