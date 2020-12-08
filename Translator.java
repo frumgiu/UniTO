@@ -67,23 +67,24 @@ public class Translator {
             case Tag.WHILE:
                 int s_next = code.newLabel();
                 stat(s_next); // s_next = newLabel()
-                code.emitLabel(s_next);
-                statlistp(sl_next);
+                code.emitLabel(sl_next);
+                statlistp(/*sl_next*/ s_next);
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    private void statlistp(int slp_next)
+    //slp_next si puo' togliere, non serve a nulla
+    private void statlistp(/*int slp_next*/ int s_next)
     {
         switch(look.tag)
         {
             case ';':
                 match(';');
-                int s_next = code.newLabel();
+                //gutint s_next = code.newLabel();
                 stat(s_next); // s_next = newLabel()
                 code.emitLabel(s_next);
-                statlistp(slp_next);
+                statlistp(/*slp_next*/ code.newLabel());
                 break;
             case '}':
             case Tag.EOF:
@@ -141,6 +142,7 @@ public class Translator {
                 whenlist(s_next, s_next, wl_false);
                 match(Tag.ELSE);
                 code.emit(OpCode.GOto, wl_false);
+                s_next = wl_false;
                 stat(s_next);
                 break;
             case Tag.WHILE:
@@ -149,7 +151,7 @@ public class Translator {
                 int be_true = code.newLabel();
                 int be_false = s_next;
                 code.emitLabel(code.newLabel()); //Sn label
-                bexpr();
+                bexpr(be_true, be_false);
                 code.emitLabel(be_true);
                 match(')');
                 stat(s_next);
@@ -168,31 +170,31 @@ public class Translator {
         switch(look.tag)
         {
             case Tag.WHEN:
-                int wi_next = code.newLabel();
+                //int wi_next = code.newLabel();
                 //int wi_true = wl_true;
                 //int wi_false = wl_false;
-                whenitem(wi_next, wl_true, wl_false);
-                code.emitLabel(wi_next);
+                whenitem(/*wl_next,*/ wl_true, wl_false);
+                code.emitLabel(wl_true);
                 //int wlp_next = wl_next;
                 //int wlp_true = wl_true;
                 //int wlp_false = wl_false;
-                whenlistp(wl_next, wl_true, wl_false);
+                whenlistp(/*wl_next,*/ wl_true, wl_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void whenlistp(int wlp_next, int wlp_true, int wlp_false)
+    private void whenlistp(/*int wlp_next,*/ int wlp_true, int wlp_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
                 int wi_next = code.newLabel();
-                int wi_true = wlp_true;
-                int wi_false = wlp_false;
-                whenitem(wi_next, wi_true, wi_false);
+                //int wi_true = wlp_true;
+                //int wi_false = wlp_false;
+                whenitem(/*wi_next,*/ wlp_true, wlp_false);
                 code.emitLabel(wi_next);
-                whenlistp(wlp_next, wlp_true, wlp_false);
+                whenlistp(/*wlp_next,*/ wlp_true, wlp_false);
                 break;
             case Tag.ELSE:
                 break;
@@ -200,26 +202,26 @@ public class Translator {
                 error("Errore in whenlistp");
         }
     }
-    private void whenitem(int wi_next, int wi_true, int wi_false)
+    private void whenitem(/*int wi_next,*/ int wi_true, int wi_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
                 match(Tag.WHEN);
                 match('(');
-                int be_true = code.newLabel();
-                int be_false = wi_next;
-                bexpr();
+                int be_true = wi_true;
+                int be_false = wi_false;
+                bexpr(be_true, be_false);
                 match(')');
                 match(Tag.DO);
-                code.emitLabel(be_true);
+                code.emitLabel(wi_true);
                 stat(wi_true);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr()
+    private void bexpr(int be_true, int be_false)
     {
         switch(look.tag)
         {
@@ -231,28 +233,28 @@ public class Translator {
                 switch(relop.lexeme)
                 {
                     case "==":
-                        code.emit(OpCode.if_icmpeq);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmpeq, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmpne, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<":
-                        code.emit(OpCode.if_icmplt);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmplt, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<=":
-                        code.emit(OpCode.if_icmple);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmple, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case ">":
-                        code.emit(OpCode.if_icmpgt);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmpgt, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case ">=":
-                        code.emit(OpCode.if_icmpge);
-                        code.emit(OpCode.GOto);
+                        code.emit(OpCode.if_icmpge, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                 }
                 break;

@@ -32,11 +32,11 @@
  .limit locals 256
  invokestatic Output/read()I
  istore 0
-L2:
+L1:
  invokestatic Output/read()I
  istore 1
-L3:
-L1:
+L2:
+L0:
 L0:
  return
 .end method

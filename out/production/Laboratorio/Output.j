@@ -32,10 +32,22 @@
  .limit locals 256
  invokestatic Output/read()I
  istore 0
-L0:
+L1:
  invokestatic Output/read()I
  istore 1
-L1:
+L2:
+ iload 0
+ iload 1
+ if_icmpeq L3
+ goto L4
+L3:
+ iload 0
+ invokestatic Output/print(I)V
+L3:
+ goto L4
+ iload 1
+ invokestatic Output/print(I)V
+L3:
 L0:
 L0:
  return
