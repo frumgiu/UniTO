@@ -32,14 +32,21 @@
  .limit locals 256
  ldc 5
  istore 0
-L1:
+L3:
  iload 0
- ldc 2
+ ldc 0
+ if_icmpgt L4
+ goto L2
+L4:
+ iload 0
  ldc 1
- iadd 
+ isub 
+ istore 0
+ iload 0
  invokestatic Output/print(I)V
-L2:
-L0:
+ goto L3
+ iload 0
+ invokestatic Output/print(I)V
 L0:
  return
 .end method
