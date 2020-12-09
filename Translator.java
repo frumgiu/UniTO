@@ -65,27 +65,26 @@ public class Translator {
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                int s_next = code.newLabel();
                 stat(sl_next);
-                //code.emitLabel(s_next);
+                int s_next = code.newLabel();
+                code.emitLabel(s_next);
                 statlistp(s_next);
-
                 break;
             default:
                 error("Errore in statlist");
         }
     }
     //slp_next si puo' togliere, non serve a nulla
-    private void statlistp(int s_next)
+    private void statlistp(int slp_next)
     {
         switch(look.tag)
         {
             case ';':
                 match(';');
-                //int s_next = code.newLabel();
-                stat(s_next); // s_next = newLabel()
+                stat(slp_next); // s_next = newLabel()
+                int s_next = code.newLabel();
                 code.emitLabel(s_next);
-                statlistp(code.newLabel());
+                statlistp(s_next);
                 break;
             case '}':
             case Tag.EOF:
