@@ -57,6 +57,7 @@ public class Translator {
     }
     private void statlist(int sl_next)
     {
+        //Commentando le righe riguardanti s_next dimezza il numero di etichette
         switch (look.tag)
         {
             case '{':
@@ -65,16 +66,16 @@ public class Translator {
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                int s_next = code.newLabel();
+                //int s_next = code.newLabel();
                 stat(sl_next);
-                code.emitLabel(s_next);
+               // code.emitLabel(s_next);
                 statlistp(sl_next);
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    //slp_next si puo' togliere, non serve a nulla
+
     private void statlistp(int slp_next)
     {
         switch(look.tag)
