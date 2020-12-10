@@ -152,7 +152,8 @@ public class Translator {
                 bexpr(be_true, s_next); //Se e' false continuo il codice
                 match(')');
                 code.emitLabel(be_true);
-                stat(s1_next);
+                stat(s_next);
+                code.emit(OpCode.GOto, s1_next); //Mi serve per il loop
                 break;
             case '{':
                 match('{');

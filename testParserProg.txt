@@ -1,16 +1,18 @@
 //print(+(5 - 7 3 10))
-
+/*
 { = x 5;
 = y +(x 2);
 
 cond when(== x y) do print(x)
    else print(y) }
-/*
+*/
 {   = x 5;
+    = y 3
+}
+/*
     while (> x 0) {
             = x - x 1;
             print(x);
         };
-    print(x)
 }
 */

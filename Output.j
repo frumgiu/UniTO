@@ -33,23 +33,9 @@
  ldc 5
  istore 0
 L2:
- iload 0
- ldc 2
- iadd 
+ ldc 3
  istore 1
 L3:
- iload 0
- iload 1
- if_icmpeq L7
- goto L6
-L7:
- iload 0
- invokestatic Output/print(I)V
-L6:
-L5:
- iload 1
- invokestatic Output/print(I)V
-L4:
 L1:
 L0:
  return
