@@ -33,8 +33,21 @@
  ldc 5
  istore 0
 L2:
- ldc 3
- istore 1
+L4:
+ iload 0
+ ldc 0
+ if_icmpgt L5
+ goto L3
+L5:
+ iload 0
+ ldc 1
+ isub 
+ istore 0
+L6:
+ iload 0
+ invokestatic Output/print(I)V
+L7:
+ goto L4
 L3:
 L1:
 L0:

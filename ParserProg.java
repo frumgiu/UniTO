@@ -123,8 +123,6 @@ public class ParserProg
                 statlist();
                 match('}');
                 break;
-            case '}':
-                break;
             default:
                 error("Errore in stat");
         }
