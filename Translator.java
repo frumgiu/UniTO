@@ -75,7 +75,7 @@ public class Translator {
                 error("Errore in statlist");
         }
     }
-
+    //slp_next si puo' togliere, non serve a nulla
     private void statlistp(int slp_next)
     {
         switch(look.tag)
@@ -152,12 +152,12 @@ public class Translator {
                 int cond = code.newLabel(); //Mi permette di tornare indietro
                 int be_true = code.newLabel();
                 int be_false = s_next; //Se e' false continuo il codice
-                code.emitLabel(cond); //Sn label
+                code.emitLabel(cond); //Sn label or cond
                 bexpr(be_true, be_false);
                 code.emitLabel(be_true);
                 match(')');
                 stat(s_next);
-                code.emit(OpCode.GOto, cond);
+                code.emit(OpCode.GOto, cond); //cond or s
                 break;
             case '{':
                 match('{');
@@ -265,7 +265,7 @@ public class Translator {
                 error("Errore in bexpr");
         }
     }
-    private void expr( /* completare */ )
+    private void expr()
     {
         switch(look.tag)
         {

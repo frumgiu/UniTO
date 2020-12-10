@@ -36,7 +36,7 @@ L2:
  iload 0
  ldc 0
  if_icmpgt L3
- goto L0
+ goto L1
 L3:
  iload 0
  ldc 1
@@ -44,9 +44,9 @@ L3:
  istore 0
  iload 0
  invokestatic Output/print(I)V
-L0:
+L4:
  goto L2
-L0:
+L1:
 L0:
  return
 .end method

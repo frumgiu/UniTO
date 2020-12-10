@@ -47,6 +47,9 @@ L3:
 L4:
  goto L2
 L1:
+ ldc 6
+ istore 1
+L5:
 L0:
  return
 .end method

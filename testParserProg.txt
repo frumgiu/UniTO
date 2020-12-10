@@ -10,5 +10,6 @@ cond when(== x y) do print(x)
     while (> x 0) {
             = x - x 1;
             print(x)
-        }
+        };
+    = y 6
 }
