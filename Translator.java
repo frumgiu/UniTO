@@ -82,7 +82,7 @@ public class Translator {
             case ';':
                 match(';');
                 int s_next = code.newLabel();
-                stat(s_next); // s_next = newLabel()
+                stat(s_next);
                 code.emitLabel(s_next);
                 statlistp(slp_next);
                 break;
