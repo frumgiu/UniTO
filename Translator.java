@@ -75,7 +75,6 @@ public class Translator {
                 error("Errore in statlist");
         }
     }
-    //slp_next si puo' togliere, non serve a nulla
     private void statlistp(int slp_next)
     {
         switch(look.tag)
