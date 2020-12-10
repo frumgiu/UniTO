@@ -65,29 +65,29 @@ public class Translator {
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                stat(sl_next);
                 int s_next = code.newLabel();
+                stat(s_next);
                 code.emitLabel(s_next);
-                statlistp(s_next);
+                statlistp(sl_next);
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    //slp_next si puo' togliere, non serve a nulla
     private void statlistp(int slp_next)
     {
         switch(look.tag)
         {
             case ';':
                 match(';');
-                stat(slp_next); // s_next = newLabel()
                 int s_next = code.newLabel();
+                stat(s_next);
                 code.emitLabel(s_next);
-                statlistp(s_next);
+                statlistp(slp_next);
                 break;
             case '}':
             case Tag.EOF:
+                //code.emit(OpCode.GOto, slp_next);
                 break;
             default:
                 error("Errore in statlistp");
@@ -137,26 +137,22 @@ public class Translator {
                 break;
             case Tag.COND:
                 match(Tag.COND);
-                //int wl_true = s_next;
                 int wl_false = code.newLabel();
-                whenlist(/*s_next,*/ s_next, wl_false);
+                whenlist(s_next, s_next, wl_false);
                 match(Tag.ELSE);
                 code.emitLabel(wl_false);
-                s_next = wl_false;
-                stat(s_next);
+                stat(s_next); //wl_false
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
-                int cond = code.newLabel(); //Mi permette di tornare indietro
                 int be_true = code.newLabel();
-                int be_false = s_next; //Se e' false continuo il codice
-                code.emitLabel(cond); //Sn label
-                bexpr(be_true, be_false);
-                code.emitLabel(be_true);
+                int s1_next = code.newLabel();
+                code.emitLabel(s1_next); //Sn label
+                bexpr(be_true, s_next); //Se e' false continuo il codice
                 match(')');
-                stat(s_next);
-                code.emit(OpCode.GOto, cond);
+                code.emitLabel(be_true);
+                stat(s1_next);
                 break;
             case '{':
                 match('{');
@@ -169,36 +165,34 @@ public class Translator {
                 error("Errore in stat");
         }
      }
-    private void whenlist(/*int wl_next,*/ int wl_true, int wl_false)
-    {
-        switch(look.tag)
-        {
-            case Tag.WHEN:
-                //int wi_next = code.newLabel();
-                //int wi_true = wl_true;
-                //int wi_false = wl_false;
-                whenitem(/*wl_next,*/ wl_true, wl_false);
-                code.emitLabel(wl_true);
-                //int wlp_next = wl_next;
-                //int wlp_true = wl_true;
-                //int wlp_false = wl_false;
-                whenlistp(/*wl_next,*/ wl_true, wl_false);
-                break;
-            default:
-                error("Errore in whenlist");
-        }
-    }
-    private void whenlistp(/*int wlp_next,*/ int wlp_true, int wlp_false)
+    private void whenlist(int wl_next, int wl_true, int wl_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
                 int wi_next = code.newLabel();
-                //int wi_true = wlp_true;
-                //int wi_false = wlp_false;
-                whenitem(/*wi_next,*/ wlp_true, wlp_false);
+                //int wi_true = wl_true;
+                //int wi_false = wl_false;
+                whenitem(wi_next, wl_true, wl_false);
                 code.emitLabel(wi_next);
-                whenlistp(/*wlp_next,*/ wlp_true, wlp_false);
+                //int wlp_next = wl_next;
+                //int wlp_true = wl_true;
+                //int wlp_false = wl_false;
+                whenlistp(wl_next, wl_true, wl_false);
+                break;
+            default:
+                error("Errore in whenlist");
+        }
+    }
+    private void whenlistp(int wlp_next, int wlp_true, int wlp_false)
+    {
+        switch(look.tag)
+        {
+            case Tag.WHEN:
+                int wi_next = code.newLabel();
+                whenitem(wi_next, wlp_true, wlp_false);
+                code.emitLabel(wi_next);
+                whenlistp(wlp_next, wlp_true, wlp_false);
                 break;
             case Tag.ELSE:
                 break;
@@ -206,19 +200,19 @@ public class Translator {
                 error("Errore in whenlistp");
         }
     }
-    private void whenitem(/*int wi_next,*/ int wi_true, int wi_false)
+    private void whenitem(int wi_next, int wi_true, int wi_false)
     {
         switch(look.tag)
         {
             case Tag.WHEN:
                 match(Tag.WHEN);
                 match('(');
-                //int be_true = wi_true;
-                //int be_false = wi_false;
-                bexpr(wi_true, wi_false);
+                int be_true = code.newLabel();
+                //int be_false = wi_next;
+                bexpr(be_true, wi_next);
                 match(')');
                 match(Tag.DO);
-                code.emitLabel(wi_true);
+                code.emitLabel(be_true);
                 stat(wi_true);
                 break;
             default:

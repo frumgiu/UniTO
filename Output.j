@@ -32,25 +32,25 @@
  .limit locals 256
  ldc 5
  istore 0
-L1:
+L2:
  iload 0
  ldc 2
  iadd 
  istore 1
-L2:
+L3:
  iload 0
  iload 1
- if_icmpeq L2
- goto L3
-L2:
+ if_icmpeq L7
+ goto L6
+L7:
  iload 0
  invokestatic Output/print(I)V
-L2:
-L3:
+L6:
+L5:
  iload 1
  invokestatic Output/print(I)V
 L4:
-L5:
+L1:
 L0:
  return
 .end method
