@@ -38,17 +38,21 @@
  istore 1
  iload 0
  iload 1
- if_icmpne L2
+ if_icmpeq L2
+ goto L1
  iload 0
  invokestatic Output/print(I)V
- goto L1
+ goto L0
 L2:
+L0:
  iload 0
  iload 1
- if_icmple L3
+ if_icmpgt L4
+ goto L1
  ldc 1
  invokestatic Output/print(I)V
- goto L1
+ goto L0
+L4:
 L3:
  iload 1
  invokestatic Output/print(I)V
