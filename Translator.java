@@ -97,8 +97,8 @@ public class Translator {
     {
         switch(look.tag)
         {
-            case Tag.SEQ:
-                match(Tag.SEQ);
+            case '=':
+                match('=');
                 int id_addr = st.lookupAddress(((Word)look).lexeme);
                 if (id_addr == -1)
                 {
@@ -119,7 +119,7 @@ public class Translator {
             case Tag.READ:
                 match(Tag.READ);
                 match('(');
-                if (look.tag==Tag.ID)
+                if (look.tag == Tag.ID)
                 {
                     id_addr = st.lookupAddress(((Word)look).lexeme);
                     if (id_addr==-1) //Non e' caricata nella symbol table
@@ -141,22 +141,22 @@ public class Translator {
                 int wl_false = code.newLabel();
                 whenlist(/*s_next,*/ s_next, wl_false);
                 match(Tag.ELSE);
+                stat(wl_false);
                 code.emitLabel(wl_false);
-                s_next = wl_false;
-                stat(s_next);
+                //s_next = wl_false;
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
                 int cond = code.newLabel(); //Mi permette di tornare indietro
                 int be_true = code.newLabel();
-                int be_false = s_next; //Se e' false continuo il codice
+                //int be_false = s_next; Se e' false continuo il codice
                 code.emitLabel(cond); //Sn label or cond
-                bexpr(be_true, be_false);
+                bexpr(be_true, s_next);
                 code.emitLabel(be_true);
                 match(')');
                 stat(s_next);
-                code.emit(OpCode.GOto, cond); //cond or s
+                code.emit(OpCode.GOto, cond); //cond
                 break;
             case '{':
                 match('{');
@@ -167,7 +167,7 @@ public class Translator {
                 error("Errore in stat");
         }
      }
-    private void whenlist(/*int wl_next,*/ int wl_true, int wl_false)
+    private void whenlist(/*int wl_next,*/ int wl_true , int wl_false)
     {
         switch(look.tag)
         {
@@ -176,7 +176,7 @@ public class Translator {
                 //int wi_true = wl_true;
                 //int wi_false = wl_false;
                 whenitem(/*wl_next,*/ wl_true, wl_false);
-                code.emitLabel(wl_true);
+                code.emitLabel(wl_true);//
                 //int wlp_next = wl_next;
                 //int wlp_true = wl_true;
                 //int wlp_false = wl_false;
@@ -195,7 +195,7 @@ public class Translator {
                 //int wi_true = wlp_true;
                 //int wi_false = wlp_false;
                 whenitem(/*wi_next,*/ wlp_true, wlp_false);
-                code.emitLabel(wi_next);
+                code.emitLabel(wi_next);//
                 whenlistp(/*wlp_next,*/ wlp_true, wlp_false);
                 break;
             case Tag.ELSE:
@@ -216,8 +216,8 @@ public class Translator {
                 bexpr(wi_true, wi_false);
                 match(')');
                 match(Tag.DO);
-                code.emitLabel(wi_true);
                 stat(wi_true);
+                code.emitLabel(wi_true);
                 break;
             default:
                 error("Errore in whenlist");
