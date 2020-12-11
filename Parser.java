@@ -1,4 +1,6 @@
 import java.io.*;
+//NOTAZIONE FORMA INFISSA
+//Es. 2+2
 //Grammatica LL(1)
 //Varibili: start, expr, exprp, term, termp, fact
 //Terminali: 0,...,9, +, -, *, /, (, ) (3.1)

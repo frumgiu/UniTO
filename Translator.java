@@ -36,7 +36,7 @@ public class Translator {
         switch(look.tag)
         {
             case '{':
-            case Tag.ASSIGN:
+            case Tag.SEQ:
             case Tag.PRINT:
             case Tag.READ:
             case Tag.COND:
@@ -61,7 +61,7 @@ public class Translator {
         switch (look.tag)
         {
             case '{':
-            case Tag.ASSIGN:
+            case '=':
             case Tag.PRINT:
             case Tag.READ:
             case Tag.COND:
@@ -81,9 +81,9 @@ public class Translator {
         {
             case ';':
                 match(';');
-                int s_next = code.newLabel();
-                stat(s_next);
-                code.emitLabel(s_next);
+                //int s_next = code.newLabel();
+                stat(slp_next);
+                //code.emitLabel(s_next);
                 statlistp(slp_next);
                 break;
             case '}':
@@ -97,8 +97,8 @@ public class Translator {
     {
         switch(look.tag)
         {
-            case Tag.ASSIGN:
-                match(Tag.ASSIGN);
+            case Tag.SEQ:
+                match(Tag.SEQ);
                 int id_addr = st.lookupAddress(((Word)look).lexeme);
                 if (id_addr == -1)
                 {

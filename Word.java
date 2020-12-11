@@ -10,7 +10,7 @@ public class Word extends Token
             elsetok = new Word(Tag.ELSE, "else"),
             whiletok = new Word(Tag.WHILE, "while"),
             dotok = new Word(Tag.DO, "do"),
-            assign = new Word(Tag.ASSIGN, "="),
+            seq = new Word(Tag.SEQ, "seq"),
             print = new Word(Tag.PRINT, "print"),
             read = new Word(Tag.READ, "read"),
             or = new Word(Tag.OR, "||"),

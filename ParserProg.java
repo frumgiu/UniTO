@@ -38,7 +38,7 @@ public class ParserProg
         switch(look.tag)
         {
             case '{':
-            case Tag.ASSIGN:
+            case Tag.SEQ:
             case Tag.PRINT:
             case Tag.READ:
             case Tag.COND:
@@ -56,7 +56,7 @@ public class ParserProg
         switch (look.tag)
         {
             case '{':
-            case Tag.ASSIGN:
+            case '=':
             case Tag.PRINT:
             case Tag.READ:
             case Tag.COND:
@@ -88,8 +88,8 @@ public class ParserProg
     {
         switch (look.tag)
         {
-            case Tag.ASSIGN:
-                match(Tag.ASSIGN);
+            case '=':
+                match('=');
                 match(Tag.ID);
                 expr();
                 break;

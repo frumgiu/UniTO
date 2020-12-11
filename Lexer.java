@@ -280,6 +280,8 @@ public class Lexer
                 return Word.print;
             case "read":
                 return Word.read;
+            case "seq":
+                return Word.seq;
 
             default:
                 return null;
