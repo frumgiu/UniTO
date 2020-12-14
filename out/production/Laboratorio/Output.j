@@ -39,20 +39,16 @@
  iload 0
  iload 1
  if_icmpne L2
- goto L1
  iload 0
  invokestatic Output/print(I)V
- goto L0
+ goto L1
 L2:
-L0:
  iload 0
  iload 1
- if_icmpgt L4
- goto L1
+ if_icmple L3
  ldc 1
  invokestatic Output/print(I)V
- goto L0
-L4:
+ goto L1
 L3:
  iload 1
  invokestatic Output/print(I)V

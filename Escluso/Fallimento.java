@@ -1,3 +1,5 @@
+package Escluso;
+
 import java.io.*;
 
 public class Fallimento {

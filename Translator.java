@@ -1,6 +1,7 @@
 import java.io.*;
 
-public class Translator {
+public class Translator
+{
         private Lexer lex;
         private BufferedReader pbr;
         private Token look;
@@ -19,11 +20,9 @@ public class Translator {
             look = lex.lexical_scan(pbr);
             System.out.println("token = " + look);
         }
-
         void error(String s) {
             throw new Error("near line " + lex.line + ": " + s);
         }
-
         void match(int t) {
             if (look.tag == t) {
                 if (look.tag != Tag.EOF)
@@ -31,7 +30,8 @@ public class Translator {
             } else error("syntax error");
         }
 
-        public void prog() {
+        public void prog()
+        {
             switch (look.tag) {
                 case '{':
 
@@ -53,8 +53,8 @@ public class Translator {
                     error("Errore in prog");
             }
         }
-
-        private void statlist(int sl_next) {
+        private void statlist(int sl_next)
+        {
             //Commentando le righe riguardanti s_next dimezza il numero di etichette
             switch (look.tag) {
                 case '{':
@@ -70,11 +70,12 @@ public class Translator {
                     error("Errore in statlist");
             }
         }
-
-        private void statlistp(int slp_next) {
+        private void statlistp(int slp_next)
+        {
             switch (look.tag) {
                 case ';':
                     match(';');
+                    code.emitLabel(code.newLabel());
                     stat(slp_next);
                     statlistp(slp_next);
                     break;
@@ -137,13 +138,14 @@ public class Translator {
                     match('(');
                     int cond = code.newLabel();
                     code.emitLabel(cond); //Mi permette di tornare indietro
-                    int be_true = code.newLabel();
-                    bexpr(be_true);
-                    System.out.println(be_true);
+                    int be_false = code.newLabel();
+                    bexpr(be_false);
+                    code.emitLabel(be_false);
+                    System.out.println(be_false);
                     match(')');
-                    stat(be_true);
+                    stat(be_false);
                     code.emit(OpCode.GOto, cond);
-                    code.emitLabel(be_true);
+                    code.emitLabel(be_false);
                     break;
                 case '{':
                     match('{');
@@ -154,24 +156,23 @@ public class Translator {
                     error("Errore in stat");
             }
         }
-
-        private void whenlist(int wl_true)
+        private void whenlist(int wl_false)
         {
             switch (look.tag) {
                 case Tag.WHEN:
-                    whenitem(wl_true);
-                    whenlistp(wl_true);
+                    whenitem(wl_false);
+                    whenlistp(wl_false);
                     break;
                 default:
                     error("Errore in whenlist");
             }
         }
-        private void whenlistp(int wlp_true)
+        private void whenlistp(int wlp_false)
         {
             switch (look.tag) {
                 case Tag.WHEN:
-                    whenitem(wlp_true);
-                    whenlistp(wlp_true);
+                    whenitem(wlp_false);
+                    whenlistp(wlp_false);
                     break;
                 case Tag.ELSE:
                     break;
@@ -179,51 +180,52 @@ public class Translator {
                     error("Errore in whenlistp");
             }
         }
-        private void whenitem(int wi_true)
+        private void whenitem(int wi_false)
         {
-            int uscita = wi_true;
+            int uscita = wi_false;
             switch (look.tag) {
                 case Tag.WHEN:
                     match(Tag.WHEN);
                     match('(');
-                    wi_true = code.newLabel();
-                    bexpr(wi_true);
+                    wi_false = code.newLabel();
+                    bexpr(wi_false);
                     match(')');
                     match(Tag.DO);
-                    stat(wi_true);
+                    stat(wi_false);
                     code.emit(OpCode.GOto, uscita);
-                    code.emitLabel(wi_true);
+                    code.emitLabel(wi_false);
                     break;
                 default:
                     error("Errore in whenlist");
             }
         }
-
-        private void bexpr(int be_true) {
+        private void bexpr(int be_false)
+        {
             switch (look.tag) {
                 case Tag.RELOP:
                     Word relop = (Word) look; //Mi serve per capire che simbolo RELOP c'e'
                     match(Tag.RELOP);
                     expr();
                     expr();
+                    //Se e' true continuo il codice, se è false salto sul suo inverso
                     switch (relop.lexeme) {
                         case "==":
-                            code.emit(OpCode.if_icmpne, be_true);
+                            code.emit(OpCode.if_icmpne, be_false);
                             break;
                         case "<>":
-                            code.emit(OpCode.if_icmpeq, be_true);
+                            code.emit(OpCode.if_icmpeq, be_false);
                             break;
                         case "<":
-                            code.emit(OpCode.if_icmpge, be_true);
+                            code.emit(OpCode.if_icmpge, be_false);
                             break;
                         case "<=":
-                            code.emit(OpCode.if_icmpgt, be_true);
+                            code.emit(OpCode.if_icmpgt, be_false);
                             break;
                         case ">":
-                            code.emit(OpCode.if_icmple, be_true);
+                            code.emit(OpCode.if_icmple, be_false);
                             break;
                         case ">=":
-                            code.emit(OpCode.if_icmplt, be_true);
+                            code.emit(OpCode.if_icmplt, be_false);
                             break;
                     }
                     break;
@@ -231,8 +233,8 @@ public class Translator {
                     error("Errore in bexpr");
             }
         }
-
-        private void expr() {
+        private void expr()
+        {
             switch (look.tag) {
                 case '+':
                     match('+');
@@ -277,8 +279,8 @@ public class Translator {
                     error("Errore in expr");
             }
         }
-
-        private void exprlist() {
+        private void exprlist()
+        {
             switch (look.tag) {
                 case '+':
                 case '-':
@@ -293,8 +295,8 @@ public class Translator {
                     error("Errore in exprlist");
             }
         }
-
-        private void exprlistp() {
+        private void exprlistp()
+        {
             switch (look.tag) {
                 case '+':
                 case '-':
@@ -312,7 +314,8 @@ public class Translator {
             }
         }
         /*parte del main*/
-        public static void main(String[] args) {
+        public static void main(String[] args)
+        {
             Lexer lex = new Lexer();
             String path = "testParserProg.txt"; // il percorso del file da leggere
             try {
