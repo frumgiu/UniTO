@@ -34,7 +34,6 @@ public class Translator
         {
             switch (look.tag) {
                 case '{':
-
                 case Tag.PRINT:
                 case Tag.READ:
                 case Tag.COND:
@@ -104,7 +103,7 @@ public class Translator
                 case Tag.PRINT:
                     match(Tag.PRINT);
                     match('(');
-                    exprlist();
+                    exprlist(look);
                     match(')');
                     code.emit(OpCode.invokestatic, 1);
                     break;
@@ -235,20 +234,21 @@ public class Translator
         }
         private void expr()
         {
-            switch (look.tag) {
+            switch (look.tag)
+            {
                 case '+':
+                    Token somma = look;
                     match('+');
                     match('(');
-                    exprlist();
+                    exprlist(somma);
                     match(')');
-                    code.emit(OpCode.iadd);
                     break;
                 case '*':
+                    Token prodotto = look;
                     match('*');
                     match('(');
-                    exprlist();
+                    exprlist(prodotto);
                     match(')');
-                    code.emit(OpCode.imul);
                     break;
                 case '-':
                     match('-');
@@ -279,33 +279,38 @@ public class Translator
                     error("Errore in expr");
             }
         }
-        private void exprlist()
+        private void exprlist(Token operando)
         {
             switch (look.tag) {
                 case '+':
-                case '-':
                 case '*':
+                case '-':
                 case '/':
                 case Tag.NUM:
                 case Tag.ID:
                     expr();
-                    exprlistp();
+                    exprlistp(operando);
                     break;
                 default:
                     error("Errore in exprlist");
             }
         }
-        private void exprlistp()
+        private void exprlistp(Token op)
         {
-            switch (look.tag) {
+            switch (look.tag)
+            {
                 case '+':
-                case '-':
                 case '*':
+                case '-':
                 case '/':
                 case Tag.NUM:
                 case Tag.ID:
                     expr();
-                    exprlistp();
+                    if(op.tag == '+')
+                        code.emit(OpCode.iadd);
+                    else if(op.tag == '*')
+                        code.emit(OpCode.imul);
+                    exprlistp(op);
                     break;
                 case ')':
                     break;
