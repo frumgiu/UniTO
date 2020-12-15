@@ -105,7 +105,6 @@ public class Translator
                     match('(');
                     exprlist(look);
                     match(')');
-                    //code.emit(OpCode.invokestatic, 1);
                     break;
                 case Tag.READ:
                     match(Tag.READ);

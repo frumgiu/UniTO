@@ -30,16 +30,11 @@
 .method public static run()V
  .limit stack 1024
  .limit locals 256
- ldc 4
+ ldc 2
+ ldc 1
  ldc 3
  iadd 
- ldc 2
- iadd 
- ldc 1
- iadd 
  invokestatic Output/print(I)V
- ldc 2
- iadd 
  invokestatic Output/print(I)V
 L0:
  return
