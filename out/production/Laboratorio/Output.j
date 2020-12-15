@@ -38,6 +38,10 @@
  ldc 1
  iadd 
  invokestatic Output/print(I)V
+ ldc 2
+ iadd 
+ invokestatic Output/print(I)V
+ invokestatic Output/print(I)V
 L0:
  return
 .end method

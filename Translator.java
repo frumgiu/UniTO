@@ -105,7 +105,7 @@ public class Translator
                     match('(');
                     exprlist(look);
                     match(')');
-                    code.emit(OpCode.invokestatic, 1);
+                    //code.emit(OpCode.invokestatic, 1);
                     break;
                 case Tag.READ:
                     match(Tag.READ);
@@ -313,6 +313,7 @@ public class Translator
                     exprlistp(op);
                     break;
                 case ')':
+                    code.emit(OpCode.invokestatic, 1);
                     break;
                 default:
                     error("Errore in exprlistp");
