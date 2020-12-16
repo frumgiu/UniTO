@@ -33,9 +33,11 @@
  ldc 1
  ldc 3
  iadd 
+ ldc 5
+ iadd 
  invokestatic Output/print(I)V
  ldc 2
- iadd 
+ ldc 4
  invokestatic Output/print(I)V
 L0:
  return

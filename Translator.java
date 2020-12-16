@@ -103,7 +103,7 @@ public class Translator
             case Tag.PRINT:
                 match(Tag.PRINT);
                 match('(');
-                exprlist(look);
+                exprlist(look, true, false);
                 match(')');
                 break;
             case Tag.READ:
@@ -239,14 +239,14 @@ public class Translator
                 Token somma = look;
                 match('+');
                 match('(');
-                exprlist(somma);
+                exprlist(somma, true, true);
                 match(')');
                 break;
             case '*':
                 Token prodotto = look;
                 match('*');
                 match('(');
-                exprlist(prodotto);
+                exprlist(prodotto, true, true);
                 match(')');
                 break;
             case '-':
@@ -278,7 +278,7 @@ public class Translator
                 error("Errore in expr");
         }
     }
-    private void exprlist(Token operando)
+    private void exprlist(Token operando,  boolean printB, boolean operatore)
     {
         switch (look.tag) {
             case '+':
@@ -288,13 +288,13 @@ public class Translator
             case Tag.NUM:
             case Tag.ID:
                 expr();
-                exprlistp(operando);
+                exprlistp(operando, printB, operatore);
                 break;
             default:
                 error("Errore in exprlist");
         }
     }
-    private void exprlistp(Token op)
+    private void exprlistp(Token op, boolean print, boolean operatore)
     {
         switch (look.tag)
         {
@@ -305,14 +305,15 @@ public class Translator
             case Tag.NUM:
             case Tag.ID:
                 expr();
-                if(op.tag == '+')
+                if(op.tag == '+' && operatore)
                     code.emit(OpCode.iadd);
-                else if(op.tag == '*')
+                else if(op.tag == '*' && operatore)
                     code.emit(OpCode.imul);
-                exprlistp(op);
+                exprlistp(op, print, operatore);
                 break;
             case ')':
                 code.emit(OpCode.invokestatic, 1);
+                operatore = false;
                 break;
             default:
                 error("Errore in exprlistp");

@@ -32,8 +32,12 @@
  .limit locals 256
  ldc 1
  ldc 3
- invokestatic Output/print(I)V
+ iadd 
+ ldc 5
+ iadd 
  ldc 2
+ invokestatic Output/print(I)V
+ ldc 4
  invokestatic Output/print(I)V
 L0:
  return
