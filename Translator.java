@@ -103,7 +103,7 @@ public class Translator
             case Tag.PRINT:
                 match(Tag.PRINT);
                 match('(');
-                exprlist(look, true, false);
+                exprlist(true, false);
                 match(')');
                 break;
             case Tag.READ:
@@ -143,7 +143,7 @@ public class Translator
                 match(')');
                 stat(be_false);
                 code.emit(OpCode.GOto, cond);
-                code.emitLabel(be_false);
+                //code.emitLabel(be_false);
                 break;
             case '{':
                 match('{');
@@ -236,17 +236,17 @@ public class Translator
         switch (look.tag)
         {
             case '+':
-                Token somma = look;
+                //Token somma = look;
                 match('+');
                 match('(');
-                exprlist(somma, true, true);
+                exprlist(false, true);
                 match(')');
                 break;
             case '*':
                 Token prodotto = look;
                 match('*');
                 match('(');
-                exprlist(prodotto, true, true);
+                exprlist(false, false);
                 match(')');
                 break;
             case '-':
@@ -278,7 +278,7 @@ public class Translator
                 error("Errore in expr");
         }
     }
-    private void exprlist(Token operando,  boolean printB, boolean operatore)
+    private void exprlist(boolean printB, boolean operatore)
     {
         switch (look.tag) {
             case '+':
@@ -288,13 +288,15 @@ public class Translator
             case Tag.NUM:
             case Tag.ID:
                 expr();
-                exprlistp(operando, printB, operatore);
+                if (printB)
+                    code.emit(OpCode.invokestatic, 1);
+                exprlistp(printB, operatore);
                 break;
             default:
                 error("Errore in exprlist");
         }
     }
-    private void exprlistp(Token op, boolean print, boolean operatore)
+    private void exprlistp(boolean print, boolean operatore)
     {
         switch (look.tag)
         {
@@ -305,15 +307,15 @@ public class Translator
             case Tag.NUM:
             case Tag.ID:
                 expr();
-                if(op.tag == '+' && operatore)
+                if(!print && operatore)
                     code.emit(OpCode.iadd);
-                else if(op.tag == '*' && operatore)
+                else if(!print && !operatore)
                     code.emit(OpCode.imul);
-                exprlistp(op, print, operatore);
+                else
+                    code.emit(OpCode.invokestatic, 1);
+                exprlistp(print, operatore);
                 break;
             case ')':
-                code.emit(OpCode.invokestatic, 1);
-                operatore = false;
                 break;
             default:
                 error("Errore in exprlistp");
