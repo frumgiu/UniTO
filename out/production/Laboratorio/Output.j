@@ -36,17 +36,27 @@ L1:
 L2:
  iload 0
  ldc 0
- if_icmple L3
+ if_icmpne L3
+ goto L4
 L3:
  iload 0
  ldc 1
  isub 
  istore 0
-L4:
+L5:
  iload 0
  invokestatic Output/print(I)V
  goto L2
-L3:
+L4:
+L6:
+ ldc 1
+ ldc 2
+ iadd 
+ ldc 4
+ ldc 3
+ isub 
+ iadd 
+ invokestatic Output/print(I)V
 L0:
  return
 .end method

@@ -138,12 +138,14 @@ public class Translator
                 code.emitLabel(cond); //Mi permette di tornare indietro
                 int be_false = code.newLabel();
                 bexpr(be_false);
+                int be_true = code.newLabel();
+                code.emit(OpCode.GOto, be_true);
                 code.emitLabel(be_false);
                 System.out.println(be_false);
                 match(')');
                 stat(be_false);
                 code.emit(OpCode.GOto, cond);
-                //code.emitLabel(be_false);
+                code.emitLabel(be_true);
                 break;
             case '{':
                 match('{');
@@ -186,7 +188,7 @@ public class Translator
                 match(Tag.WHEN);
                 match('(');
                 wi_false = code.newLabel();
-                bexpr(wi_false);
+                bexpr(wi_false );
                 match(')');
                 match(Tag.DO);
                 stat(wi_false);
