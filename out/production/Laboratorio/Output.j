@@ -52,6 +52,8 @@ L6:
  ldc 1
  ldc 2
  iadd 
+ ldc 3
+ iadd 
  ldc 4
  ldc 3
  isub 
