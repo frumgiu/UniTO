@@ -40,21 +40,28 @@ L1:
 L2:
  iload 0
  iload 1
- if_icmpeq L4
- goto L3
+ if_icmpeq L3
+ goto L4
+L3:
  iload 0
  invokestatic Output/print(I)V
+ goto L5
 L4:
  iload 0
  iload 1
- if_icmpgt L5
- goto L3
+ if_icmpgt L6
+ goto L7
+L6:
  ldc 1
  invokestatic Output/print(I)V
-L5:
+ goto L5
+L7:
  iload 1
  invokestatic Output/print(I)V
-L3:
+L5:
+L8:
+ ldc 2
+ istore 2
 L0:
  return
 .end method

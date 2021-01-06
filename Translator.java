@@ -124,27 +124,29 @@ public class Translator
                 break;
             case Tag.COND:
                 match(Tag.COND);
-                int wl_false = code.newLabel();
-                whenlist(wl_false);
+                int wl_false;// = code.newLabel();
+                int uscita; // = code.newLabel();
+                whenlist(code.newLabel(), (wl_false = code.newLabel()), (uscita = code.newLabel()));
                 match(Tag.ELSE);
                 stat(wl_false);
-                code.emitLabel(wl_false);
+                code.emitLabel(uscita);   //Deve essere l'uscita dei GOto
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
                 int cond = code.newLabel();
                 code.emitLabel(cond); //Mi permette di tornare indietro
-                int be_false = code.newLabel();
-                bexpr(be_false);
                 int be_true = code.newLabel();
-                code.emit(OpCode.GOto, be_true);
-                code.emitLabel(be_false);
-                System.out.println(be_false);
-                match(')');
-                stat(be_false);
-                code.emit(OpCode.GOto, cond);
+                int be_false = code.newLabel();
+                bexpr(be_true, be_false);
+
+                //code.emit(OpCode.GOto, be_true);
                 code.emitLabel(be_true);
+                //System.out.println(be_false);
+                match(')');
+                stat(be_true);
+                code.emit(OpCode.GOto, cond);
+                code.emitLabel(be_false);
                 break;
             case '{':
                 match('{');
@@ -155,23 +157,24 @@ public class Translator
                 error("Errore in stat");
         }
     }
-    private void whenlist(int wl_false)
+    private void whenlist(int wl_true, int wl_false, int uscita)
     {
+
         switch (look.tag) {
             case Tag.WHEN:
-                whenitem(wl_false);
-                whenlistp(wl_false);
+                whenitem(wl_true, wl_false, uscita);
+                whenlistp(code.newLabel(), code.newLabel(), uscita);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void whenlistp(int wlp_false)
+    private void whenlistp(int wlp_true, int wlp_false, int uscita)
     {
         switch (look.tag) {
             case Tag.WHEN:
-                whenitem(wlp_false);
-                whenlistp(wlp_false);
+                whenitem(wlp_true, wlp_false, uscita);
+                whenlistp(wlp_true, wlp_false, uscita);
                 break;
             case Tag.ELSE:
                 break;
@@ -179,27 +182,28 @@ public class Translator
                 error("Errore in whenlistp");
         }
     }
-    private void whenitem(int wi_false)
+    private void whenitem(int wi_true, int wi_false, int uscita)
     {
-        int uscita = wi_false;
+
         switch (look.tag) {
             case Tag.WHEN:
                 match(Tag.WHEN);
                 match('(');
-                wi_false = code.newLabel();
-                bexpr(wi_false);
-                code.emit(OpCode.GOto, uscita);
+                //wi_true = code.newLabel();
+                bexpr(wi_true, wi_false);
+                //code.emit(OpCode.GOto, uscita);
                 match(')');
                 match(Tag.DO);
-                stat(wi_false);
-
+                code.emitLabel(wi_true);
+                stat(wi_true);
+                code.emit(OpCode.GOto, uscita);
                 code.emitLabel(wi_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr(int be_true)
+    private void bexpr(int be_true, int be_false)
     {
         switch (look.tag) {
             case Tag.RELOP:
@@ -215,18 +219,23 @@ public class Translator
                         break;
                     case "<>":
                         code.emit(OpCode.if_icmpne, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<":
                         code.emit(OpCode.if_icmplt, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<=":
                         code.emit(OpCode.if_icmple, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case ">":
                         code.emit(OpCode.if_icmpgt, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case ">=":
                         code.emit(OpCode.if_icmpge, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                 }
                 break;

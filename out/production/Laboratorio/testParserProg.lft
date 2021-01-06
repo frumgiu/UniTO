@@ -3,7 +3,9 @@
     cond
         when(== x y) do print(x)
         when(> x y) do print(1)
-        else print(y)
+        else print(y);
+
+    = c 2
  }
 /*
 {   = x 5;
