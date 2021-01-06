@@ -188,17 +188,18 @@ public class Translator
                 match('(');
                 wi_false = code.newLabel();
                 bexpr(wi_false);
+                code.emit(OpCode.GOto, uscita);
                 match(')');
                 match(Tag.DO);
                 stat(wi_false);
-                code.emit(OpCode.GOto, uscita);
+
                 code.emitLabel(wi_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr(int be_false)
+    private void bexpr(int be_true)
     {
         switch (look.tag) {
             case Tag.RELOP:
@@ -209,22 +210,23 @@ public class Translator
                 //Se e' true continuo il codice, se è false salto sul suo inverso
                 switch (relop.lexeme) {
                     case "==":
-                        code.emit(OpCode.if_icmpeq, be_false);
+                        code.emit(OpCode.if_icmpeq, be_true);
+                        code.emit(OpCode.GOto, be_false);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne, be_false);
+                        code.emit(OpCode.if_icmpne, be_true);
                         break;
                     case "<":
-                        code.emit(OpCode.if_icmplt, be_false);
+                        code.emit(OpCode.if_icmplt, be_true);
                         break;
                     case "<=":
-                        code.emit(OpCode.if_icmple, be_false);
+                        code.emit(OpCode.if_icmple, be_true);
                         break;
                     case ">":
-                        code.emit(OpCode.if_icmpgt, be_false);
+                        code.emit(OpCode.if_icmpgt, be_true);
                         break;
                     case ">=":
-                        code.emit(OpCode.if_icmpge, be_false);
+                        code.emit(OpCode.if_icmpge, be_true);
                         break;
                 }
                 break;
