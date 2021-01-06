@@ -127,24 +127,24 @@ public class Translator
                 int wl_false = code.newLabel();
                 whenlist(wl_false);
                 match(Tag.ELSE);
-                stat(wl_false);
+                stat(s_next);
                 code.emitLabel(wl_false);
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
                 int cond = code.newLabel();
-                code.emitLabel(cond); //Mi permette di tornare indietro
-                int be_false = code.newLabel();
-                bexpr(be_false);
+                code.emitLabel(cond);               //Mi permette di tornare indietro
                 int be_true = code.newLabel();
-                code.emit(OpCode.GOto, be_true);
-                code.emitLabel(be_false);
-                System.out.println(be_false);
-                match(')');
-                stat(be_false);
-                code.emit(OpCode.GOto, cond);
+                bexpr(be_true);
+                int be_false = code.newLabel();
+                code.emit(OpCode.GOto, be_false);
                 code.emitLabel(be_true);
+                System.out.println(be_true);
+                match(')');
+                stat(be_true);
+                code.emit(OpCode.GOto, cond);
+                code.emitLabel(be_false);
                 break;
             case '{':
                 match('{');
@@ -187,18 +187,18 @@ public class Translator
                 match(Tag.WHEN);
                 match('(');
                 wi_false = code.newLabel();
-                bexpr(wi_false );
+                bexpr(uscita);
                 match(')');
                 match(Tag.DO);
                 stat(wi_false);
-                code.emit(OpCode.GOto, uscita);
+                code.emit(OpCode.GOto, wi_false);
                 code.emitLabel(wi_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr(int be_false)
+    private void bexpr(int be_true)
     {
         switch (look.tag) {
             case Tag.RELOP:
@@ -209,22 +209,22 @@ public class Translator
                 //Se e' true continuo il codice, se è false salto sul suo inverso
                 switch (relop.lexeme) {
                     case "==":
-                        code.emit(OpCode.if_icmpeq, be_false);
+                        code.emit(OpCode.if_icmpeq, be_true);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne, be_false);
+                        code.emit(OpCode.if_icmpne, be_true);
                         break;
                     case "<":
-                        code.emit(OpCode.if_icmplt, be_false);
+                        code.emit(OpCode.if_icmplt, be_true);
                         break;
                     case "<=":
-                        code.emit(OpCode.if_icmple, be_false);
+                        code.emit(OpCode.if_icmple, be_true);
                         break;
                     case ">":
-                        code.emit(OpCode.if_icmpgt, be_false);
+                        code.emit(OpCode.if_icmpgt, be_true);
                         break;
                     case ">=":
-                        code.emit(OpCode.if_icmpge, be_false);
+                        code.emit(OpCode.if_icmpge, be_true);
                         break;
                 }
                 break;
