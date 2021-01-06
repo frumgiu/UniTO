@@ -39,7 +39,7 @@ public class Translator
             case Tag.COND:
             case Tag.WHILE:
                 int lnext_prog = code.newLabel();
-                statlist(lnext_prog);
+                statlist();
                 code.emitLabel(lnext_prog);
                 match(Tag.EOF);
                 try {
@@ -52,7 +52,7 @@ public class Translator
                 error("Errore in prog");
         }
     }
-    private void statlist(int sl_next)
+    private void statlist()
     {
         switch (look.tag) {
             case '{':
@@ -61,21 +61,21 @@ public class Translator
             case Tag.READ:
             case Tag.COND:
             case Tag.WHILE:
-                stat(sl_next);
-                statlistp(sl_next);
+                stat();
+                statlistp();
                 break;
             default:
                 error("Errore in statlist");
         }
     }
-    private void statlistp(int slp_next)
+    private void statlistp()
     {
         switch (look.tag) {
             case ';':
                 match(';');
                 code.emitLabel(code.newLabel());
-                stat(slp_next);
-                statlistp(slp_next);
+                stat();
+                statlistp();
                 break;
             case '}':
             case Tag.EOF:
@@ -84,7 +84,7 @@ public class Translator
                 error("Errore in statlistp");
         }
     }
-    public void stat(int s_next)
+    public void stat()
     {
         switch (look.tag)
         {
@@ -128,7 +128,7 @@ public class Translator
                 int uscita; // = code.newLabel();
                 whenlist(code.newLabel(), (wl_false = code.newLabel()), (uscita = code.newLabel()));
                 match(Tag.ELSE);
-                stat(wl_false);
+                stat();
                 code.emitLabel(uscita);   //Deve essere l'uscita dei GOto
                 break;
             case Tag.WHILE:
@@ -139,18 +139,15 @@ public class Translator
                 int be_true = code.newLabel();
                 int be_false = code.newLabel();
                 bexpr(be_true, be_false);
-
-                //code.emit(OpCode.GOto, be_true);
                 code.emitLabel(be_true);
-                //System.out.println(be_false);
                 match(')');
-                stat(be_true);
+                stat();
                 code.emit(OpCode.GOto, cond);
                 code.emitLabel(be_false);
                 break;
             case '{':
                 match('{');
-                statlist(s_next);
+                statlist();
                 match('}');
                 break;
             default:
@@ -195,7 +192,7 @@ public class Translator
                 match(')');
                 match(Tag.DO);
                 code.emitLabel(wi_true);
-                stat(wi_true);
+                stat();
                 code.emit(OpCode.GOto, uscita);
                 code.emitLabel(wi_false);
                 break;
