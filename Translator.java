@@ -54,7 +54,6 @@ public class Translator
     }
     private void statlist(int sl_next)
     {
-        //Commentando le righe riguardanti s_next dimezza il numero di etichette
         switch (look.tag) {
             case '{':
             case '=':
@@ -238,14 +237,12 @@ public class Translator
         switch (look.tag)
         {
             case '+':
-                //Token somma = look;
                 match('+');
                 match('(');
                 exprlist(false, true);
                 match(')');
                 break;
             case '*':
-                Token prodotto = look;
                 match('*');
                 match('(');
                 exprlist(false, false);

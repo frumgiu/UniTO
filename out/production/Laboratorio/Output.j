@@ -51,13 +51,13 @@ L4:
 L6:
  ldc 1
  ldc 2
- iadd 
+ imul 
  ldc 3
- iadd 
+ imul 
  ldc 4
  ldc 3
  isub 
- iadd 
+ imul 
  invokestatic Output/print(I)V
 L0:
  return
