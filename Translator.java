@@ -209,22 +209,22 @@ public class Translator
                 //Se e' true continuo il codice, se è false salto sul suo inverso
                 switch (relop.lexeme) {
                     case "==":
-                        code.emit(OpCode.if_icmpne, be_false);
-                        break;
-                    case "<>":
                         code.emit(OpCode.if_icmpeq, be_false);
                         break;
+                    case "<>":
+                        code.emit(OpCode.if_icmpne, be_false);
+                        break;
                     case "<":
-                        code.emit(OpCode.if_icmpge, be_false);
+                        code.emit(OpCode.if_icmplt, be_false);
                         break;
                     case "<=":
-                        code.emit(OpCode.if_icmpgt, be_false);
-                        break;
-                    case ">":
                         code.emit(OpCode.if_icmple, be_false);
                         break;
+                    case ">":
+                        code.emit(OpCode.if_icmpgt, be_false);
+                        break;
                     case ">=":
-                        code.emit(OpCode.if_icmplt, be_false);
+                        code.emit(OpCode.if_icmpge, be_false);
                         break;
                 }
                 break;

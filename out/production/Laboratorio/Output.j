@@ -36,7 +36,7 @@ L1:
 L2:
  iload 0
  ldc 0
- if_icmpne L3
+ if_icmpgt L3
  goto L4
 L3:
  iload 0
