@@ -33,28 +33,32 @@
  ldc 5
  istore 0
 L1:
- iload 0
- ldc 2
- iadd 
- istore 1
 L2:
  iload 0
- iload 1
- if_icmpeq L3
- iload 0
- invokestatic Output/print(I)V
- goto L4
-L4:
- iload 0
- iload 1
+ ldc 0
  if_icmpgt L3
- ldc 1
- invokestatic Output/print(I)V
- goto L5
-L5:
- iload 1
- invokestatic Output/print(I)V
+ goto L4
 L3:
+ iload 0
+ ldc 1
+ isub 
+ istore 0
+L5:
+ iload 0
+ invokestatic Output/print(I)V
+ goto L2
+L4:
+L6:
+ ldc 1
+ ldc 2
+ imul 
+ ldc 3
+ imul 
+ ldc 4
+ ldc 3
+ isub 
+ imul 
+ invokestatic Output/print(I)V
 L0:
  return
 .end method

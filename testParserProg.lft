@@ -1,11 +1,11 @@
-{   = x 5;
+ /*{   = x 5;
     = y +(x 2);
     cond
         when(== x y) do print(x)
         when(> x y) do print(1)
         else print(y)
- }
- /*
+ }*/
+
 {   = x 5;
     while (> x 0) {
             = x - x 1;
@@ -13,4 +13,3 @@
         };
         print(*(1 2 3 - 4 3))
 }
-*/

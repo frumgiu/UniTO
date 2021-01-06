@@ -127,24 +127,24 @@ public class Translator
                 int wl_false = code.newLabel();
                 whenlist(wl_false);
                 match(Tag.ELSE);
-                stat(s_next);
+                stat(wl_false);
                 code.emitLabel(wl_false);
                 break;
             case Tag.WHILE:
                 match(Tag.WHILE);
                 match('(');
                 int cond = code.newLabel();
-                code.emitLabel(cond);               //Mi permette di tornare indietro
-                int be_true = code.newLabel();
-                bexpr(be_true);
+                code.emitLabel(cond); //Mi permette di tornare indietro
                 int be_false = code.newLabel();
-                code.emit(OpCode.GOto, be_false);
-                code.emitLabel(be_true);
-                System.out.println(be_true);
-                match(')');
-                stat(be_true);
-                code.emit(OpCode.GOto, cond);
+                bexpr(be_false);
+                int be_true = code.newLabel();
+                code.emit(OpCode.GOto, be_true);
                 code.emitLabel(be_false);
+                System.out.println(be_false);
+                match(')');
+                stat(be_false);
+                code.emit(OpCode.GOto, cond);
+                code.emitLabel(be_true);
                 break;
             case '{':
                 match('{');
@@ -187,18 +187,18 @@ public class Translator
                 match(Tag.WHEN);
                 match('(');
                 wi_false = code.newLabel();
-                bexpr(uscita);
+                bexpr(wi_false);
                 match(')');
                 match(Tag.DO);
                 stat(wi_false);
-                code.emit(OpCode.GOto, wi_false);
+                code.emit(OpCode.GOto, uscita);
                 code.emitLabel(wi_false);
                 break;
             default:
                 error("Errore in whenlist");
         }
     }
-    private void bexpr(int be_true)
+    private void bexpr(int be_false)
     {
         switch (look.tag) {
             case Tag.RELOP:
@@ -209,22 +209,22 @@ public class Translator
                 //Se e' true continuo il codice, se è false salto sul suo inverso
                 switch (relop.lexeme) {
                     case "==":
-                        code.emit(OpCode.if_icmpeq, be_true);
+                        code.emit(OpCode.if_icmpeq, be_false);
                         break;
                     case "<>":
-                        code.emit(OpCode.if_icmpne, be_true);
+                        code.emit(OpCode.if_icmpne, be_false);
                         break;
                     case "<":
-                        code.emit(OpCode.if_icmplt, be_true);
+                        code.emit(OpCode.if_icmplt, be_false);
                         break;
                     case "<=":
-                        code.emit(OpCode.if_icmple, be_true);
+                        code.emit(OpCode.if_icmple, be_false);
                         break;
                     case ">":
-                        code.emit(OpCode.if_icmpgt, be_true);
+                        code.emit(OpCode.if_icmpgt, be_false);
                         break;
                     case ">=":
-                        code.emit(OpCode.if_icmpge, be_true);
+                        code.emit(OpCode.if_icmpge, be_false);
                         break;
                 }
                 break;
@@ -324,7 +324,7 @@ public class Translator
     public static void main(String[] args)
     {
         Lexer lex = new Lexer();
-        String path = "testParserProg.txt"; // il percorso del file da leggere
+        String path = "testParserProg.lft"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Translator translator = new Translator(lex, br);
