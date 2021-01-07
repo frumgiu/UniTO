@@ -52,6 +52,7 @@ public class Translator
                 error("Errore in prog");
         }
     }
+
     private void statlist()
     {
         switch (look.tag) {
@@ -68,6 +69,7 @@ public class Translator
                 error("Errore in statlist");
         }
     }
+
     private void statlistp()
     {
         switch (look.tag) {
@@ -84,6 +86,7 @@ public class Translator
                 error("Errore in statlistp");
         }
     }
+
     public void stat()
     {
         switch (look.tag)
@@ -154,6 +157,7 @@ public class Translator
                 error("Errore in stat");
         }
     }
+
     private void whenlist(int wl_true, int wl_false, int uscita)
     {
 
@@ -303,6 +307,7 @@ public class Translator
                 error("Errore in exprlist");
         }
     }
+
     private void exprlistp(boolean print, boolean operatore)
     {
         switch (look.tag)
