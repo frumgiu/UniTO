@@ -13,7 +13,6 @@ struct viaggio {
 };
 
 struct client {
-    long mex_tipo;
     struct viaggio itinerario;      /* Partenza e destinazione della client */
     enum status stato;              /* Stato della client */
 };
@@ -28,7 +27,7 @@ st_clientp init_client(st_cellap, st_mappap);
 /* Invia clienti (messaggi) alla coda della cella source */
 void new_client(int, int, int, int);
 /* Per settare lo stato di client durante la sua vita */
-void set_status_request(st_clientp);
+void set_status_request(st_clientp, enum status);
 /* Stampa informazioni riguardo al cliente. USATA PER DEBUGGARE IL CODICE */
 void print_client(st_clientp, st_cellap);
 

@@ -14,9 +14,9 @@ int init_coda(int key)
     return mex_id;
 }
 
-void set_status_request(st_clientp clientp)
+void set_status_request(st_clientp clientp, enum status stato)
 {
-    clientp->stato = Pending;
+    clientp->stato = stato;
     /* TODO: gli altri casi dopo che funziona tutto client */
 }
 
@@ -26,10 +26,9 @@ st_clientp init_client(st_cellap source, st_mappap mappa)
 
     mex->itinerario.partenza = source;
     mex->itinerario.destinazione = random_cella(mappa);
-    mex->mex_tipo = 1;                                  /* 1 da eseguire, 0 estinto. Quando lo inizializza e' da estinguere */
-    while ( mex->itinerario.destinazione == source)     /* Deve essere diverso dalla cella di partenza */
+    while ( mex->itinerario.destinazione == source)                   /* Deve essere diverso dalla cella di partenza */
         mex->itinerario.destinazione = random_cella(mappa);
-    set_status_request(mex);                            /* Inizializza lo stato della richiesta */
+    set_status_request(mex, Pending);                            /* Inizializza lo stato della richiesta */
 
     return mex;
 }
@@ -51,6 +50,7 @@ void new_client (int i, int j, int sem_id, int shm_id)
         srand(getpid());
         while (getval_semaphore(sem_id, SEM_ID_CLIENT) == 0)
         {
+            /* Metto mutex? */
             messaggio = init_client(&mappa->c[i][j], mappa);                                         /* Il processo crea un client */
             msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0);     /* Invio il messaggio nella coda */
             nanosleep(&ripetizione, &mancante);

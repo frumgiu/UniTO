@@ -17,14 +17,17 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
            fprintf(stderr, "Errore '%s' durante lettura da coda\n", strerror(errno));
            exit(1);
        }
-        /* TODO: muovo */
+       set_status_request(taxi_p->request, Running);
+        /* TODO: muovo il taxi verso il risultato */
     }
     else
-        return;
-        /* TODO: cerco una cella_taxi sorgente vicino */
+        exit(0);
+        /* TODO: cerco una cella_taxi sorgente vicino o lo uccido e ricreo sperando nasca in source */
 }
 
 /* TODO: funzione che muove il taxi da una cella A a una cella B */
+/* Se resta fermo piu' di timeout muore */
+
 
 void init_taxi(st_cellap c, int sem_id, int shm_id)
 {

@@ -6,16 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.c
-stdio.h
--
-stdlib.h
--
-string.h
--
-Common_IPC.h
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
-
 /home/giulia/CLionProjects/TaxiCab/Common_IPC.h
 time.h
 -
@@ -31,12 +21,6 @@ errno.h
 -
 
 /home/giulia/CLionProjects/TaxiCab/cella.h
-
-/home/giulia/CLionProjects/TaxiCab/client.c
-client.h
-/home/giulia/CLionProjects/TaxiCab/client.h
-Common_IPC.h
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
 
 /home/giulia/CLionProjects/TaxiCab/client.h
 unistd.h
