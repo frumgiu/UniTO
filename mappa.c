@@ -48,6 +48,7 @@ void init_map(const int sources, const int holes, st_mappap mappa)
         exit(1);
     }
 }
+
 int is_dimension_ok(int sources, int holes)
 {
     if (sources > DIM_MAPPA)
@@ -74,6 +75,7 @@ int is_dimension_ok(int sources, int holes)
     else
         return 1;
 }
+
 int check_hole_ok(st_mappap m, int r, int c)
 {
     int i, j;
@@ -95,6 +97,7 @@ int check_hole_ok(st_mappap m, int r, int c)
     }
     return 1;
 }
+
 void print_map(st_mappap m)
 {
     int riga, colonna;
@@ -107,6 +110,7 @@ void print_map(st_mappap m)
         printf("\n");        /* Riga dopo */
     }
 }
+
 st_cellap random_cella(st_mappap mappa)
 {
     st_cellap result = &mappa->c[random_num(0, SO_HEIGHT)][random_num(0, SO_WIDTH)];
