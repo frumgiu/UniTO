@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "cella.h"
 
 int random_num(int a, int b)
@@ -17,6 +20,7 @@ int random_num(int a, int b)
     random = (rand() % (massimo - minimo)) + minimo;
     return random;
 }
+
 void create_cella(st_cellap c, int cap_min, int cap_max, int so_time_min, int so_time_max, int source, int hole, int x, int y)
 {
     c->so_cap = random_num(cap_min, cap_max);               /* Valori generato randomicamente */
@@ -28,6 +32,7 @@ void create_cella(st_cellap c, int cap_min, int cap_max, int so_time_min, int so
     c->statoCella.num_taxi = 0;                             /* Le celle vengono create vuote inizialmente */
     c->statoCella.queue_id = -1;                                /* Non punta a nessuna coda all'inizio, si modifica solo se la cella e' source */
 }
+
 int set_source(int sources, const int probability)
 {
     if (sources > 0)
@@ -37,6 +42,7 @@ int set_source(int sources, const int probability)
     else
         return 0;
 }
+
 int set_holes (int holes, int flag_source)
 {
     if (holes > 0 && flag_source == 0)
@@ -46,6 +52,7 @@ int set_holes (int holes, int flag_source)
     else
         return 0;
 }
+
 int is_hole (st_cella c)
 {
     if (c.hole == 1)
@@ -53,6 +60,7 @@ int is_hole (st_cella c)
     else
         return 0;
 }
+
 void print_cella(st_cellap cellap)
 {
     if (cellap->source == 1)
@@ -60,12 +68,14 @@ void print_cella(st_cellap cellap)
     else if (cellap->hole == 1)
         printf("  X, -  ");                                     /* Indica una cella inaccessibile */
     else
-        printf("  N, %d  ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
+        printf("  ., %d  ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
 }
+
 void enter_cella(st_cellap c)
 {
     c->statoCella.num_taxi++;
 }
+
 void exit_cella(st_cellap c)
 {
     c->statoCella.num_taxi--;

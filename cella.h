@@ -1,10 +1,6 @@
 #ifndef TAXICAB_CELLA_H
 #define TAXICAB_CELLA_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 struct stato_cella {
     int num_taxi;       /* Quanti taxi ci sono in quella cella attualmente */
     int queue_id;       /* Id della sua coda di messaggi, se e' una source */

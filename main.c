@@ -1,8 +1,5 @@
-
+#include "Common_IPC.h"
 #include "taxi.h"
-#include "configurazione.h"
-
-#define MAPPA_KEY 51213
 
 static struct timespec so_duration = {0, 0};
 static const struct timespec wait_cycle = {0, 400000};

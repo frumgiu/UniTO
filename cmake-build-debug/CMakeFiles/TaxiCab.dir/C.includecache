@@ -7,22 +7,6 @@
 #IncludeRegexTransform: 
 
 /home/giulia/CLionProjects/TaxiCab/cella.h
-stdio.h
--
-stdlib.h
--
-time.h
--
-
-/home/giulia/CLionProjects/TaxiCab/client.h
-unistd.h
--
-wait.h
--
-semaphore_common.h
-/home/giulia/CLionProjects/TaxiCab/semaphore_common.h
-mappa.h
-/home/giulia/CLionProjects/TaxiCab/mappa.h
 
 /home/giulia/CLionProjects/TaxiCab/configurazione.h
 stdio.h
@@ -36,43 +20,15 @@ configurazione_private.h
 
 /home/giulia/CLionProjects/TaxiCab/configurazione_private.h
 
-/home/giulia/CLionProjects/TaxiCab/debug.h
-
-/home/giulia/CLionProjects/TaxiCab/main.c
-taxi.h
-/home/giulia/CLionProjects/TaxiCab/taxi.h
-configurazione.h
-/home/giulia/CLionProjects/TaxiCab/configurazione.h
-
 /home/giulia/CLionProjects/TaxiCab/mappa.c
+time.h
+-
 mappa.h
 /home/giulia/CLionProjects/TaxiCab/mappa.h
-debug.h
-/home/giulia/CLionProjects/TaxiCab/debug.h
 
 /home/giulia/CLionProjects/TaxiCab/mappa.h
-string.h
--
-sys/types.h
--
-sys/ipc.h
--
-sys/msg.h
--
-sys/shm.h
--
-errno.h
--
 cella.h
 /home/giulia/CLionProjects/TaxiCab/cella.h
 configurazione.h
 /home/giulia/CLionProjects/TaxiCab/configurazione.h
-
-/home/giulia/CLionProjects/TaxiCab/semaphore_common.h
-sys/sem.h
--
-
-/home/giulia/CLionProjects/TaxiCab/taxi.h
-client.h
-/home/giulia/CLionProjects/TaxiCab/client.h
 

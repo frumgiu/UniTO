@@ -1,13 +1,6 @@
 #ifndef TAXICAB_MAPPA_H
 #define TAXICAB_MAPPA_H
 
-#include <string.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <sys/shm.h>
-#include <errno.h>
-
 #include "cella.h"
 #include "configurazione.h"
 

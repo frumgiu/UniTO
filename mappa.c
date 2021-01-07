@@ -1,5 +1,5 @@
+#include <time.h>
 #include "mappa.h"
-#include "debug.h"
 
 void init_map(const int sources, const int holes, st_mappap mappa)
 {

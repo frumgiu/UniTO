@@ -1,7 +1,7 @@
 #include "client.h"
 #include "Common_IPC.h"
 
-static const struct timespec ripetizione = {2, 0};
+static const struct timespec ripetizione = {1, 0};
 static struct timespec mancante = {0, 0};
 
 int init_coda(int key)

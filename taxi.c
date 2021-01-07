@@ -9,20 +9,20 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
     int mex_que_id;
     nanosleep(&ripetizione, &mancante);
         /* TODO: verifico se la cella e' sorgente */
-    if (taxi_p->posizione->source == 1)
+   /* if (taxi_p->posizione->source == 1)
     {
-        mex_que_id = taxi_p->posizione->statoCella.queue_id;            /* Mi serve per accedere in lettura alla coda della source */
+       mex_que_id = taxi_p->posizione->statoCella.queue_id;             Mi serve per accedere in lettura alla coda della source */
         /* TODO: verifico se sulla cella corrente c'e una richiesta */
-        if ()
-        {/* TODO: prendo la richiesta in carico */
+       /* if (0)*/
+        /*{ TODO: prendo la richiesta in carico */
             /* TODO: muovo */
-        }
+        /*}
         else
             return;
-            /* TODO: esco, aspetto qualche secondo e rincontrollo la cella */
-    }
+             TODO: esco, aspetto qualche secondo e rincontrollo la cella */
+    /*}
     else
-        return;
+        return;*/
         /* TODO: cerco una cella sorgente vicino */
 }
 

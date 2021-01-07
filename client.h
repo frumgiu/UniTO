@@ -2,8 +2,6 @@
 #define TAXICAB_CLIENT_H
 
 #include <unistd.h>
-#include <wait.h>
-#include "Common_IPC.h"
 #include "mappa.h"
 
 /* Valori che puo' assumere la variabile stato */
