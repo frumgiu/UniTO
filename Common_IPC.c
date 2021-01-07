@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "semaphore_common.h"
+#include "Common_IPC.h"
 
 static union semun sem;
 

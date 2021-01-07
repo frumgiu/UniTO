@@ -76,6 +76,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/giulia/CLionProjects/TaxiCab/Common_IPC.c">
+			<Option target="TaxiCab"/>
+		</Unit>
+		<Unit filename="/home/giulia/CLionProjects/TaxiCab/Common_IPC.h">
+			<Option target="TaxiCab"/>
+		</Unit>
 		<Unit filename="/home/giulia/CLionProjects/TaxiCab/cella.c">
 			<Option target="TaxiCab"/>
 		</Unit>
@@ -101,9 +107,6 @@
 			<Option target="TaxiCab"/>
 		</Unit>
 		<Unit filename="/home/giulia/CLionProjects/TaxiCab/mappa.h">
-			<Option target="TaxiCab"/>
-		</Unit>
-		<Unit filename="/home/giulia/CLionProjects/TaxiCab/semaphore.c">
 			<Option target="TaxiCab"/>
 		</Unit>
 		<Unit filename="/home/giulia/CLionProjects/TaxiCab/taxi.c">

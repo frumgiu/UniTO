@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/home/giulia/CLionProjects/TaxiCab/Common_IPC.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/Common_IPC.c.o"
   "/home/giulia/CLionProjects/TaxiCab/cella.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/cella.c.o"
   "/home/giulia/CLionProjects/TaxiCab/client.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/client.c.o"
   "/home/giulia/CLionProjects/TaxiCab/configurazione.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/configurazione.c.o"
   "/home/giulia/CLionProjects/TaxiCab/main.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/main.c.o"
   "/home/giulia/CLionProjects/TaxiCab/mappa.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/mappa.c.o"
-  "/home/giulia/CLionProjects/TaxiCab/semaphore.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/semaphore.c.o"
   "/home/giulia/CLionProjects/TaxiCab/taxi.c" "/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles/TaxiCab.dir/taxi.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

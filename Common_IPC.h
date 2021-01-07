@@ -1,7 +1,9 @@
-#ifndef TAXICAB_SEMAPHORE_COMMON_H
-#define TAXICAB_SEMAPHORE_COMMON_H
+#ifndef TAXICAB_COMMON_IPC_H
+#define TAXICAB_COMMON_IPC_H
 
-#include <sys/sem.h>
+#include <sys/ipc.h>	/* Semafori */
+#include <sys/msg.h>	/* Coda di messaggi */
+#include <sys/shm.h>	/* Shared Memory */
 
 #define SEM_ID_CLIENT        0
 #define SEM_ID_TAXI          1
@@ -24,7 +26,7 @@ int remove_semaphore(int);
 int increment_sem (int, int);
 int decrement_sem (int, int);
 
-#endif /* TAXICAB_SEMAPHORE_COMMON_H */
+#endif /* TAXICAB_COMMON_IPC_H */
 /*
 * Created by giulia on 03/01/2021.
 */

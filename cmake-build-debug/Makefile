@@ -143,6 +143,33 @@ TaxiCab/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/build
 .PHONY : TaxiCab/fast
 
+Common_IPC.o: Common_IPC.c.o
+
+.PHONY : Common_IPC.o
+
+# target to build an object file
+Common_IPC.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/Common_IPC.c.o
+.PHONY : Common_IPC.c.o
+
+Common_IPC.i: Common_IPC.c.i
+
+.PHONY : Common_IPC.i
+
+# target to preprocess a source file
+Common_IPC.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/Common_IPC.c.i
+.PHONY : Common_IPC.c.i
+
+Common_IPC.s: Common_IPC.c.s
+
+.PHONY : Common_IPC.s
+
+# target to generate assembly for a file
+Common_IPC.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/Common_IPC.c.s
+.PHONY : Common_IPC.c.s
+
 cella.o: cella.c.o
 
 .PHONY : cella.o
@@ -278,33 +305,6 @@ mappa.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/mappa.c.s
 .PHONY : mappa.c.s
 
-semaphore.o: semaphore.c.o
-
-.PHONY : semaphore.o
-
-# target to build an object file
-semaphore.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/semaphore.c.o
-.PHONY : semaphore.c.o
-
-semaphore.i: semaphore.c.i
-
-.PHONY : semaphore.i
-
-# target to preprocess a source file
-semaphore.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/semaphore.c.i
-.PHONY : semaphore.c.i
-
-semaphore.s: semaphore.c.s
-
-.PHONY : semaphore.s
-
-# target to generate assembly for a file
-semaphore.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TaxiCab.dir/build.make CMakeFiles/TaxiCab.dir/semaphore.c.s
-.PHONY : semaphore.c.s
-
 taxi.o: taxi.c.o
 
 .PHONY : taxi.o
@@ -341,6 +341,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... TaxiCab"
+	@echo "... Common_IPC.o"
+	@echo "... Common_IPC.i"
+	@echo "... Common_IPC.s"
 	@echo "... cella.o"
 	@echo "... cella.i"
 	@echo "... cella.s"
@@ -356,9 +359,6 @@ help:
 	@echo "... mappa.o"
 	@echo "... mappa.i"
 	@echo "... mappa.s"
-	@echo "... semaphore.o"
-	@echo "... semaphore.i"
-	@echo "... semaphore.s"
 	@echo "... taxi.o"
 	@echo "... taxi.i"
 	@echo "... taxi.s"

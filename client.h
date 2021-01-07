@@ -3,7 +3,7 @@
 
 #include <unistd.h>
 #include <wait.h>
-#include "semaphore_common.h"
+#include "Common_IPC.h"
 #include "mappa.h"
 
 /* Valori che puo' assumere la variabile stato */

@@ -142,18 +142,18 @@ CMakeFiles/TaxiCab.dir/client.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TaxiCab.dir/client.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/giulia/CLionProjects/TaxiCab/client.c -o CMakeFiles/TaxiCab.dir/client.c.s
 
-CMakeFiles/TaxiCab.dir/semaphore.c.o: CMakeFiles/TaxiCab.dir/flags.make
-CMakeFiles/TaxiCab.dir/semaphore.c.o: ../semaphore.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/TaxiCab.dir/semaphore.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TaxiCab.dir/semaphore.c.o   -c /home/giulia/CLionProjects/TaxiCab/semaphore.c
+CMakeFiles/TaxiCab.dir/Common_IPC.c.o: CMakeFiles/TaxiCab.dir/flags.make
+CMakeFiles/TaxiCab.dir/Common_IPC.c.o: ../Common_IPC.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giulia/CLionProjects/TaxiCab/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/TaxiCab.dir/Common_IPC.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TaxiCab.dir/Common_IPC.c.o   -c /home/giulia/CLionProjects/TaxiCab/Common_IPC.c
 
-CMakeFiles/TaxiCab.dir/semaphore.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TaxiCab.dir/semaphore.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/giulia/CLionProjects/TaxiCab/semaphore.c > CMakeFiles/TaxiCab.dir/semaphore.c.i
+CMakeFiles/TaxiCab.dir/Common_IPC.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TaxiCab.dir/Common_IPC.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/giulia/CLionProjects/TaxiCab/Common_IPC.c > CMakeFiles/TaxiCab.dir/Common_IPC.c.i
 
-CMakeFiles/TaxiCab.dir/semaphore.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TaxiCab.dir/semaphore.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/giulia/CLionProjects/TaxiCab/semaphore.c -o CMakeFiles/TaxiCab.dir/semaphore.c.s
+CMakeFiles/TaxiCab.dir/Common_IPC.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TaxiCab.dir/Common_IPC.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/giulia/CLionProjects/TaxiCab/Common_IPC.c -o CMakeFiles/TaxiCab.dir/Common_IPC.c.s
 
 CMakeFiles/TaxiCab.dir/taxi.c.o: CMakeFiles/TaxiCab.dir/flags.make
 CMakeFiles/TaxiCab.dir/taxi.c.o: ../taxi.c
@@ -175,7 +175,7 @@ TaxiCab_OBJECTS = \
 "CMakeFiles/TaxiCab.dir/cella.c.o" \
 "CMakeFiles/TaxiCab.dir/mappa.c.o" \
 "CMakeFiles/TaxiCab.dir/client.c.o" \
-"CMakeFiles/TaxiCab.dir/semaphore.c.o" \
+"CMakeFiles/TaxiCab.dir/Common_IPC.c.o" \
 "CMakeFiles/TaxiCab.dir/taxi.c.o"
 
 # External object files for target TaxiCab
@@ -186,7 +186,7 @@ TaxiCab: CMakeFiles/TaxiCab.dir/configurazione.c.o
 TaxiCab: CMakeFiles/TaxiCab.dir/cella.c.o
 TaxiCab: CMakeFiles/TaxiCab.dir/mappa.c.o
 TaxiCab: CMakeFiles/TaxiCab.dir/client.c.o
-TaxiCab: CMakeFiles/TaxiCab.dir/semaphore.c.o
+TaxiCab: CMakeFiles/TaxiCab.dir/Common_IPC.c.o
 TaxiCab: CMakeFiles/TaxiCab.dir/taxi.c.o
 TaxiCab: CMakeFiles/TaxiCab.dir/build.make
 TaxiCab: CMakeFiles/TaxiCab.dir/link.txt
