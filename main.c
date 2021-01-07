@@ -44,7 +44,7 @@ static void create_source_queue() {
     for (i = 0; i < SO_HEIGHT; ++i) {
         for (j = 0; j < SO_WIDTH; ++j) {
             if (mappa->c[i][j].source == 1)
-                mappa->c[i][j].statoCella.m_id = init_coda(IPC_PRIVATE);
+                mappa->c[i][j].statoCella.queue_id = init_coda(IPC_PRIVATE);
         }
     }
 }
@@ -56,19 +56,19 @@ static void remove_queue_source() {
     for (i = 0; i < SO_HEIGHT; ++i) {
         for (j = 0; j < SO_WIDTH; ++j) {
             if (mappa->c[i][j].source == 1)
-                msgctl(mappa->c[i][j].statoCella.m_id, IPC_RMID, 0);
+                msgctl(mappa->c[i][j].statoCella.queue_id, IPC_RMID, 0);
         }
     }
 }
 
-static void create_taxi(int sem_id, int valore) {
+static void create_taxi(int sem_id, int valore, int shm_id) {
     int n;
     printf("4. Creazione di %d taxi per servire le richeste\n", get_so_taxi());
     setval_semaphore(sem_id, SEM_ID_TAXI, valore);
     setval_semaphore(sem_id, SEM_ID_TAXI_START, valore);
     n = get_so_taxi();                      /* Numero di taxi che devo creare */
     while (n > 0) {
-        init_taxi(random_cella(mappa), sem_id);  /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
+        init_taxi(random_cella(mappa), sem_id, shm_id);  /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
         --n;
     }
     print_map(mappa);
@@ -104,7 +104,8 @@ static void termina_specifiche() {
     /* TODO: Funzione per la stampa di questa mappa finale */
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     int sem_set_id;
     int sem_mutex;
     int shm_id;
@@ -116,10 +117,9 @@ int main(int argc, char **argv) {
     shm_id = inizializza_mappa();                                       /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
     create_source_queue();                                              /* Creo code di messaggi nelle celle source */
 
-    sem_set_id = create_semaphore(SEM_KEY_SOURCE,
-                                  3);                                                  /* Creo set di 3 semafori, 1 per source, 2 per taxi */
+    sem_set_id = create_semaphore(SEM_KEY_SOURCE, 3);                   /* Creo set di 3 semafori, 1 per source, 2 per taxi */
     /* -- SEZIONE CRITICA -- i taxi aggiorneranno la loro posizione */
-    create_taxi(sem_set_id, 0);
+    create_taxi(sem_set_id, 0, shm_id);
     create_client(sem_set_id, 0, shm_id);
     setval_semaphore(sem_set_id, SEM_ID_TAXI_START, get_so_taxi());                     /* Faccio partire la corsa dei processi taxi */
     /* TODO: Ogni secondo deve stampare la mappa aggiornata, per vedere i taxi muoversi */

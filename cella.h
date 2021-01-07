@@ -7,7 +7,7 @@
 
 struct stato_cella {
     int num_taxi;       /* Quanti taxi ci sono in quella cella attualmente */
-    int m_id;           /* Id della sua coda di messaggi, se e' una source */
+    int queue_id;       /* Id della sua coda di messaggi, se e' una source */
 };
 struct coordinate {
     int colonna;

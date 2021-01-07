@@ -51,7 +51,7 @@ void new_client (int i, int j, int sem_id, int shm_id)
         while (getval_semaphore(sem_id, SEM_ID_CLIENT) == 0)
         {
             messaggio = init_client(&mappa->c[i][j], mappa);                                         /* Il processo crea un client */
-            msgsnd(mappa->c[i][j].statoCella.m_id, &messaggio, sizeof(&messaggio), 0); /* Invio il messaggio nella coda */
+            msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0); /* Invio il messaggio nella coda */
             nanosleep(&ripetizione, &mancante);
         }
         decrement_sem(sem_id, SEM_ID_CLIENT);
@@ -64,7 +64,7 @@ void print_client(st_clientp c, st_cellap cp)
 {
     printf("Il cliente parte da: (%d,%d)\n", c->itinerario.partenza->coordinate.riga, c->itinerario.partenza->coordinate.colonna);
     printf("Vuole arrivare a: (%d,%d)\n", c->itinerario.destinazione->coordinate.riga, c->itinerario.destinazione->coordinate.colonna);
-    printf("Inserito in coda ID: %d\n\n", cp->statoCella.m_id);
+    printf("Inserito in coda ID: %d\n\n", cp->statoCella.queue_id);
 }
 /*
 * Created by giulia on 23/12/2020.

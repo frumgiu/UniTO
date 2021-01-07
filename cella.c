@@ -26,7 +26,7 @@ void create_cella(st_cellap c, int cap_min, int cap_max, int so_time_min, int so
     c->coordinate.colonna = x;                              /* Set di coordinate per trovare la cella nella mappa */
     c->coordinate.riga = y;
     c->statoCella.num_taxi = 0;                             /* Le celle vengono create vuote inizialmente */
-    c->statoCella.m_id = -1;                                /* Non punta a nessuna coda all'inizio, si modifica solo se la cella e' source */
+    c->statoCella.queue_id = -1;                                /* Non punta a nessuna coda all'inizio, si modifica solo se la cella e' source */
 }
 int set_source(int sources, const int probability)
 {

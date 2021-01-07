@@ -12,9 +12,9 @@ typedef struct taxi st_taxi;
 typedef struct taxi * st_taxip;
 
 /* Crea un taxi senza richieste, nella cella data */
-void init_taxi(st_cellap, int);
+void init_taxi(st_cellap, int, int);
 /* Funzione che muove il taxi */
-static void run_taxi(st_taxip, int);
+static void run_taxi(st_taxip, st_mappap, int);
 /* Per vedere se il taxi e' occupato da un cliente (1) o e' libero (0) */
 int is_busy(st_taxip);
 

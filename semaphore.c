@@ -65,6 +65,7 @@ int increment_sem (int semId, int semNum)
     }
     return result;
 }
+
 int decrement_sem (int semId, int semNum)
 {
     int result;
@@ -79,6 +80,8 @@ int decrement_sem (int semId, int semNum)
     }
     return result;
 }
+
+/* TODO: funzione che legge dalla coda di mex */
 
 /*
 * Created by giulia on 05/01/2021.
