@@ -14,7 +14,7 @@ void print_debug_pid(const char *string) {
 static void inizializza_configurazione() {
     printf("1. Lettura dal file .txt dei parametri di configurazione\n");
     read_conf_from_file(&configuration);
-    so_duration.tv_sec = get_so_duration();     /* Mi serve per settare il tempo della nanosleep */
+    so_duration.tv_sec = get_so_duration();  /* TODO: diventa eliminabile con l'uso del segmale. Mi serve per settare il tempo della nanosleep */
     print_conf(&configuration);
 }
 
@@ -122,8 +122,10 @@ int main(int argc, char **argv)
     setval_semaphore(sem_set_id, SEM_ID_TAXI_START, get_so_taxi());                     /* Faccio partire la corsa dei processi taxi */
 
     /* TODO: Ogni secondo deve stampare la mappa aggiornata, per vedere i taxi muoversi */
+    /* alarm(get_so_duration); */
+    /* sigaction(); */
     nanosleep(&so_duration,&mancante);                                                  /* Il padre dorme per il tempo SO_DURATION */
-    /* -- FINE SEZIONE CRITICA -- i taxi smettono di muoversi e leggere e scrivere sulla mappa */
+    /* -- FINE SEZIONE CRITICA -- */
     /* TODO: appena si azzera posso svegliare gli altri nanosleep e interromperli, per finire subito */
     printf("\n-- finito tempo simulazione --\n");
 

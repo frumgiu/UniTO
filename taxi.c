@@ -22,7 +22,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
     }
     else
         exit(0);
-        /* TODO: cerco una cella_taxi sorgente vicino o lo uccido e ricreo sperando nasca in source */
+        /* TODO: cerco una cella_taxi sorgente vicino o lo uccido e ricreo sperando nasca in source               */
 }
 
 /* TODO: funzione che muove il taxi da una cella A a una cella B */
