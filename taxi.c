@@ -7,23 +7,21 @@ static struct timespec mancante = {0, 0};
 static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
 {
     int mex_que_id;
+    st_cellap cella_taxi = taxi_p->posizione;
     nanosleep(&ripetizione, &mancante);
-        /* TODO: verifico se la cella e' sorgente */
-   /* if (taxi_p->posizione->source == 1)
+    if (cella_taxi->source == 1)
     {
-       mex_que_id = taxi_p->posizione->statoCella.queue_id;             Mi serve per accedere in lettura alla coda della source */
-        /* TODO: verifico se sulla cella corrente c'e una richiesta */
-       /* if (0)*/
-        /*{ TODO: prendo la richiesta in carico */
-            /* TODO: muovo */
-        /*}
-        else
-            return;
-             TODO: esco, aspetto qualche secondo e rincontrollo la cella */
-    /*}
+       mex_que_id = cella_taxi->statoCella.queue_id;
+       if (msgrcv(mex_que_id, &taxi_p->request, sizeof(&taxi_p->request), 0, 0) == -1)
+       {
+           fprintf(stderr, "Errore '%s' durante lettura da coda\n", strerror(errno));
+           exit(1);
+       }
+        /* TODO: muovo */
+    }
     else
-        return;*/
-        /* TODO: cerco una cella sorgente vicino */
+        return;
+        /* TODO: cerco una cella_taxi sorgente vicino */
 }
 
 /* TODO: funzione che muove il taxi da una cella A a una cella B */

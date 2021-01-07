@@ -69,7 +69,7 @@ static void create_taxi(int sem_id, int valore, int shm_id) {
         init_taxi(random_cella(mappa), sem_id, shm_id);  /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
         --n;
     }
-    print_map(mappa);
+    /* print_map(mappa); */
 }
 
 static void create_client(int sem_id, int valore, int shm_id) {
@@ -120,6 +120,7 @@ int main(int argc, char **argv)
     create_taxi(sem_set_id, 0, shm_id);
     create_client(sem_set_id, 0, shm_id);
     setval_semaphore(sem_set_id, SEM_ID_TAXI_START, get_so_taxi());                     /* Faccio partire la corsa dei processi taxi */
+
     /* TODO: Ogni secondo deve stampare la mappa aggiornata, per vedere i taxi muoversi */
     nanosleep(&so_duration,&mancante);                                                  /* Il padre dorme per il tempo SO_DURATION */
     /* -- FINE SEZIONE CRITICA -- i taxi smettono di muoversi e leggere e scrivere sulla mappa */

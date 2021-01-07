@@ -52,7 +52,7 @@ void new_client (int i, int j, int sem_id, int shm_id)
         while (getval_semaphore(sem_id, SEM_ID_CLIENT) == 0)
         {
             messaggio = init_client(&mappa->c[i][j], mappa);                                         /* Il processo crea un client */
-            msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0); /* Invio il messaggio nella coda */
+            msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0);     /* Invio il messaggio nella coda */
             nanosleep(&ripetizione, &mancante);
         }
         decrement_sem(sem_id, SEM_ID_CLIENT);

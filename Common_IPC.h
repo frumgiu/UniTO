@@ -31,6 +31,7 @@ int increment_sem (int, int);
 int decrement_sem (int, int);
 
 #endif /* TAXICAB_COMMON_IPC_H */
+
 /*
 * Created by giulia on 03/01/2021.
 */
