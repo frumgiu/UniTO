@@ -7,10 +7,8 @@ static struct timespec mancante = {0, 0};
 int init_coda(int key)
 {
     int mex_id;
-    if((mex_id = msgget(key, IPC_CREAT | 0666)) == -1) {
-        fprintf(stderr, "Errore '%s' generato nella creazione di una coda di messaggi\n", strerror(errno));
-        exit(1);
-    }
+    if((mex_id = msgget(key, IPC_CREAT | 0666)) == -1)
+        ERROR;
     return mex_id;
 }
 
@@ -33,8 +31,7 @@ void new_client (int i, int j, int sem_id, int shm_id)
     child = fork();
     if (child == -1)
     {
-        fprintf(stderr, "Errore '%s' nell'esecuzione della fork del processo source\n", strerror(errno));
-        exit(1);
+        ERROR;
     }
     else if (child == 0)        /* CHILD PROCESS */
     {

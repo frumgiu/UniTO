@@ -9,7 +9,6 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
     int mex_que_id;
 
     st_cellap cella_taxi = taxi_p->posizione;
-    nanosleep(&ripetizione, &mancante);
     switch (taxi_p->stato)
     {
         case TAXI_STATE_SEARCHING:
@@ -20,8 +19,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
                 result = msgrcv(mex_que_id, &taxi_p->request, sizeof(&taxi_p->request), 0, IPC_NOWAIT);
                 if (result == -1)
                 {
-                    fprintf(stderr, "Errore '%s' durante lettura da coda\n", strerror(errno));
-                    exit(1);
+                    ERROR;
                 }
                 else if(result > 0)
                 {
@@ -29,14 +27,14 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
                 }
                 else
                 {
-                    return;
                     /* TODO: cerco una cella_taxi sorgente vicino */
+                    /* mi avvicino alla nuova sorgente */
                 }
             }
             else
             {
-                exit(0);
                 /* TODO: cerco una cella_taxi sorgente vicino */
+                /* mi avvicino alla nuova sorgente */
             }
             break;
         case TAXI_STATE_RUNNING:
@@ -64,6 +62,25 @@ static void move_taxi(st_taxip taxi)
     /* se arrivo a destinazione taxi->stato = completed, request->stato = completed */
 }
 
+static st_cellap near_source(st_taxip taxi)
+{
+    int i, j, min_distance;
+    st_cellap min_source;
+    min_distance = DIM_MAPPA; /* La distanza piu' grande che posso avere */
+    /* Controllo la distanza tra la sua posizione e le celle sorgenti sulla mappa */
+    for (i = 0; i < SO_HEIGHT; i++)
+    {
+        for (j = 0; j < SO_WIDTH; j++)
+        {
+            if(is_source(/* cella della mappa su cui sono */))
+                /* calcolo la distanza e la confronto con min_distance */
+        }
+    }
+    /* salvo quella con distanza minore */
+    /* restituisco il puntatore a quella sorgente */
+    return min_source;
+}
+
 void init_taxi(st_cellap c, int sem_id, int shm_id)
 {
     int child;
@@ -75,8 +92,7 @@ void init_taxi(st_cellap c, int sem_id, int shm_id)
     child = fork();
     if (child == -1)
     {
-        fprintf(stderr, "Errore '%s' nell'esecuzione della fork nei taxi\n", strerror(errno));
-        exit(1);
+        ERROR;
     }
     else if (child == 0)                /* CHILD PROCESS */
     {
@@ -85,6 +101,7 @@ void init_taxi(st_cellap c, int sem_id, int shm_id)
         while (getval_semaphore(sem_id, SEM_ID_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */
         {
             run_taxi(taxip, mappa, sem_id);
+            nanosleep(&ripetizione, &mancante);
         }
         decrement_sem(sem_id, SEM_ID_TAXI);                  /* se esci perche' semaforo > 0 --> decremento il semaforo di 1 */
         shmdt(mappa);

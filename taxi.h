@@ -27,6 +27,8 @@ static void move_taxi(st_taxip);
 static void move_taxi_x(st_taxip);
 /* Funzione che fa lo spostamento su asse y */
 static void move_taxi_y(st_taxip);
+/* Funzione che cerca la cella sorgente piu' vicina */
+static st_cellap near_source(st_taxip);
 
 #endif /* TAXICAB_TAXI_H */
 /*

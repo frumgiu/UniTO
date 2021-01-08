@@ -5,6 +5,7 @@
 
 int random_num(int a, int b)
 {
+    /* TODO: chiedere a papa' in una riga */
     int random = 0;
     int minimo = 0, massimo = 0;
     if (a < b)
@@ -55,18 +56,20 @@ int set_holes (int holes, int flag_source)
 
 int is_hole (st_cella c)
 {
-    if (c.hole == 1)
-        return 1;
-    else
-        return 0;
+    return c.hole == 1 ? 1 : 0;
+}
+
+int is_source (st_cella c)
+{
+    return c.source == 1 ? 1 : 0;
 }
 
 void print_cella(st_cellap cellap)
 {
-    if (cellap->source == 1)
+    if (is_source(*cellap) == 1)
         printf("  S, %d  ", cellap->statoCella.num_taxi);      /* Indica una cella sorgente */
-    else if (cellap->hole == 1)
-        printf("  X, -  ");                                     /* Indica una cella inaccessibile */
+    else if (is_hole(*cellap) == 1)
+        printf("  X, -  ");                                    /* Indica una cella inaccessibile */
     else
         printf("  ., %d  ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
 }

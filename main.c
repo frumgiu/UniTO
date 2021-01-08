@@ -1,6 +1,8 @@
 #include "Common_IPC.h"
 #include "taxi.h"
 
+
+
 static struct timespec so_duration = {0, 0};
 static const struct timespec wait_cycle = {0, 400000};
 static struct timespec mancante = {0, 0};
@@ -19,10 +21,7 @@ static int inizializza_mappa()
     int shm_id;
     printf("2. Inizializzazione della mappa, di dimensione %dx%d, e prima stampa\n", SO_HEIGHT, SO_WIDTH);
     if ((shm_id = shmget(MAPPA_KEY, sizeof(struct cella) * (DIM_MAPPA), IPC_CREAT | 0666)) == -1)
-    {
-        fprintf(stderr, "Errore '%s' generato nella creazione di uno spazio di memoria condivisa\n", strerror(errno));
-        exit(1);
-    }
+        ERROR;
     mappa = shmat(shm_id, NULL, 0);
     init_map(get_so_source(), get_so_holes(), mappa);
     print_map(mappa);
@@ -36,7 +35,7 @@ static void create_source_queue() {
     printf("3. Inizializzazione delle code di messaggi (vuote) nelle %d celle source\n", get_so_source());
     for (i = 0; i < SO_HEIGHT; ++i) {        /* creo una coda di messaggi per ogni cella source */
         for (j = 0; j < SO_WIDTH; ++j) {
-            if (mappa->c[i][j].source == 1)
+            if (is_source(mappa->c[i][j]) == 1)
                 mappa->c[i][j].statoCella.queue_id = init_coda(IPC_PRIVATE);
         }
     }
@@ -48,7 +47,7 @@ static void remove_queue_source() {
     /* creo una coda di messaggi per ogni cella source */
     for (i = 0; i < SO_HEIGHT; ++i) {
         for (j = 0; j < SO_WIDTH; ++j) {
-            if (mappa->c[i][j].source == 1)
+            if (is_source(mappa->c[i][j]) == 1)
                 msgctl(mappa->c[i][j].statoCella.queue_id, IPC_RMID, 0);
         }
     }
@@ -73,7 +72,7 @@ static void create_client(int sem_id, int valore, int shm_id) {
     if (setval_semaphore(sem_id, SEM_ID_CLIENT, valore) == 0)
         for (i = 0; i < SO_HEIGHT; ++i) {
             for (j = 0; j < SO_WIDTH; ++j) {
-                if (mappa->c[i][j].source == 1)
+                if (is_source(mappa->c[i][j]) == 1)
                     new_client(i, j, sem_id, shm_id);
             }
         }
@@ -89,8 +88,7 @@ static void chiudi_processi_child(int sem_id, int semnum, int valore, char* chil
 static void termina_specifiche() {
     printf("6. Stampa delle specifiche richieste a termine simulazione\n");
     printf("Numero di viaggi (completi, inevasi e abortiti): %d\n", 0);
-    printf("Processo taxi che ha fatto piu' strada: %d\n",
-           0);                              /* Stampo il pid del processo */
+    printf("Processo taxi che ha fatto piu' strada: %d\n", 0);                              /* Stampo il pid del processo */
     printf("Processo taxi che ha fatto il tempo piu' lungo per una client: %d\n", 0);
     printf("Processo taxi che ha servito piu' clienti: %d\n", 0);
     printf("Mappa con evidenziate le sorgenti e le %d celle piu' attraversate\n", get_so_top_cell());
@@ -131,10 +129,7 @@ int main(int argc, char **argv)
     shmdt(mappa);                                                                        /* Stacco la shared memory dal processo master */
     printf("9. Elimino l'area di memoria condivisa\n");
     if (shmctl(shm_id, IPC_RMID, 0) < 0)                                             /* Cancello area memoria condivisa */
-    {
-        fprintf(stderr, "Errore '%s' nella cancellazione della shared memory usata\n", strerror(errno));
-        exit(1);
-    }
+        ERROR;
     printf("\n-- FINE SIMULAZIONE --");
 
     exit(0);
