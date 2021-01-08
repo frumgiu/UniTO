@@ -56,12 +56,12 @@ int set_holes (int holes, int flag_source)
 
 int is_hole (st_cella c)
 {
-    return c.hole == 1 ? 1 : 0;
+    return c.hole == 1;
 }
 
 int is_source (st_cella c)
 {
-    return c.source == 1 ? 1 : 0;
+    return c.source == 1;
 }
 
 void print_cella(st_cellap cellap)
