@@ -1,8 +1,11 @@
 #include "taxi.h"
 #include "Common_IPC.h"
 
-static const struct timespec ripetizione = {0, 500000};
+static const struct timespec ripetizione = {0, 100000000};
 static struct timespec mancante = {0, 0};
+
+static struct timespec movimento = {0, 0};
+static struct timespec pausa = {0, 0};
 
 static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
 {
@@ -53,38 +56,103 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
     }
 }
 
-static void move_taxi(st_taxip taxi, st_cellap arrivo)
+static void move_taxi(st_taxip taxi, st_cellap arrivo, st_mappap mappa)
 {
     /* TODO: funzione che muove il taxi da una cella A a una cella B */
     int distance_x, distance_y;
-    st_cellap next = NULL;
     struct coordinate taxi_pos;
     taxi_pos = taxi->posizione->coordinate;
     distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
-    if(distance_x > 0) /* muoversi verso sinistra */
-    {
-        next->coordinate.colonna = taxi_pos.colonna - 1;
-        next->coordinate.riga = taxi_pos.riga;
-        if (!is_hole(*next))
-        {
-            enter_cella(next);
-            exit_cella(taxi->posizione);
-            taxi->posizione = next; /* FALSE: Il taxi si sposta sulla cella vicina */
-        }
-    }
-    else /* muovo verso destra */
-    {}
+    distance_y = taxi_pos.riga - arrivo->coordinate.riga;
     /* inizio a spostarmi sull'asse x, se incontro un holes mi sposto di uno su y verso la destinazione */
+    if (distance_x != 0)
+    {
+        move_taxi_x(taxi, distance_x, distance_y, mappa);
+    }
     /* se ho finito di muovere x, mi sposto verso y */
-    /* se arrivo a destinazione taxi->stato = completed */
+    else if (distance_y != 0)
+    {
+        move_taxi_y(taxi, distance_x, distance_y, mappa);
+    }
+    if(taxi->posizione == taxi->request->destinazione)
+    {
+        taxi->stato = TAXI_STATE_COMPLETED;
+    }
 }
 
-static void move_taxi_x(st_cellap taxi_pos, int distance_x, int distance_y)
+static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap mappa)
 {
+    int result = 0;
+    int step = distance_x > 0 ? -1 : 1;
+    st_cellap next;
+
+    if (distance_x == 0 && taxi->posizione->coordinate.riga == SO_HEIGHT)
+    {
+        step = -1;
+    }
+    next = return_cell(taxi->posizione->coordinate.colonna + step, taxi->posizione->coordinate.riga, mappa);
+    if (!is_hole(*next))
+    {
+        if (enter_cella(next) == 1)
+        {
+            exit_cella(taxi->posizione);
+            taxi->posizione = next;
+            time(&taxi->last_move);
+            result = 1;
+        }
+        else
+        {
+            if (taxi->last_move >= get_so_timeout())
+            {
+                taxi->stato = TAXI_STATE_ABORTED;
+            }
+        }
+        /* TODO: valutare se cambiare tempo tentativo */
+        movimento.tv_nsec = next->so_timensec;
+        nanosleep(&movimento, &pausa);
+    }
+    else    /* else mi muovo su y */
+    {
+       result = move_taxi_y(taxi, distance_x, distance_y, mappa);
+    }
+    return result;
 }
 
-static void move_taxi_y(st_taxip taxi)
-{}
+static int move_taxi_y(st_taxip taxi,int distance_x, int distance_y, st_mappap mappa)
+{
+    int result = 0;
+    int step = distance_y > 0 ? -1 : 1;
+    st_cellap next;
+    if (distance_y == 0 && taxi->posizione->coordinate.colonna == SO_WIDTH)
+    {
+        step = -1;
+    }
+    next = return_cell(taxi->posizione->coordinate.colonna, taxi->posizione->coordinate.riga + step, mappa);
+    if (!is_hole(*next))
+    {
+        if (enter_cella(next) == 1)
+        {
+            exit_cella(taxi->posizione);
+            taxi->posizione = next;
+            time(&taxi->last_move);
+            result = 1;
+        }
+        else
+        {
+            if (taxi->last_move >= get_so_timeout())
+            {
+                taxi->stato = TAXI_STATE_ABORTED;
+            }
+        }
+        movimento.tv_nsec = next->so_timensec;
+        nanosleep(&movimento, &pausa);
+    }
+    else    /* else mi muovo su x */
+    {
+        result = move_taxi_x(taxi, distance_x, distance_y, mappa);
+    }
+    return result;
+}
 
 static st_cellap find_near_source(st_taxip taxi, st_mappap mappa)
 {
@@ -101,20 +169,15 @@ static st_cellap find_near_source(st_taxip taxi, st_mappap mappa)
             source_pos = mappa->c[i][j].coordinate;
             if(is_source(mappa->c[i][j]))
             {
-                /* calcolo la distanza e la confronto con min_distance */
                 distance = abs(taxi_pos.colonna - source_pos.colonna) + abs(taxi_pos.riga - source_pos.riga);
-                /* la confronto con min_distance */
-                /* TRUE: assegno la distance a dist_min e min_source */
                 if (distance < min_distance)
                 {
                     min_distance = distance;
                     min_source = &mappa->c[i][j];
                 }
-                /* FALSE: resta uguale */
             }
         }
     }
-    /* restituisco il puntatore a quella sorgente */
     return min_source;
 }
 

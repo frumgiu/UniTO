@@ -26,6 +26,8 @@ int check_hole_ok(st_mappap, int, int);
 void print_map(st_mappap);
 /* Estrae una cella casualmente dalla mappa */
 st_cellap random_cella(st_mappap);
+/* Ritorna la cella dalle coordinate */
+st_cellap return_cell(int, int, st_mappap);
 
 #endif /* TAXICAB_MAPPA_H */
 /*

@@ -121,6 +121,11 @@ st_cellap random_cella(st_mappap mappa)
     return result;
 }
 
+st_cellap return_cell(int x, int y, st_mappap mappa)
+{
+    return &mappa->c[x][y];
+}
+
 /*
 * Created by giulia on 11/12/2020.
 */

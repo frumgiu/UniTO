@@ -5,12 +5,12 @@ static struct timespec so_duration = {0, 0};
 static const struct timespec wait_cycle = {0, 400000};
 static struct timespec mancante = {0, 0};
 
-static st_mappap mappa;
+static st_mappap mappa;     /* Puntatore alla zona della mappa */
 
 static void inizializza_configurazione() {
     printf("1. Lettura dal file .txt dei parametri di configurazione\n");
     read_conf_from_file(&configuration);
-    so_duration.tv_sec = get_so_duration();  /* TODO: diventa eliminabile con l'uso del segmale. Mi serve per settare il tempo della nanosleep */
+    so_duration.tv_sec = get_so_duration();  /* Mi serve per settare il tempo della nanosleep */
     print_conf(&configuration);
 }
 

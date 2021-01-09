@@ -85,24 +85,20 @@ void print_cella(st_cellap cellap)
 int enter_cella(st_cellap c)
 {
     int result = 0;
-    /* Blocco la cella */
     decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     if (!is_full(c))
     {
         c->statoCella.num_taxi++;
         result = 1;
     }
-    /* Sblocco */
     increment_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     return result;
 }
 
 void exit_cella(st_cellap c)
 {
-    /* Blocco cella */
     decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     c->statoCella.num_taxi--;
-    /* Sblocco cella */
     increment_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
 }
 /*

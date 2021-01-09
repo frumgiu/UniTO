@@ -12,6 +12,7 @@ struct taxi {
     st_cellap posizione;    /* dove si trova il taxi al momento */
     st_clientp request;     /* informazioni sulla client del cliente */
     int stato;              /* 0 vuoto, 1 con richiesta, */
+    time_t last_move;
 };
 
 typedef struct taxi st_taxi;
@@ -22,11 +23,11 @@ void init_taxi(st_cellap, int, int);
 /* Funzione che muove il taxi */
 static void run_taxi(st_taxip, st_mappap, int);
 /* Funzione che muove il taxi */
-static void move_taxi(st_taxip, st_cellap);
+static void move_taxi(st_taxip, st_cellap, st_mappap);
 /* Funzione che fa lo spostamento su asse x */
-static void move_taxi_x(st_cellap, int, int);
+static int move_taxi_x(st_taxip , int, int, st_mappap);
 /* Funzione che fa lo spostamento su asse y */
-static void move_taxi_y(st_taxip);
+static int move_taxi_y(st_taxip, int, int, st_mappap);
 /* Funzione che cerca la cella sorgente piu' vicina */
 static st_cellap find_near_source(st_taxip taxi, st_mappap mappa);
 
