@@ -26,19 +26,21 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
                 }
                 else if(result > 0)
                 {
-                    /* Ha una richiesta da servire */
+                    move_taxi(taxi_p, taxi_p->request->destinazione, mappa);
                     taxi_p->stato = TAXI_STATE_RUNNING;
                 }
                 else
                 {
-                    find_near_source(taxi_p, mappa);
-                    /* mi avvicino alla nuova sorgente */
+                    st_cellap next_source;
+                    next_source = find_near_source(taxi_p, mappa);
+                    move_taxi(taxi_p, next_source, mappa);
                 }
             }
             else
             {
-                find_near_source(taxi_p, mappa);
-                /* mi avvicino alla nuova sorgente */
+                st_cellap next_source;
+                next_source = find_near_source(taxi_p, mappa);
+                move_taxi(taxi_p, next_source, mappa);
             }
             break;
         case TAXI_STATE_RUNNING:
@@ -60,19 +62,18 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo, st_mappap mappa)
 {
     /* TODO: funzione che muove il taxi da una cella A a una cella B */
     int distance_x, distance_y;
+    int result = 1;
     struct coordinate taxi_pos;
     taxi_pos = taxi->posizione->coordinate;
     distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
     distance_y = taxi_pos.riga - arrivo->coordinate.riga;
-    /* inizio a spostarmi sull'asse x, se incontro un holes mi sposto di uno su y verso la destinazione */
-    if (distance_x != 0)
+    if (distance_x != 0 && result != 0)
     {
-        move_taxi_x(taxi, distance_x, distance_y, mappa);
+        result = move_taxi_x(taxi, distance_x, distance_y, mappa);
     }
-    /* se ho finito di muovere x, mi sposto verso y */
-    else if (distance_y != 0)
+    else if (distance_y != 0 && result != 0)
     {
-        move_taxi_y(taxi, distance_x, distance_y, mappa);
+        result = move_taxi_y(taxi, distance_x, distance_y, mappa);
     }
     if(taxi->posizione == taxi->request->destinazione)
     {
@@ -86,7 +87,7 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
     int step = distance_x > 0 ? -1 : 1;
     st_cellap next;
 
-    if (distance_x == 0 && taxi->posizione->coordinate.riga == SO_HEIGHT)
+    if (distance_x == 0 && (taxi->posizione->coordinate.riga == SO_HEIGHT))
     {
         step = -1;
     }
@@ -118,12 +119,12 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
     return result;
 }
 
-static int move_taxi_y(st_taxip taxi,int distance_x, int distance_y, st_mappap mappa)
+static int move_taxi_y(st_taxip taxi, int distance_x, int distance_y, st_mappap mappa)
 {
     int result = 0;
     int step = distance_y > 0 ? -1 : 1;
     st_cellap next;
-    if (distance_y == 0 && taxi->posizione->coordinate.colonna == SO_WIDTH)
+    if (distance_y == 0 && (taxi->posizione->coordinate.colonna == SO_WIDTH))
     {
         step = -1;
     }
