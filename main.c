@@ -103,7 +103,8 @@ int main(int argc, char **argv)
 
     printf("-- INIZIO SIMULAZIONE --\n\n");
     inizializza_configurazione();
-    sem_mutex = create_semaphore(SEM_MUTEX, 1);                         /* Creo semaforo mutex, per gestire le sezioni critiche e lo metto a 1 (aperto) */
+    sem_mutex = create_semaphore(SEM_MUTEX, (DIM_MAPPA - get_so_holes())); /* Creo set semaforo per le cell (non holes) lo metto a 1 (aperto) */
+    /* TODO: devo settarli tutti */
     setval_semaphore(sem_mutex, 0, 1);
     shm_id = inizializza_mappa();                                       /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
     create_source_queue();                                              /* Creo code di messaggi nelle celle source */

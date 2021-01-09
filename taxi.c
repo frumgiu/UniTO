@@ -23,28 +23,29 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
                 }
                 else if(result > 0)
                 {
+                    /* Ha una richiesta da servire */
                     taxi_p->stato = TAXI_STATE_RUNNING;
                 }
                 else
                 {
-                    /* TODO: cerco una cella_taxi sorgente vicino */
+                    find_near_source(taxi_p, mappa);
                     /* mi avvicino alla nuova sorgente */
                 }
             }
             else
             {
-                /* TODO: cerco una cella_taxi sorgente vicino */
+                find_near_source(taxi_p, mappa);
                 /* mi avvicino alla nuova sorgente */
             }
             break;
         case TAXI_STATE_RUNNING:
             /* TODO: controllo se sono arrivato */
-            /* muovo il taxi verso il risultato */
-            /* controllo finale */
+            /* FALSE: muovo il taxi verso il risultato finche' o si completa o muore */
+            /* TRUE: controllo tipo di finale */
             break;
         case TAXI_STATE_COMPLETED:
             taxi_p->stato = TAXI_STATE_SEARCHING;
-            taxi_p->request = NULL;
+            taxi_p->request = NULL;         /* Cosi' cancella la richiesta conslusa dalla sua 'memoria' */
             break;
         case TAXI_STATE_ABORTED:
             /* TODO: muore e creo un nuovo processo taxi */
@@ -52,17 +53,45 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
     }
 }
 
-static void move_taxi(st_taxip taxi)
+static void move_taxi(st_taxip taxi, st_cellap arrivo)
 {
     /* TODO: funzione che muove il taxi da una cella A a una cella B */
-    /* Controllo che la destinazione non sia una delle celle adiacenti */
-    /* se si mi sposto di uno sull'asse x/y */
-    /* senno' inizio a spostarmi sull'asse x, se incontro un holes mi sposto di uno su y verso la destinazione */
+    int distance_x, distance_y;
+    st_cellap next;
+    struct coordinate taxi_pos;
+    taxi_pos = taxi->posizione->coordinate;
+    distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
+    if(distance_x > 0) /* muoversi verso sinistra */
+    {
+        next->coordinate.colonna = taxi_pos.colonna - 1;
+        next->coordinate.riga = taxi_pos.riga;
+        if (!is_hole(*next)) { /* controllo se la cella dopo non e' piena */
+            if () {
+                /* TRUE: aspetta che si liberi un posto, entro timeout */
+            }
+            else {
+                enter_cella(next);
+                exit_cella(taxi->posizione);
+                taxi->posizione = next; /* FALSE: Il taxi si sposta sulla cella vicina */
+
+            }
+        }
+    }
+    else /* muovo verso destra */
+    /* inizio a spostarmi sull'asse x, se incontro un holes mi sposto di uno su y verso la destinazione */
     /* se ho finito di muovere x, mi sposto verso y */
-    /* se arrivo a destinazione taxi->stato = completed, request->stato = completed */
+    /* se arrivo a destinazione taxi->stato = completed */
 }
 
-static st_cellap near_source(st_taxip taxi, st_mappap mappa)
+static void move_taxi_x(st_cellap taxi_pos, int distance_x, int distance_y)
+{
+
+}
+
+static void move_taxi_y(st_taxip taxi)
+{}
+
+static st_cellap find_near_source(st_taxip taxi, st_mappap mappa)
 {
     int i, j, min_distance, distance;
     st_cellap min_source;

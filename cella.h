@@ -4,11 +4,15 @@
 struct stato_cella {
     int num_taxi;       /* Quanti taxi ci sono in quella cella attualmente */
     int queue_id;       /* Id della sua coda di messaggi, se e' una source */
+    int sem_set_id;
+    int sem_num;
 };
+
 struct coordinate {
     int colonna;
     int riga;
 };
+
 struct cella {
     int so_cap;                     /* Capacita' della cella */
     int so_timensec;                /* Tempo per ogni taxi di attraversare la cella */
@@ -36,7 +40,7 @@ int is_source(st_cella);
 /* Funzione che stampa una cella */
 void print_cella(st_cellap);
 /* Funzione che incrementa il numero di taxi nella cella */
-void enter_cella(st_cellap);
+int enter_cella(st_cellap);
 /* Funzione che decrementa il numero di taxi nella cella */
 void exit_cella(st_cellap);
 

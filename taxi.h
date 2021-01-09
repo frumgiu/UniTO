@@ -22,13 +22,13 @@ void init_taxi(st_cellap, int, int);
 /* Funzione che muove il taxi */
 static void run_taxi(st_taxip, st_mappap, int);
 /* Funzione che muove il taxi */
-static void move_taxi(st_taxip);
+static void move_taxi(st_taxip, st_cellap);
 /* Funzione che fa lo spostamento su asse x */
-static void move_taxi_x(st_taxip);
+static void move_taxi_x(st_cellap, int, int);
 /* Funzione che fa lo spostamento su asse y */
 static void move_taxi_y(st_taxip);
 /* Funzione che cerca la cella sorgente piu' vicina */
-static st_cellap near_source(st_taxip, st_mappap);
+static st_cellap find_near_source(st_taxip taxi, st_mappap mappa);
 
 #endif /* TAXICAB_TAXI_H */
 /*
