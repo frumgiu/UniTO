@@ -6,7 +6,7 @@
 
 #define SO_HEIGHT   10                  /* Righe */
 #define SO_WIDTH    20                  /* Colonne */
-#define DIM_MAPPA SO_WIDTH*SO_HEIGHT   /* Dimensione mappa */
+#define DIM_MAPPA SO_WIDTH*SO_HEIGHT    /* Dimensione mappa */
 #define DIM_MAPPA_BORDO (SO_WIDTH + 2) * (SO_HEIGHT + 2)
 
 struct mappa {

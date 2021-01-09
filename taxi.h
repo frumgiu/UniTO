@@ -21,7 +21,7 @@ typedef struct taxi * st_taxip;
 /* Crea un taxi senza richieste, nella cella data */
 void init_taxi(st_cellap, int, int);
 /* Funzione che muove il taxi */
-static void run_taxi(st_taxip, st_mappap, int);
+static void run_taxi(st_taxip, st_mappap, int, int);
 /* Funzione che muove il taxi */
 static void move_taxi(st_taxip, st_cellap, st_mappap);
 /* Funzione che fa lo spostamento su asse x */

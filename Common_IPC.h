@@ -9,8 +9,8 @@
 #include <errno.h>
 
 #define ERROR if (errno) {fprintf(stderr,                                              \
-              "Errore in file: %s, durante processo (pid) %ld; errno: %d (%s)\n",      \
-              __FILE__, (long) getpid(), errno,                                        \
+              "Errore in file: %s, riga: %d durante processo (pid) %ld; errno: %d (%s)\n",      \
+              __FILE__, __LINE__, (long) getpid(), errno,                                        \
               strerror(errno)); exit(1);}
 
 #define SEM_ID_CLIENT        0

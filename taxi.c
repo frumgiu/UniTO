@@ -7,7 +7,7 @@ static struct timespec mancante = {0, 0};
 static struct timespec movimento = {0, 0};
 static struct timespec pausa = {0, 0};
 
-static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
+static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id, int shm_id)
 {
     int mex_que_id;
 
@@ -26,56 +26,54 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, int sem_id)
                 }
                 else if(result > 0)
                 {
-                    move_taxi(taxi_p, taxi_p->request->destinazione, mappa);
                     taxi_p->stato = TAXI_STATE_RUNNING;
                 }
                 else
                 {
-                    st_cellap next_source;
-                    next_source = find_near_source(taxi_p, mappa);
+                    st_cellap next_source = find_near_source(taxi_p, mappa);
                     move_taxi(taxi_p, next_source, mappa);
                 }
             }
             else
             {
-                st_cellap next_source;
-                next_source = find_near_source(taxi_p, mappa);
+                st_cellap next_source = find_near_source(taxi_p, mappa);
                 move_taxi(taxi_p, next_source, mappa);
             }
             break;
         case TAXI_STATE_RUNNING:
-            /* TODO: controllo se sono arrivato */
-            /* FALSE: muovo il taxi verso il risultato finche' o si completa o muore */
-            /* TRUE: controllo tipo di finale */
+            move_taxi(taxi_p, taxi_p->request->destinazione, mappa);
             break;
         case TAXI_STATE_COMPLETED:
             taxi_p->stato = TAXI_STATE_SEARCHING;
-            taxi_p->request = NULL;         /* Cosi' cancella la richiesta conslusa dalla sua 'memoria' */
+            taxi_p->request = NULL;         /* Per sicurezza gli rimuovo la richiesta appena conclusa */
             break;
         case TAXI_STATE_ABORTED:
-            /* TODO: muore e creo un nuovo processo taxi */
+            shmdt(mappa);
+            free(taxi_p);
+            setval_semaphore(sem_id, SEM_ID_TAXI_START, 1); /* senno' non puo' partire */
+            init_taxi(random_cella(mappa), sem_id, shm_id); /* crea un nuovo taxi */
             break;
     }
 }
 
 static void move_taxi(st_taxip taxi, st_cellap arrivo, st_mappap mappa)
 {
-    /* TODO: funzione che muove il taxi da una cella A a una cella B */
     int distance_x, distance_y;
-    int result = 1;
     struct coordinate taxi_pos;
     taxi_pos = taxi->posizione->coordinate;
     distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
     distance_y = taxi_pos.riga - arrivo->coordinate.riga;
-    if (distance_x != 0 && result != 0)
+    if (distance_x != 0)
     {
-        result = move_taxi_x(taxi, distance_x, distance_y, mappa);
+        if (move_taxi_x(taxi, distance_x, distance_y, mappa) == 0)
+            return;
     }
-    else if (distance_y != 0 && result != 0)
+    else if (distance_y != 0)
     {
-        result = move_taxi_y(taxi, distance_x, distance_y, mappa);
+        if (move_taxi_y(taxi, distance_x, distance_y, mappa) == 0)
+            return;
     }
-    if(taxi->posizione == taxi->request->destinazione)
+    if (taxi->posizione == taxi->request->destinazione)
     {
         taxi->stato = TAXI_STATE_COMPLETED;
     }
@@ -99,6 +97,8 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
             exit_cella(taxi->posizione);
             taxi->posizione = next;
             time(&taxi->last_move);
+            movimento.tv_nsec = next->so_timensec;
+            nanosleep(&movimento, &pausa);
             result = 1;
         }
         else
@@ -108,9 +108,7 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
                 taxi->stato = TAXI_STATE_ABORTED;
             }
         }
-        /* TODO: valutare se cambiare tempo tentativo */
-        movimento.tv_nsec = next->so_timensec;
-        nanosleep(&movimento, &pausa);
+        nanosleep(&ripetizione, &pausa);
     }
     else    /* else mi muovo su y */
     {
@@ -136,6 +134,8 @@ static int move_taxi_y(st_taxip taxi, int distance_x, int distance_y, st_mappap 
             exit_cella(taxi->posizione);
             taxi->posizione = next;
             time(&taxi->last_move);
+            movimento.tv_nsec = next->so_timensec;
+            nanosleep(&movimento, &pausa);
             result = 1;
         }
         else
@@ -145,8 +145,7 @@ static int move_taxi_y(st_taxip taxi, int distance_x, int distance_y, st_mappap 
                 taxi->stato = TAXI_STATE_ABORTED;
             }
         }
-        movimento.tv_nsec = next->so_timensec;
-        nanosleep(&movimento, &pausa);
+        nanosleep(&ripetizione, &pausa);
     }
     else    /* else mi muovo su x */
     {
@@ -201,7 +200,7 @@ void init_taxi(st_cellap c, int sem_id, int shm_id)
         decrement_sem(sem_id, SEM_ID_TAXI_START);
         while (getval_semaphore(sem_id, SEM_ID_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */
         {
-            run_taxi(taxip, mappa, sem_id);
+            run_taxi(taxip, mappa, sem_id, shm_id);
             nanosleep(&ripetizione, &mancante);
         }
         decrement_sem(sem_id, SEM_ID_TAXI);                  /* se esci perche' semaforo > 0 --> decremento il semaforo di 1 */

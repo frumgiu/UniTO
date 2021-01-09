@@ -77,7 +77,7 @@ static void create_taxi(int sem_id, int valore, int shm_id) {
         init_taxi(random_cella(mappa), sem_id, shm_id);  /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
         --n;
     }
-    /* print_map(mappa); */
+    print_map(mappa);
 }
 
 static void create_client(int sem_id, int valore, int shm_id) {
@@ -114,11 +114,11 @@ int main(int argc, char **argv)
     int sem_set_id;
     int sem_mutex_id;
     int shm_id;
-    int num_sem_mutex = DIM_MAPPA - get_so_holes();
+    int num_sem_mutex;
 
     printf("-- INIZIO SIMULAZIONE --\n\n");
     inizializza_configurazione();
-
+    num_sem_mutex = (DIM_MAPPA - get_so_holes());
     sem_mutex_id = create_semaphore(SEM_MUTEX, num_sem_mutex);          /* Creo set semaforo per le cell (non holes) lo metto a 1 (aperto) */
     shm_id = inizializza_mappa(sem_mutex_id);                           /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
     create_source_queue();                                              /* Creo code di messaggi nelle celle source */
