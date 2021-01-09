@@ -35,7 +35,6 @@ void create_cella(st_cellap c, int cap_min, int cap_max, int so_time_min, int so
     c->statoCella.num_taxi = 0;                             /* Le celle vengono create vuote inizialmente */
     c->statoCella.queue_id = -1;                            /* Non punta a nessuna coda all'inizio, si modifica solo se la cella e' source */
     c->statoCella.sem_num = 0;
-    c->statoCella.sem_set_id = 0;
 }
 
 int set_source(int sources, const int probability)
@@ -60,12 +59,12 @@ int set_holes (int holes, int flag_source)
 
 int is_hole (st_cella c)
 {
-    return c.hole == 1;
+    return c.hole == 1 ? 1 : 0;
 }
 
 int is_source (st_cella c)
 {
-    return c.source == 1;
+    return c.source == 1 ? 1 : 0;
 }
 
 static int is_full (st_cellap c)
@@ -87,20 +86,24 @@ int enter_cella(st_cellap c)
 {
     int result = 0;
     /* Blocco la cella */
+    decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     if (!is_full(c))
     {
         c->statoCella.num_taxi++;
         result = 1;
     }
     /* Sblocco */
+    increment_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     return result;
 }
 
 void exit_cella(st_cellap c)
 {
-    /* blocco cella */
+    /* Blocco cella */
+    decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     c->statoCella.num_taxi--;
-    /* sblocco cella */
+    /* Sblocco cella */
+    increment_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
 }
 /*
 * Created by giulia on 11/12/2020.

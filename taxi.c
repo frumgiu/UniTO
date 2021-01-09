@@ -57,7 +57,7 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo)
 {
     /* TODO: funzione che muove il taxi da una cella A a una cella B */
     int distance_x, distance_y;
-    st_cellap next;
+    st_cellap next = NULL;
     struct coordinate taxi_pos;
     taxi_pos = taxi->posizione->coordinate;
     distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
@@ -65,19 +65,15 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo)
     {
         next->coordinate.colonna = taxi_pos.colonna - 1;
         next->coordinate.riga = taxi_pos.riga;
-        if (!is_hole(*next)) { /* controllo se la cella dopo non e' piena */
-            if () {
-                /* TRUE: aspetta che si liberi un posto, entro timeout */
-            }
-            else {
-                enter_cella(next);
-                exit_cella(taxi->posizione);
-                taxi->posizione = next; /* FALSE: Il taxi si sposta sulla cella vicina */
-
-            }
+        if (!is_hole(*next))
+        {
+            enter_cella(next);
+            exit_cella(taxi->posizione);
+            taxi->posizione = next; /* FALSE: Il taxi si sposta sulla cella vicina */
         }
     }
     else /* muovo verso destra */
+    {}
     /* inizio a spostarmi sull'asse x, se incontro un holes mi sposto di uno su y verso la destinazione */
     /* se ho finito di muovere x, mi sposto verso y */
     /* se arrivo a destinazione taxi->stato = completed */
@@ -85,7 +81,6 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo)
 
 static void move_taxi_x(st_cellap taxi_pos, int distance_x, int distance_y)
 {
-
 }
 
 static void move_taxi_y(st_taxip taxi)

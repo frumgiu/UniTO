@@ -33,9 +33,9 @@ void create_cella(st_cellap, int, int, int, int, int, int, int, int);
 int set_source(int, int);
 /* Decide se una cella e' inaccessibile o no */
 int set_holes(int, int);
-/* Controlla se una cella e' inaccessibile */
+/* Controlla se una cella e' inaccessibile (1) 0 no (0) */
 int is_hole(st_cella);
-/* Controlla se una cella e' sorgente */
+/* Controlla se una cella e' sorgente (1) 0 no (0) */
 int is_source(st_cella);
 /* Funzione che stampa una cella */
 void print_cella(st_cellap);

@@ -1,8 +1,6 @@
 #include "Common_IPC.h"
 #include "taxi.h"
 
-
-
 static struct timespec so_duration = {0, 0};
 static const struct timespec wait_cycle = {0, 400000};
 static struct timespec mancante = {0, 0};
@@ -16,17 +14,33 @@ static void inizializza_configurazione() {
     print_conf(&configuration);
 }
 
-static int inizializza_mappa()
+static int inizializza_mappa(int sem_celle_id)
 {
     int shm_id;
+    int i, j;
+
     printf("2. Inizializzazione della mappa, di dimensione %dx%d, e prima stampa\n", SO_HEIGHT, SO_WIDTH);
     if ((shm_id = shmget(MAPPA_KEY, sizeof(struct cella) * (DIM_MAPPA), IPC_CREAT | 0666)) == -1)
         ERROR;
+
     mappa = shmat(shm_id, NULL, 0);
     init_map(get_so_source(), get_so_holes(), mappa);
+    /* Devo settare tutti i mutex nelle celle, assegno il numero di semaforo nelle celle (tranne holes) */
+    for (i = 0; i < SO_HEIGHT; ++i) {
+        for (j = 0; j < SO_WIDTH; ++j) {
+            int sem_num = 0;
+            if (is_hole(mappa->c[i][j]) == 0)           /* Escludo celle inaccessibili */
+            {
+                setval_semaphore(sem_celle_id, sem_num, 1);
+                mappa->c[i][j].statoCella.sem_set_id = sem_celle_id;
+                mappa->c[i][j].statoCella.sem_num = sem_num;
+                ++sem_num;
+            }
+        }
+    }
     print_map(mappa);
     printf("\n-- Legenda --\nS = cella sorgente\nX = cella inaccessibile\n"
-           "N = cella normale\nI numeri nelle celle corrisondono ai taxi presenti in esse\n\n");
+           ". = cella normale\nI numeri nelle celle corrisondono ai taxi presenti in esse\n\n");
     return shm_id;
 }
 
@@ -98,15 +112,15 @@ static void termina_specifiche() {
 int main(int argc, char **argv)
 {
     int sem_set_id;
-    int sem_mutex;
+    int sem_mutex_id;
     int shm_id;
+    int num_sem_mutex = DIM_MAPPA - get_so_holes();
 
     printf("-- INIZIO SIMULAZIONE --\n\n");
     inizializza_configurazione();
-    sem_mutex = create_semaphore(SEM_MUTEX, (DIM_MAPPA - get_so_holes())); /* Creo set semaforo per le cell (non holes) lo metto a 1 (aperto) */
-    /* TODO: devo settarli tutti */
-    setval_semaphore(sem_mutex, 0, 1);
-    shm_id = inizializza_mappa();                                       /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
+
+    sem_mutex_id = create_semaphore(SEM_MUTEX, num_sem_mutex);          /* Creo set semaforo per le cell (non holes) lo metto a 1 (aperto) */
+    shm_id = inizializza_mappa(sem_mutex_id);                           /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
     create_source_queue();                                              /* Creo code di messaggi nelle celle source */
     sem_set_id = create_semaphore(SEM_KEY_SOURCE, 3);                   /* Creo set di 3 semafori, 1 per source, 2 per taxi */
     /* -- SEZIONE CRITICA -- i taxi aggiorneranno la loro posizione */
@@ -120,15 +134,15 @@ int main(int argc, char **argv)
     /* -- FINE SEZIONE CRITICA -- */
     /* TODO: appena si azzera posso svegliare gli altri nanosleep e interromperli, per finire subito */
     printf("\n-- finito tempo simulazione --\n");
-
     termina_specifiche();
     chiudi_processi_child(sem_set_id, SEM_ID_CLIENT, get_so_source(), "source");    /* Chiusura processi source */
     chiudi_processi_child(sem_set_id, SEM_ID_TAXI, get_so_taxi(), "taxi");          /* Chiusura processi taxi */
+    printf("9. Chiudo i set di semafori creati\n");
     remove_semaphore(sem_set_id);                                                        /* Chiusura dei due set di semafori */
-    remove_semaphore(sem_mutex);
+    remove_semaphore(sem_mutex_id);
     remove_queue_source();                                                               /* Chiudo le code di messaggi */
     shmdt(mappa);                                                                        /* Stacco la shared memory dal processo master */
-    printf("9. Elimino l'area di memoria condivisa\n");
+    printf("10. Elimino l'area di memoria condivisa\n");
     if (shmctl(shm_id, IPC_RMID, 0) < 0)                                             /* Cancello area memoria condivisa */
         ERROR;
     printf("\n-- FINE SIMULAZIONE --");
