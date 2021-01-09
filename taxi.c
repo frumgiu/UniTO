@@ -62,21 +62,34 @@ static void move_taxi(st_taxip taxi)
     /* se arrivo a destinazione taxi->stato = completed, request->stato = completed */
 }
 
-static st_cellap near_source(st_taxip taxi)
+static st_cellap near_source(st_taxip taxi, st_mappap mappa)
 {
-    int i, j, min_distance;
+    int i, j, min_distance, distance;
     st_cellap min_source;
+    struct coordinate taxi_pos, source_pos;
     min_distance = DIM_MAPPA; /* La distanza piu' grande che posso avere */
     /* Controllo la distanza tra la sua posizione e le celle sorgenti sulla mappa */
     for (i = 0; i < SO_HEIGHT; i++)
     {
         for (j = 0; j < SO_WIDTH; j++)
         {
-            if(is_source(/* cella della mappa su cui sono */))
+            taxi_pos = taxi->posizione->coordinate;
+            source_pos = mappa->c[i][j].coordinate;
+            if(is_source(mappa->c[i][j]))
+            {
                 /* calcolo la distanza e la confronto con min_distance */
+                distance = abs(taxi_pos.colonna - source_pos.colonna) + abs(taxi_pos.riga - source_pos.riga);
+                /* la confronto con min_distance */
+                /* TRUE: assegno la distance a dist_min e min_source */
+                if (distance < min_distance)
+                {
+                    min_distance = distance;
+                    min_source = &mappa->c[i][j];
+                }
+                /* FALSE: resta uguale */
+            }
         }
     }
-    /* salvo quella con distanza minore */
     /* restituisco il puntatore a quella sorgente */
     return min_source;
 }
