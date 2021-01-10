@@ -10,7 +10,7 @@
 
 struct taxi {
     st_cellap posizione;    /* dove si trova il taxi al momento */
-    st_clientp request;     /* informazioni sulla client del cliente */
+    st_client request;      /* informazioni sulla client del cliente */
     int stato;              /* 0 vuoto, 1 con richiesta, */
     time_t last_move;
 };
@@ -23,7 +23,7 @@ void init_taxi(int, int);
 /* Funzione che muove il taxi */
 static void run_taxi(st_taxip, st_mappap, int, int);
 /* Funzione che muove il taxi */
-static void move_taxi(st_taxip, st_cellap, st_mappap);
+static void move_taxi(st_taxip, struct coordinate *, st_mappap);
 /* Funzione che fa lo spostamento su asse x */
 static int move_taxi_x(st_taxip , int, int, st_mappap);
 /* Funzione che fa lo spostamento su asse y */

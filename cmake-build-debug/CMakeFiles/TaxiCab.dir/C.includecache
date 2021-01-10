@@ -6,16 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.c
-stdio.h
--
-stdlib.h
--
-string.h
--
-Common_IPC.h
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
-
 /home/giulia/CLionProjects/TaxiCab/Common_IPC.h
 time.h
 -
@@ -31,6 +21,12 @@ errno.h
 -
 
 /home/giulia/CLionProjects/TaxiCab/cella.h
+
+/home/giulia/CLionProjects/TaxiCab/client.c
+client.h
+/home/giulia/CLionProjects/TaxiCab/client.h
+Common_IPC.h
+/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
 
 /home/giulia/CLionProjects/TaxiCab/client.h
 unistd.h
@@ -50,25 +46,9 @@ configurazione_private.h
 
 /home/giulia/CLionProjects/TaxiCab/configurazione_private.h
 
-/home/giulia/CLionProjects/TaxiCab/main.c
-Common_IPC.h
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
-taxi.h
-/home/giulia/CLionProjects/TaxiCab/taxi.h
-
 /home/giulia/CLionProjects/TaxiCab/mappa.h
 cella.h
 /home/giulia/CLionProjects/TaxiCab/cella.h
 configurazione.h
 /home/giulia/CLionProjects/TaxiCab/configurazione.h
-
-/home/giulia/CLionProjects/TaxiCab/taxi.c
-taxi.h
-/home/giulia/CLionProjects/TaxiCab/taxi.h
-Common_IPC.h
-/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
-
-/home/giulia/CLionProjects/TaxiCab/taxi.h
-client.h
-/home/giulia/CLionProjects/TaxiCab/client.h
 

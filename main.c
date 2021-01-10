@@ -123,8 +123,8 @@ int main(int argc, char **argv)
     sem_set_id = create_semaphore(SEM_KEY_SOURCE, NUM_SEM);             /* Creo set di 3 semafori, 1 per source, 2 per taxi */
     /* -- SEZIONE CRITICA -- i taxi aggiorneranno la loro posizione */
     create_taxi(sem_set_id, 0, shm_id);
-    set_semop(sem_set_id, SEM_NUM_TAXI_INIT_READY, -get_so_taxi());
     create_client(sem_set_id, 0, shm_id);
+    set_semop(sem_set_id, SEM_NUM_TAXI_INIT_READY, (0-get_so_taxi()));
     printf("\n Adesso aspetto i taxi \n");
     print_map(mappa);
     setval_semaphore(sem_set_id, SEM_NUM_TAXI_START, get_so_taxi());                     /* Faccio partire la corsa dei processi taxi */
@@ -134,10 +134,10 @@ int main(int argc, char **argv)
     nanosleep(&so_duration, &mancante);                                                  /* Il padre dorme per il tempo SO_DURATION */
     /* -- FINE SEZIONE CRITICA -- */
     /* TODO: appena si azzera posso svegliare gli altri nanosleep e interromperli, per finire subito */
+    chiudi_processi_child(sem_set_id, SEM_NUM_TAXI, get_so_taxi(), "taxi");          /* Chiusura processi taxi */
+    chiudi_processi_child(sem_set_id, SEM_NUM_CLIENT, get_so_source(), "source");    /* Chiusura processi source */
     printf("\n-- finito tempo simulazione --\n");
     termina_specifiche();
-    chiudi_processi_child(sem_set_id, SEM_NUM_CLIENT, get_so_source(), "source");    /* Chiusura processi source */
-    chiudi_processi_child(sem_set_id, SEM_NUM_TAXI, get_so_taxi(), "taxi");          /* Chiusura processi taxi */
     printf("9. Chiudo i set di semafori creati\n");
     remove_semaphore(sem_set_id);                                                        /* Chiusura dei due set di semafori */
     remove_semaphore(sem_mutex_id);

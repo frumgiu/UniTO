@@ -15,11 +15,10 @@ int init_coda(int key)
 st_clientp init_client(st_cellap source, st_mappap mappa)
 {
     st_clientp mex = malloc(sizeof(st_client));
-
-    mex->partenza = source;
-    mex->destinazione = random_cella(mappa);
-    while ( mex->destinazione == source)                   /* Deve essere diverso dalla cella di partenza */
-        mex->destinazione = random_cella(mappa);
+    memcpy(&(mex->partenza), &source->coordinate, sizeof(struct coordinate));
+    do                   /* Deve essere diverso dalla cella di partenza */
+        memcpy(&(mex->destinazione), &(random_cella(mappa)->coordinate), sizeof(struct coordinate));
+    while (mex->destinazione.riga == source->coordinate.riga && mex->destinazione.colonna == source->coordinate.colonna);
     return mex;
 }
 
@@ -40,8 +39,10 @@ void new_client (int i, int j, int sem_id, int shm_id)
         while (getval_semaphore(sem_id, SEM_NUM_CLIENT) == 0)
         {
             /* Metto mutex? */
-            messaggio = init_client(&mappa->c[i][j], mappa);                                          /* Il processo crea un client */
-            msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0);     /* Invio il messaggio nella coda */
+            messaggio = init_client(&mappa->c[i][j], mappa);/* Il processo crea un client */
+            /*print_client(messaggio, mappa->c[i][j].statoCella.queue_id);*/
+            msgsnd(mappa->c[i][j].statoCella.queue_id, messaggio, sizeof(st_client), 0);     /* Invio il messaggio nella coda */
+            free(messaggio);
             nanosleep(&ripetizione, &mancante);
         }
         decrement_sem(sem_id, SEM_NUM_CLIENT);
@@ -50,11 +51,11 @@ void new_client (int i, int j, int sem_id, int shm_id)
     }
 }
 
-void print_client(st_clientp c, st_cellap cp)
+void print_client(st_clientp c, int queue_id )
 {
-    printf("Il cliente parte da: (%d,%d)\n", c->partenza->coordinate.riga, c->partenza->coordinate.colonna);
-    printf("Vuole arrivare a: (%d,%d)\n", c->destinazione->coordinate.riga, c->destinazione->coordinate.colonna);
-    printf("Inserito in coda ID: %d\n\n", cp->statoCella.queue_id);
+    printf("Il cliente parte da: (%d,%d)\n", c->partenza.riga, c->partenza.colonna);
+    printf("Vuole arrivare a: (%d,%d)\n", c->destinazione.riga, c->destinazione.colonna);
+    printf("Inserito in coda ID: %d\n\n", queue_id);
 }
 /*
 * Created by giulia on 23/12/2020.

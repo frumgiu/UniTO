@@ -55,13 +55,13 @@ int set_semop (int semId, int semNum, int value)
 
 int increment_sem (int semId, int semNum)
 {
-    printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
+    /*printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);*/
    return set_semop(semId, semNum, +1);
 }
 
 int decrement_sem (int semId, int semNum)
 {
-    printf("Decremento con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
+    /*printf("Decremento con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);*/
     return set_semop(semId, semNum, -1);
 }
 
