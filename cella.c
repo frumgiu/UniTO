@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "Common_IPC.h"
 
 #include "cella.h"
@@ -57,14 +58,14 @@ int set_holes (int holes, int flag_source)
         return 0;
 }
 
-int is_hole (st_cella c)
+int is_hole (st_cellap c)
 {
-    return c.hole == 1 ? 1 : 0;
+    return c->hole == 1 ? 1 : 0;
 }
 
-int is_source (st_cella c)
+int is_source (st_cellap c)
 {
-    return c.source == 1 ? 1 : 0;
+    return c->source == 1 ? 1 : 0;
 }
 
 static int is_full (st_cellap c)
@@ -74,9 +75,9 @@ static int is_full (st_cellap c)
 
 void print_cella(st_cellap cellap)
 {
-    if (is_source(*cellap) == 1)
+    if (is_source(cellap) == 1)
         printf("  S, %d  ", cellap->statoCella.num_taxi);      /* Indica una cella sorgente */
-    else if (is_hole(*cellap) == 1)
+    else if (is_hole(cellap) == 1)
         printf("  X, -  ");                                    /* Indica una cella inaccessibile */
     else
         printf("  ., %d  ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
@@ -85,6 +86,7 @@ void print_cella(st_cellap cellap)
 int enter_cella(st_cellap c)
 {
     int result = 0;
+    printf("Enter in cella %d,%d con PID: %d e sem_id %d e sem_num %d\n", c->coordinate.colonna, c->coordinate.riga, getpid(), c->statoCella.sem_set_id, c->statoCella.sem_num);
     decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     if (!is_full(c))
     {

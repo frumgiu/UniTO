@@ -25,7 +25,7 @@ void init_map(const int sources, const int holes, st_mappap mappa)
                 for (colonna = 0; colonna < SO_WIDTH; colonna++)
                 {
                     st_cellap cellap = &mappa->c[riga][colonna];
-                    if (is_source(*cellap) != 0 || is_hole(*cellap) != 0)
+                    if (is_source(cellap) != 0 || is_hole(cellap) != 0)
                         continue;
                     flagS = set_source(i, probability_source);
                     flagH = set_holes(j, flagS);
@@ -91,7 +91,7 @@ int check_hole_ok(st_mappap m, int r, int c)
     {
         for (j = inizio_c; j <= fine_c; ++j)
         {
-            if (is_hole(m->c[i][j]) == 1 && !(i == r && j == c))
+            if (is_hole(&m->c[i][j]) == 1 && !(i == r && j == c))
                 return 0;
         }
     }
@@ -113,11 +113,12 @@ void print_map(st_mappap m)
 
 st_cellap random_cella(st_mappap mappa)
 {
-    st_cellap result = &mappa->c[random_num(0, SO_HEIGHT)][random_num(0, SO_WIDTH)];
-    while (is_hole(*result) == 1)
+    st_cellap result;
+    do
     {
-        result = &mappa->c[random_num(0, SO_HEIGHT)][random_num(0, SO_WIDTH)];
+        result = &mappa->c[random_num(0, SO_HEIGHT-1)][random_num(0, SO_WIDTH-1)];
     }
+    while (is_hole(result) == 1);
     return result;
 }
 

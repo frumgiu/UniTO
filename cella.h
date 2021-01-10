@@ -34,9 +34,9 @@ int set_source(int, int);
 /* Decide se una cella e' inaccessibile o no */
 int set_holes(int, int);
 /* Controlla se una cella e' inaccessibile (1) 0 no (0) */
-int is_hole(st_cella);
+int is_hole(st_cellap);
 /* Controlla se una cella e' sorgente (1) 0 no (0) */
-int is_source(st_cella);
+int is_source(st_cellap);
 /* Funzione che stampa una cella */
 void print_cella(st_cellap);
 /* Funzione che incrementa il numero di taxi nella cella */

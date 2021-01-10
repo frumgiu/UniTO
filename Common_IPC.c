@@ -39,28 +39,30 @@ int remove_semaphore (int sem_id)
     return result;
 }
 
-int increment_sem (int semId, int semNum)
+int set_semop (int semId, int semNum, int value)
 {
     int result;
     struct sembuf sops;
+
     sops.sem_num = semNum;
-    sops.sem_op = 1;
+    sops.sem_op = value;
     sops.sem_flg = 0;
     if ((result = semop(semId, &sops, 1)) < 0)
         ERROR;
+    printf("Esco decremento con PID %d\n", getpid());
     return result;
+}
+
+int increment_sem (int semId, int semNum)
+{
+    printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
+   return set_semop(semId, semNum, +1);
 }
 
 int decrement_sem (int semId, int semNum)
 {
-    int result;
-    struct sembuf sops;
-    sops.sem_num = semNum;
-    sops.sem_op = -1;
-    sops.sem_flg = 0;
-    if ((result = semop(semId, &sops, 1)) < 0)
-        ERROR;
-    return result;
+    printf("Decremento con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
+    return set_semop(semId, semNum, -1);
 }
 
 /*

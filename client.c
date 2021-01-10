@@ -37,14 +37,14 @@ void new_client (int i, int j, int sem_id, int shm_id)
     {
         st_mappap mappa = shmat(shm_id, NULL, 0);
         srand(getpid());
-        while (getval_semaphore(sem_id, SEM_ID_CLIENT) == 0)
+        while (getval_semaphore(sem_id, SEM_NUM_CLIENT) == 0)
         {
             /* Metto mutex? */
             messaggio = init_client(&mappa->c[i][j], mappa);                                          /* Il processo crea un client */
             msgsnd(mappa->c[i][j].statoCella.queue_id, &messaggio, sizeof(&messaggio), 0);     /* Invio il messaggio nella coda */
             nanosleep(&ripetizione, &mancante);
         }
-        decrement_sem(sem_id, SEM_ID_CLIENT);
+        decrement_sem(sem_id, SEM_NUM_CLIENT);
         shmdt(mappa);
         exit(0);
     }
