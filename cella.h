@@ -9,8 +9,8 @@ struct stato_cella {
 };
 
 struct coordinate {
-    int colonna;
     int riga;
+    int colonna;
 };
 
 struct cella {

@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/giulia/CLionProjects/TaxiCab/Common_IPC.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+Common_IPC.h
+/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
+
 /home/giulia/CLionProjects/TaxiCab/Common_IPC.h
 time.h
 -
@@ -39,6 +49,12 @@ configurazione_private.h
 /home/giulia/CLionProjects/TaxiCab/configurazione_private.h
 
 /home/giulia/CLionProjects/TaxiCab/configurazione_private.h
+
+/home/giulia/CLionProjects/TaxiCab/main.c
+Common_IPC.h
+/home/giulia/CLionProjects/TaxiCab/Common_IPC.h
+taxi.h
+/home/giulia/CLionProjects/TaxiCab/taxi.h
 
 /home/giulia/CLionProjects/TaxiCab/mappa.h
 cella.h

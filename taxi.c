@@ -64,6 +64,7 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo, st_mappap mappa)
     taxi_pos = taxi->posizione->coordinate;
     distance_x = taxi_pos.colonna - arrivo->coordinate.colonna;
     distance_y = taxi_pos.riga - arrivo->coordinate.riga;
+    /*printf("Mi muovo da = %d,%d PID %d \n", taxi_pos.riga, taxi_pos.colonna, getpid());*/
     if (distance_x != 0)
     {
         if (move_taxi_x(taxi, distance_x, distance_y, mappa) == 0)
@@ -74,8 +75,10 @@ static void move_taxi(st_taxip taxi, st_cellap arrivo, st_mappap mappa)
         if (move_taxi_y(taxi, distance_x, distance_y, mappa) == 0)
             return;
     }
+    /*printf("Sono arrivato in cella = %d,%d PID %d \n", taxi_pos.riga, taxi_pos.colonna, getpid());*/
     if (taxi->posizione == taxi->request->destinazione)
     {
+        free(taxi->request);
         taxi->stato = TAXI_STATE_COMPLETED;
     }
 }
@@ -90,7 +93,8 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
     {
         step = -1;
     }
-    next = return_cell(taxi->posizione->coordinate.colonna + step, taxi->posizione->coordinate.riga, mappa);
+    /* TODO: l'errore era qui */
+    next = return_cell(taxi->posizione->coordinate.riga, taxi->posizione->coordinate.colonna + step, mappa);
     if (!is_hole(next))
     {
         if (enter_cella(next) == 1)
@@ -127,7 +131,7 @@ static int move_taxi_y(st_taxip taxi, int distance_x, int distance_y, st_mappap 
     {
         step = -1;
     }
-    next = return_cell(taxi->posizione->coordinate.colonna, taxi->posizione->coordinate.riga + step, mappa);
+    next = return_cell(taxi->posizione->coordinate.riga + step, taxi->posizione->coordinate.colonna, mappa);
     if (!is_hole(next))
     {
         if (enter_cella(next) == 1)
@@ -176,7 +180,7 @@ static st_cellap find_near_source(st_taxip taxi, st_mappap mappa)
                     min_distance = distance;
                     min_source = &mappa->c[i][j];
                     printf("Min source = %d,%d PID %d \n", i, j, getpid());
-                    printf("Min source mappa = %d,%d PID %d \n", mappa->c[i][j].coordinate.colonna, mappa->c[i][j].coordinate.riga, getpid());
+                    printf("Min source mappa = %d,%d PID %d \n", mappa->c[i][j].coordinate.riga, mappa->c[i][j].coordinate.colonna, getpid());
                 }
             }
         }
@@ -212,14 +216,14 @@ void init_taxi(int sem_id, int shm_id)
     else if (child == 0)                /* CHILD PROCESS */
     {
         st_mappap mappa = shmat(shm_id, NULL, 0);
-        stampa(mappa);
+
         srand(getpid());
         while (!enter_cella(c = random_cella(mappa)))
         {
             nanosleep(&ripetizione, &mancante);
         }
         taxip->posizione = c;
-        printf("creato taxi con in PID: %d e il semaforo vale %d\n", getpid(), getval_semaphore(sem_id, SEM_NUM_TAXI_START));
+        /*printf("creato taxi con in PID: %d e il semaforo vale %d\n", getpid(), getval_semaphore(sem_id, SEM_NUM_TAXI_START));*/
         increment_sem(sem_id, SEM_NUM_TAXI_INIT_READY);
         decrement_sem(sem_id, SEM_NUM_TAXI_START);
         while (getval_semaphore(sem_id, SEM_NUM_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */

@@ -49,7 +49,7 @@ int set_semop (int semId, int semNum, int value)
     sops.sem_flg = 0;
     if ((result = semop(semId, &sops, 1)) < 0)
         ERROR;
-    printf("Esco decremento con PID %d\n", getpid());
+    /*printf("Esco decremento con PID %d\n", getpid());*/
     return result;
 }
 

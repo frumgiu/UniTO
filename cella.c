@@ -86,7 +86,7 @@ void print_cella(st_cellap cellap)
 int enter_cella(st_cellap c)
 {
     int result = 0;
-    printf("Enter in cella %d,%d con PID: %d e sem_id %d e sem_num %d\n", c->coordinate.colonna, c->coordinate.riga, getpid(), c->statoCella.sem_set_id, c->statoCella.sem_num);
+    printf("Entro in cella %d,%d con PID: %d e sem_id %d e sem_num %d\n", c->coordinate.colonna, c->coordinate.riga, getpid(), c->statoCella.sem_set_id, c->statoCella.sem_num);
     decrement_sem(c->statoCella.sem_set_id, c->statoCella.sem_num);
     if (!is_full(c))
     {

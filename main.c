@@ -31,10 +31,8 @@ static int inizializza_mappa(int sem_celle_id)
             if (!is_hole(&mappa->c[i][j]))           /* Escludo celle inaccessibili */
             {
                 setval_semaphore(sem_celle_id, sem_num, 1);
-                printf("Inizializzazione celle %d,%d con sem_id %d e sem_num %d\n", i, j, sem_celle_id, sem_num);
                 mappa->c[i][j].statoCella.sem_set_id = sem_celle_id;
                 mappa->c[i][j].statoCella.sem_num = sem_num;
-                printf("Ho scritto in cella %d,%d con sem_id %d e sem_num %d\n", i, j, mappa->c[i][j].statoCella.sem_set_id, mappa->c[i][j].statoCella.sem_num);
                 ++sem_num;
             }
         }
