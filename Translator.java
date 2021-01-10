@@ -170,12 +170,13 @@ public class Translator
                 error("Errore in whenlist");
         }
     }
+
     private void whenlistp(int wlp_true, int wlp_false, int uscita)
     {
         switch (look.tag) {
             case Tag.WHEN:
                 whenitem(wlp_true, wlp_false, uscita);
-                whenlistp(wlp_true, wlp_false, uscita);
+                whenlistp(code.newLabel(), code.newLabel(), uscita);
                 break;
             case Tag.ELSE:
                 break;
@@ -183,6 +184,7 @@ public class Translator
                 error("Errore in whenlistp");
         }
     }
+
     private void whenitem(int wi_true, int wi_false, int uscita)
     {
 
@@ -204,6 +206,7 @@ public class Translator
                 error("Errore in whenlist");
         }
     }
+
     private void bexpr(int be_true, int be_false)
     {
         switch (look.tag) {
@@ -244,6 +247,7 @@ public class Translator
                 error("Errore in bexpr");
         }
     }
+
     private void expr()
     {
         switch (look.tag)
@@ -289,6 +293,7 @@ public class Translator
                 error("Errore in expr");
         }
     }
+
     private void exprlist(boolean printB, boolean operatore)
     {
         switch (look.tag) {
