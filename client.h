@@ -14,9 +14,7 @@ typedef struct client * st_clientp;
 
 /* Inizializza una coda di messaggi vuota nella cella source */
 int init_coda(int);
-/* Crea un nuovo cliente, con destinazione generata randomicamente */
-st_clientp init_client(st_cellap, st_mappap);
-/* Invia clienti (messaggi) alla coda della cella source */
+/* Invia richieste (messaggi) alla coda della cella source */
 void new_client(int, int, int, int);
 /* Stampa informazioni riguardo al cliente. USATA PER DEBUGGARE IL CODICE */
 void print_client(st_clientp, int);

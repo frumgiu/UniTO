@@ -7,7 +7,15 @@
 
 static union semun sem;
 
-int create_semaphore(int key, int num_sem)
+int create_shmemory (int key, size_t size)
+{
+    int id = 0;
+    if ((id = shmget(key, size, IPC_CREAT | 0666)) == -1)
+        ERROR;
+    return id;
+}
+
+int create_semaphore (int key, int num_sem)
 {
     int sem_id;
     if ((sem_id = semget(key, num_sem, 0666 | IPC_CREAT)) < 0)
@@ -57,7 +65,7 @@ int set_semop (int semId, int semNum, int value)
 int increment_sem (int semId, int semNum)
 {
     /*printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);*/
-   return set_semop(semId, semNum, +1);
+    return set_semop(semId, semNum, +1);
 }
 
 int decrement_sem (int semId, int semNum)

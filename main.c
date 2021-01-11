@@ -1,34 +1,29 @@
+#include <time.h>
+#include <signal.h>
 #include "Common_IPC.h"
 #include "taxi.h"
 
-static struct timespec so_duration = {0, 0};
-static const struct timespec wait_cycle = {0, 400000};
-
-static struct timespec mancante = {0, 0};
-
 static st_mappap mappa;     /* Puntatore alla zona della mappa */
+static st_raccoltap statistic;
 
 static void inizializza_configurazione() {
     printf("1. Lettura dal file .txt dei parametri di configurazione\n");
     read_conf_from_file(&configuration);
-    so_duration.tv_sec = get_so_duration();  /* Mi serve per settare il tempo della nanosleep */
     print_conf(&configuration);
 }
 
 static int inizializza_mappa(int sem_celle_id)
 {
-    int shm_id;
-    int i, j;
-    int sem_num = 0;
+    int shm_id, i, j, sem_num = 0;
     printf("2. Inizializzazione della mappa, di dimensione %dx%d, e prima stampa\n", SO_HEIGHT, SO_WIDTH);
-    if ((shm_id = shmget(MAPPA_KEY, sizeof(struct cella) * (DIM_MAPPA), IPC_CREAT | 0666)) == -1)
-        ERROR;
+
+    shm_id = create_shmemory(MAPPA_KEY, sizeof(struct cella) * (DIM_MAPPA));
     mappa = shmat(shm_id, NULL, 0);
     init_map(get_so_source(), get_so_holes(), mappa);
-    /* Devo settare tutti i mutex nelle celle, assegno il numero di semaforo nelle celle (tranne holes) */
-    for (i = 0; i < SO_HEIGHT; ++i) {
+
+    for (i = 0; i < SO_HEIGHT; ++i) {    /* Devo settare tutti i mutex nelle celle, assegno il numero di semaforo nelle celle (tranne holes) */
         for (j = 0; j < SO_WIDTH; ++j) {
-            if (!is_hole(&mappa->c[i][j]))           /* Escludo celle inaccessibili */
+            if (!is_hole(&mappa->c[i][j]))
             {
                 setval_semaphore(sem_celle_id, sem_num, 1);
                 mappa->c[i][j].statoCella.sem_set_id = sem_celle_id;
@@ -40,6 +35,7 @@ static int inizializza_mappa(int sem_celle_id)
     print_map(mappa);
     printf("\n-- Legenda --\nS = cella sorgente\nX = cella inaccessibile\n"
            ". = cella normale\nI numeri nelle celle corrisondono ai taxi presenti in esse\n\n");
+
     return shm_id;
 }
 
@@ -57,7 +53,6 @@ static void create_source_queue() {
 static void remove_queue_source() {
     int i, j;
     printf("8. Chiusura delle code di messaggi delle celle source\n");
-    /* creo una coda di messaggi per ogni cella source */
     for (i = 0; i < SO_HEIGHT; ++i) {
         for (j = 0; j < SO_WIDTH; ++j) {
             if (is_source(&mappa->c[i][j]) == 1)
@@ -66,14 +61,14 @@ static void remove_queue_source() {
     }
 }
 
-static void create_taxi(int sem_id, int valore, int shm_id) {
+static void create_taxi(int sem_id, int valore, int shm_id, int shm_stat) {
     int n;
     printf("4. Creazione di %d taxi per servire le richeste\n", get_so_taxi());
     setval_semaphore(sem_id, SEM_NUM_TAXI, valore);
     setval_semaphore(sem_id, SEM_NUM_TAXI_START, valore);
     n = get_so_taxi();
     while (n > 0) {
-        init_taxi(sem_id, shm_id);  /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
+        init_taxi(sem_id, shm_id, shm_stat);      /* Nella funzione sono gia' escluse le celle holes, non serve ricontrollare */
         --n;
     }
 }
@@ -91,62 +86,104 @@ static void create_client(int sem_id, int valore, int shm_id) {
 }
 
 static void chiudi_processi_child(int sem_id, int semnum, int valore, char* child) {
-    printf("7. Terminazione dei processi %s\n", child);
+    printf("6. Terminazione dei processi %s\n", child);
     setval_semaphore(sem_id, semnum, valore);
     while (semctl(sem_id, semnum, GETVAL) > 0)
-        nanosleep(&wait_cycle, &mancante);
+        sleep(1);                           /* Aspetto un attimo prima di ricontrollare */
 }
 
 static void termina_specifiche() {
-    printf("6. Stampa delle specifiche richieste a termine simulazione\n");
-    printf("Numero di viaggi (completi, inevasi e abortiti): %d\n", 0);
-    printf("Processo taxi che ha fatto piu' strada: %d\n", 0);                              /* Stampo il pid del processo */
-    printf("Processo taxi che ha fatto il tempo piu' lungo per una client: %d\n", 0);
-    printf("Processo taxi che ha servito piu' clienti: %d\n", 0);
+    int inevasi = statistic->viaggi[CLIENT_TOTALI] - (statistic->viaggi[CLIENT_COMPLETED] + statistic->viaggi[CLIENT_ABORTED]);
+    printf("7. Stampa delle specifiche richieste a termine simulazione\n");
+    printf("Numero di viaggi totali: %d\n- completati %d\n- abortiti %d\n- inevasi %d\n",
+           statistic->viaggi[CLIENT_TOTALI], statistic->viaggi[CLIENT_COMPLETED], statistic->viaggi[CLIENT_ABORTED], inevasi);
+    printf("PID processo taxi che ha fatto piu' strada per servire un cliente: %d, %d celle attraversate\n",
+           statistic->strada[0], statistic->strada[1]);
+    printf("PID processo taxi che ha fatto il tempo piu' lungo per una richiesta: %d, %ld secondi\n", statistic->pid_taxi, statistic->vita);
+    printf("PID processo taxi che ha raccolto piu' richieste: %d, %d richieste\n", statistic->richieste[0], statistic->richieste[1]);
     printf("Mappa con evidenziate le sorgenti e le %d celle piu' attraversate\n", get_so_top_cell());
     /* TODO: Funzione per la stampa di questa mappa finale */
 }
 
+static void handler_close (int sig)
+{
+    if (sig == SIGALRM) {
+        int key = semget(SEM_KEY_SOURCE, 0, 0);
+        int key_mutex = semget(SEM_KEY_MUTEX, 0, 0);
+        setval_semaphore(key_mutex, (DIM_MAPPA-get_so_holes()), 0); /* Chiudo il mutex per non far piu' stampare la mappa aggiornata */
+        printf("\n-- finito tempo simulazione --\n");
+        chiudi_processi_child(key, SEM_NUM_TAXI, get_so_taxi(), "taxi");      /* Chiusura processi taxi */
+        chiudi_processi_child(key, SEM_NUM_CLIENT, get_so_source(), "source");/* Chiusura processi source */
+    }
+    else if (sig == SIGINT)
+    {
+        printf("Ricevuto segnale da tastiera (CTRL Z)di generare una richiesta\n");
+    }
+}
+
 int main(int argc, char **argv)
 {
-    int sem_set_id;
-    int sem_mutex_id;
-    int shm_id;
-    int num_sem_mutex;
+    int sem_set_id, sem_mutex_id, num_sem_mutex, shm_id;
+    int shm_id_stat;
+    unsigned int timer;
+    struct sigaction new;
+    /* Come gestire il segnale SIGALRM ~ usato per terminare la simulazione */
+    new.sa_flags = 0;
+    new.sa_handler = handler_close;
+    sigaction(SIGALRM, &new, NULL);
+    sigaction(SIGTSTP, &new, NULL);
 
-    printf("-- INIZIO SIMULAZIONE --\n\n");
+    printf("-- INIZIO PREPARAZIONE SIMULAZIONE --\n\n");
+    /* Inizio dalla lettura del file di configurazione ~ usare file allegato in cartella */
     inizializza_configurazione();
-    num_sem_mutex = (DIM_MAPPA - get_so_holes());
-    sem_mutex_id = create_semaphore(SEM_MUTEX, num_sem_mutex);          /* Creo set semaforo per le cell (non holes) lo metto a 1 (aperto) */
+    timer = get_so_duration();
+
+    /* Creazione memoria condivisa per raccolta delle statistiche ~ condiviso solo con i taxi */
+    shm_id_stat = create_shmemory(STAT_KEY, sizeof(st_raccolta));
+    statistic = shmat(shm_id_stat, NULL, 0);
+    memset(statistic, 0, sizeof(st_raccolta));
+
+    /* Preparazione mappa e allocazione in memoria condivisa */
+    num_sem_mutex = (DIM_MAPPA - get_so_holes() + 1);
+    sem_mutex_id = create_semaphore(SEM_KEY_MUTEX, num_sem_mutex);      /* Creo set semaforo per le celle (non holes) lo metto a 1 (aperto) */
     shm_id = inizializza_mappa(sem_mutex_id);                           /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
-    create_source_queue();                                              /* Creo code di messaggi nelle celle source */
-    sem_set_id = create_semaphore(SEM_KEY_SOURCE, NUM_SEM);             /* Creo set di 3 semafori, 1 per source, 2 per taxi */
-    /* -- SEZIONE CRITICA -- i taxi aggiorneranno la loro posizione */
-    create_taxi(sem_set_id, 0, shm_id);
+
+    /* Creazione code di messaggi, processi source e taxi ~ settaggio dei semafori */
+    create_source_queue();
+    sem_set_id = create_semaphore(SEM_KEY_SOURCE, NUM_SEM);
+    create_taxi(sem_set_id, 0, shm_id, shm_id_stat);
+    set_semop(sem_set_id, SEM_NUM_TAXI_INIT_READY, (0-get_so_taxi()));  /* Ogni taxi inizilizzato incrementa il semaforo, se non arriva a 0 manca qualcuno */
+    setval_semaphore(sem_set_id, SEM_MUTEX_STAT, 1);
+    setval_semaphore(sem_mutex_id, num_sem_mutex - 1, 1);
+
+    /* Dove parte la simulazione ~ movimento taxi e creazione richieste */
+    printf("-- inizio simulazione --\n\n");
     create_client(sem_set_id, 0, shm_id);
-    set_semop(sem_set_id, SEM_NUM_TAXI_INIT_READY, (0-get_so_taxi()));
-    printf("\n Adesso aspetto i taxi \n");
-    print_map(mappa);
-    setval_semaphore(sem_set_id, SEM_NUM_TAXI_START, get_so_taxi());                     /* Faccio partire la corsa dei processi taxi */
-    /* TODO: Ogni secondo deve stampare la mappa aggiornata, per vedere i taxi muoversi */
-    /* alarm(get_so_duration); */
-    /* sigaction(); */
-    nanosleep(&so_duration, &mancante);                                                  /* Il padre dorme per il tempo SO_DURATION */
-    /* -- FINE SEZIONE CRITICA -- */
-    /* TODO: appena si azzera posso svegliare gli altri nanosleep e interromperli, per finire subito */
-    chiudi_processi_child(sem_set_id, SEM_NUM_TAXI, get_so_taxi(), "taxi");          /* Chiusura processi taxi */
-    chiudi_processi_child(sem_set_id, SEM_NUM_CLIENT, get_so_source(), "source");    /* Chiusura processi source */
-    printf("\n-- finito tempo simulazione --\n");
+    setval_semaphore(sem_set_id, SEM_NUM_TAXI_START, get_so_taxi());
+
+    alarm(timer);
+    while (getval_semaphore(sem_mutex_id, num_sem_mutex-1) == 1)
+    {
+        print_map(mappa);
+        printf("--------------------------------------------------------------------------------------------------------------------------------\n");
+        sleep(1);
+    }
+    /* Si e' chiusa la simulazione ~ timer scaduto e cancello tutte le strutture IPC */
     termina_specifiche();
+    remove_queue_source();                                                /* Chiudo le code di messaggi */
+
     printf("9. Chiudo i set di semafori creati\n");
-    remove_semaphore(sem_set_id);                                                        /* Chiusura dei due set di semafori */
+    remove_semaphore(sem_set_id);                                         /* Chiusura dei set di semafori */
     remove_semaphore(sem_mutex_id);
-    remove_queue_source();                                                               /* Chiudo le code di messaggi */
-    shmdt(mappa);                                                                        /* Stacco la shared memory dal processo master */
+
     printf("10. Elimino l'area di memoria condivisa\n");
-    if (shmctl(shm_id, IPC_RMID, 0) < 0)                                             /* Cancello area memoria condivisa */
+    shmdt(mappa);                                                         /* Stacco le shared memory dal processo master */
+    shmdt(statistic);
+    if (shmctl(shm_id, IPC_RMID, 0) < 0)                              /* Cancello aree di memoria condivisa */
         ERROR;
-    printf("\n-- FINE SIMULAZIONE --");
+    if (shmctl(shm_id_stat, IPC_RMID, 0) < 0)
+        ERROR;
+    printf("\n-- FINE --");
 
     exit(0);
 }

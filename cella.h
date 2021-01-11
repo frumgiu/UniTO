@@ -2,6 +2,7 @@
 #define TAXICAB_CELLA_H
 
 struct stato_cella {
+    int attraversamento;
     int num_taxi;       /* Quanti taxi ci sono in quella cella attualmente */
     int queue_id;       /* Id della sua coda di messaggi, se e' una source */
     int sem_set_id;

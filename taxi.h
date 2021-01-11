@@ -3,6 +3,10 @@
 
 #include "client.h"
 
+#include "client.h"
+
+#define SEARCHING              -1
+
 #define TAXI_STATE_SEARCHING    0
 #define TAXI_STATE_RUNNING      1
 #define TAXI_STATE_ABORTED      2
@@ -11,23 +15,18 @@
 struct taxi {
     st_cellap posizione;    /* dove si trova il taxi al momento */
     st_client request;      /* informazioni sulla client del cliente */
-    int stato;              /* 0 vuoto, 1 con richiesta, */
+    int stato;
+    int strada;
+    int richieste;
     time_t last_move;
+    time_t move_client;
 };
 
 typedef struct taxi st_taxi;
 typedef struct taxi * st_taxip;
 
-/* Crea un taxi senza richieste, nella cella data */
-void init_taxi(int, int);
-/* Funzione che muove il taxi */
-static void run_taxi(st_taxip, st_mappap, int, int);
-/* Funzione che muove il taxi */
-static void move_taxi(st_taxip, struct coordinate *, st_mappap);
-/* Funzione che fa lo spostamento su asse x */
-static int move_taxi_x(st_taxip , int, int, st_mappap);
-/* Funzione che fa lo spostamento su asse y */
-static int move_taxi_y(st_taxip, int, int, st_mappap);
+/* Crea un taxi senza richieste in una cella casuale */
+void init_taxi(int, int, int);
 
 #endif /* TAXICAB_TAXI_H */
 /*

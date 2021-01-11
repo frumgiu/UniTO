@@ -13,9 +13,8 @@ void init_map(const int sources, const int holes, st_mappap mappa)
         i = sources;
         j = holes;
         /* TODO: va controllato, messo un timer? */
-        probability_source = (DIM_MAPPA/2)/sources;
-        /* Mette a 0 tutta la memoria che contiene mappa.c */
-        memset(&mappa->c, 0, sizeof(mappa->c));
+        probability_source = (DIM_MAPPA)/sources;
+        memset(&mappa->c, 0, sizeof(mappa->c));  /* Mette a 0 tutta la memoria che contiene mappa */
 
         srand(time(NULL));
         while((i > 0 || j > 0))      /* Devo assegnare tutti i source e tutti gli hole, SERVE UN TIMER CHE LO FACCIA FALLIRE SE VA IN LOOP */
@@ -27,10 +26,10 @@ void init_map(const int sources, const int holes, st_mappap mappa)
                     st_cellap cellap = &mappa->c[riga][colonna];
                     if (is_source(cellap) != 0 || is_hole(cellap) != 0)
                         continue;
-                    flagS = set_source(i, probability_source);
+                    flagS = set_source(i, 2);
                     flagH = set_holes(j, flagS);
                     create_cella(cellap, get_so_cap_min(), get_so_cap_max(),
-                               get_so_timensec_min(), get_so_timensec_max(), flagS, flagH, colonna, riga);
+                                 get_so_timensec_min(), get_so_timensec_max(), flagS, flagH, colonna, riga);
                     if (flagS == 1)
                         i--;
                     if (flagH == 1)
@@ -61,7 +60,7 @@ int is_dimension_ok(int sources, int holes)
         fprintf(stderr, "Siccome ci sono %d sorgenti e' impossibile generare richieste (is_dimension_ok).\n", sources);
         return 0;
     }
-    /* TODO: verificare vada bene, mi da errore in casi che potrebbero stare ma rischiano il loop -- DOVREBBE ANDARE */
+        /* TODO: verificare vada bene, mi da errore in casi che potrebbero stare ma rischiano il loop -- DOVREBBE ANDARE */
     else if((holes * 9) - sources >= DIM_MAPPA_BORDO)
     {
         fprintf(stderr, "Il numero di holes richiesti, %d, non e' possibile distribuirlo senza creare muri, per le dimensioni della mappa, %d (is_dimension_ok).\n", holes, DIM_MAPPA);

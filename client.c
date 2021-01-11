@@ -1,8 +1,13 @@
 #include "client.h"
 #include "Common_IPC.h"
 
-static const struct timespec ripetizione = {1, 0};
-static struct timespec mancante = {0, 0};
+static void handler_child (int sig)
+{
+    if (sig == SIGTSTP)
+    {
+        /* printf("Creo una richiesta in risposta al segnale in PID %d\n", getpid()); */
+    }
+}
 
 int init_coda(int key)
 {
@@ -11,8 +16,8 @@ int init_coda(int key)
         ERROR;
     return mex_id;
 }
-
-st_clientp init_client(st_cellap source, st_mappap mappa)
+/* Crea un nuovo cliente, con destinazione generata randomicamente */
+static st_clientp init_client(st_cellap source, st_mappap mappa)
 {
     st_clientp mex = malloc(sizeof(st_client));
     memcpy(&(mex->partenza), &source->coordinate, sizeof(struct coordinate));
@@ -26,6 +31,7 @@ void new_client (int i, int j, int sem_id, int shm_id)
 {
     st_clientp messaggio;
     int child;
+    unsigned int timer = 2;
 
     child = fork();
     if (child == -1)
@@ -35,15 +41,18 @@ void new_client (int i, int j, int sem_id, int shm_id)
     else if (child == 0)        /* CHILD PROCESS */
     {
         st_mappap mappa = shmat(shm_id, NULL, 0);
+        struct  sigaction sig;
+        sig.sa_handler = handler_child;
+        sig.sa_flags = 0;
+        sigaction(SIGTSTP, &sig ,  NULL);
         srand(getpid());
         while (getval_semaphore(sem_id, SEM_NUM_CLIENT) == 0)
         {
-            /* Metto mutex? */
-            messaggio = init_client(&mappa->c[i][j], mappa);/* Il processo crea un client */
+            messaggio = init_client(&mappa->c[i][j], mappa);    /* Il processo crea un client */
             /*print_client(messaggio, mappa->c[i][j].statoCella.queue_id);*/
             msgsnd(mappa->c[i][j].statoCella.queue_id, messaggio, sizeof(st_client), 0);     /* Invio il messaggio nella coda */
             free(messaggio);
-            nanosleep(&ripetizione, &mancante);
+            sleep(timer);
         }
         decrement_sem(sem_id, SEM_NUM_CLIENT);
         shmdt(mappa);
