@@ -188,7 +188,6 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
             break;
         case TAXI_STATE_COMPLETED:
             /*printf("Il taxi  PID %d ha completato la richiesta\n", getpid());*/
-            /* TODO: controllare se il mio numero di celle e' maggiore di quello in memoria */
             time(&current_time);
             decrement_sem(sem_id, SEM_MUTEX_STAT);
             if (taxi_p->strada > raccolta->strada[1])
@@ -234,6 +233,8 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
 {
     int child;
     st_cellap c;
+    static struct timespec movimento = {0, 100000000};
+    static struct timespec pausa = {0, 0};
     st_taxip taxip = malloc(sizeof(st_taxi));
     taxip->stato = TAXI_STATE_SEARCHING;
     taxip->richieste = 0;
@@ -257,7 +258,7 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
         srand(getpid());
         while (!enter_cella(c = random_cella(mappa)))
         {
-            sleep((unsigned int) 0.001);
+            nanosleep(&movimento, &pausa);
         }
         taxip->posizione = c;
         /*printf("creato taxi con in PID: %d dal padre %d e il semaforo vale %d\n", getpid(), parent, getval_semaphore(sem_id, SEM_NUM_TAXI_START));*/
@@ -266,6 +267,7 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
         while (getval_semaphore(sem_id, SEM_NUM_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */
         {
             run_taxi(taxip, mappa, raccolta, sem_id, shm_id, shm_stat);
+            nanosleep(&movimento, &pausa);
         }
         /*printf("PID %d voglio chiudere il processo con semaforo %d valore %d\n", getpid(), sem_id, getval_semaphore(sem_id, SEM_NUM_TAXI));*/
         /* TODO: Non mi tornano i numeri */
