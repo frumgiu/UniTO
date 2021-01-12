@@ -13,8 +13,8 @@ void init_map(const int sources, const int holes, st_mappap mappa)
     {
         i = sources;
         j = holes;
-        probability_source = (DIM_MAPPA)/sources;
-        memset(&mappa->c, 0, sizeof(mappa->c));  /* Mette a 0 tutta la memoria che contiene mappa */
+        probability_source = DIM_MAPPA - holes;
+        memset(mappa, 0, sizeof(st_mappa));  /* Mette a 0 tutta la memoria che contiene mappa */
 
         srand(time(NULL));
         while((i > 0 || j > 0))      /* Devo assegnare tutti i source e tutti gli hole, SERVE UN TIMER CHE LO FACCIA FALLIRE SE VA IN LOOP */
@@ -24,17 +24,17 @@ void init_map(const int sources, const int holes, st_mappap mappa)
                 for (colonna = 0; colonna < SO_WIDTH; colonna++)
                 {
                     st_cellap cellap = &mappa->c[riga][colonna];
-                    if (is_source(cellap) != 0 || is_hole(cellap) != 0)
+                    if (is_source(cellap) || is_hole(cellap))
                         continue;
                     flagS = set_source(i, probability_source);
                     flagH = set_holes(j, flagS);
                     create_cella(cellap, get_so_cap_min(), get_so_cap_max(),
                                  get_so_timensec_min(), get_so_timensec_max(), flagS, flagH, colonna, riga);
-                    if (flagS == 1)
+                    if (flagS)
                         i--;
-                    if (flagH == 1)
+                    if (flagH)
                     {
-                        if(check_hole_ok(mappa, riga, colonna) == 1)
+                        if(check_hole_ok(mappa, riga, colonna))
                             j--;
                         else                /* Non puo' essere un hole */
                             cellap->hole = 0;
@@ -43,6 +43,7 @@ void init_map(const int sources, const int holes, st_mappap mappa)
             }
         }
     } else {
+        remove_semaphore(semget(SEM_KEY_MUTEX_CELLE, 0, 0));
         fprintf(stderr, "Non e' stato possibile inizializzare la mappa a causa di un problema di dimensioni (init_map).\n");
         exit(1);
     }
@@ -117,7 +118,7 @@ st_cellap random_cella(st_mappap mappa)
     {
         result = &mappa->c[random_num(0, SO_HEIGHT-1)][random_num(0, SO_WIDTH-1)];
     }
-    while (is_hole(result) == 1);
+    while (is_hole(result));
     return result;
 }
 

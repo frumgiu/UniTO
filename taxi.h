@@ -5,7 +5,7 @@
 
 #include "client.h"
 
-#define SEARCHING              -1
+#define SEARCHING              (-1)
 
 #define TAXI_STATE_SEARCHING    0
 #define TAXI_STATE_RUNNING      1

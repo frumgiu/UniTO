@@ -38,19 +38,20 @@ static void handler_child (int sig)
 /* Funzione che fa lo spostamento su asse x */
 static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap mappa)
 {
-    static const struct timespec ripetizione = {0, 100000000};
-    static struct timespec mancante = {0, 0};
-    static struct timespec movimento = {0, 0};
-    static struct timespec pausa = {0, 0};
+    const struct timespec ripetizione = {0, 100000000};
+    struct timespec mancante = {0, 0};
+    struct timespec movimento = {0, 0};
+    struct timespec pausa = {0, 0};
     int result = 0;
     int step = distance_x > 0 ? -1 : 1;
     st_cellap next;
     /*printf("muove_taxi_x da = %d,%d PID %d \n", taxi->posizione->coordinate.riga, taxi->posizione->coordinate.colonna, getpid());*/
-    if (distance_x == 0 && (taxi->posizione->coordinate.colonna == SO_WIDTH))
+    if (distance_x == 0 && (taxi->posizione->coordinate.colonna == SO_WIDTH-1))
     {
         step = -1;
     }
     next = return_cell(taxi->posizione->coordinate.riga, taxi->posizione->coordinate.colonna + step, mappa);
+    printf("La cella next e' in %d,%d per il PID %d\n", next->coordinate.riga, next->coordinate.colonna, getpid());
     if (!is_hole(next))
     {
         if (enter_cella(next))
@@ -75,13 +76,13 @@ static int move_taxi_x(st_taxip taxi, int distance_x, int distance_y, st_mappap 
 /* Funzione che fa lo spostamento su asse y */
 static int move_taxi_y(st_taxip taxi, int distance_x, int distance_y, st_mappap mappa)
 {
-    static struct timespec movimento = {0, 0};
-    static struct timespec pausa = {0, 0};
+    struct timespec movimento = {0, 0};
+    struct timespec pausa = {0, 0};
     int result = 0;
     int step = distance_y > 0 ? -1 : 1;
     st_cellap next;
     /*printf("muove_taxi_y da = %d,%d PID %d \n", taxi->posizione->coordinate.riga, taxi->posizione->coordinate.colonna, getpid());*/
-    if (distance_y == 0 && (taxi->posizione->coordinate.riga == SO_HEIGHT))
+    if (distance_y == 0 && (taxi->posizione->coordinate.riga == SO_HEIGHT-1))
     {
         step = -1;
     }
@@ -162,9 +163,9 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
                 else if(result > 0)
                 {
                     /*printf("Ricevo richiesta PID %d\n", getpid());*/
-                    decrement_sem(sem_id, SEM_MUTEX_STAT);
+                    decrement_sem(sem_id, SEM_NUM_MUTEX_STAT);
                     raccolta->viaggi[CLIENT_TOTALI]++;
-                    increment_sem(sem_id, SEM_MUTEX_STAT);
+                    increment_sem(sem_id, SEM_NUM_MUTEX_STAT);
                     taxi_p->stato = TAXI_STATE_RUNNING;
                     taxi_p->richieste++;
                     taxi_p->strada = 0;
@@ -190,7 +191,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
         case TAXI_STATE_COMPLETED:
             /*printf("Il taxi  PID %d ha completato la richiesta\n", getpid());*/
             time(&current_time);
-            decrement_sem(sem_id, SEM_MUTEX_STAT);
+            decrement_sem(sem_id, SEM_NUM_MUTEX_STAT);
             if (taxi_p->strada > raccolta->strada[1])
             {
                 raccolta->strada[0] = getpid();
@@ -204,15 +205,14 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
                     raccolta->vita = (current_time - taxi_p->move_client);
                 }
             raccolta->viaggi[CLIENT_COMPLETED]++;
-            increment_sem(sem_id, SEM_MUTEX_STAT);
+            increment_sem(sem_id, SEM_NUM_MUTEX_STAT);
             taxi_p->stato = TAXI_STATE_SEARCHING;
             taxi_p->request.destinazione.colonna = SEARCHING;
             break;
         case TAXI_STATE_ABORTED:
-            parent = getpid();
-            /*printf("Il taxi  PID %d e' morto, viene ricreato\n", getpid());*/
+            printf("Il taxi  PID %d e' morto, viene ricreato\n", getpid());
             exit_cella(taxi_p->posizione);
-            decrement_sem(sem_id, SEM_MUTEX_STAT);
+            decrement_sem(sem_id, SEM_NUM_MUTEX_STAT);
             if (taxi_p->request.destinazione.colonna != SEARCHING)
                 raccolta->viaggi[CLIENT_ABORTED]++;
             if (taxi_p->richieste > raccolta->richieste[1])
@@ -220,11 +220,11 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
                 raccolta->richieste[0] = getpid();
                 raccolta->richieste[1] = taxi_p->richieste;
             }
-            increment_sem(sem_id, SEM_MUTEX_STAT);
+            increment_sem(sem_id, SEM_NUM_MUTEX_STAT);
             shmdt(mappa);
             shmdt(raccolta);
             free(taxi_p);
-            /*printf("Sto nuovo taxi  PID %d da %d\n", getpid(), parent);*/
+            printf("IL nuovo taxi  PID %d e' pronto a partire con semaforo START a %d (Da incrementare)\n", getpid(), getval_semaphore(sem_id, SEM_NUM_TAXI_START));
             increment_sem(sem_id, SEM_NUM_TAXI_START); /* senno' non puo' partire */
             init_taxi(sem_id, shm_id, shm_stat);       /* crea un nuovo taxi */
             exit(0);
@@ -234,6 +234,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
 void init_taxi(int sem_id, int shm_id, int shm_stat)
 {
     int child;
+    int parent = getpid();
     st_cellap c;
     static struct timespec movimento = {0, 100000000};
     static struct timespec pausa = {0, 0};
@@ -251,7 +252,6 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
     }
     else if (child == 0)                /* CHILD PROCESS */
     {
-        int parent = getpid();
         st_mappap mappa = shmat(shm_id, NULL, 0);
         st_raccoltap raccolta = shmat(shm_stat, NULL, 0);
         struct  sigaction sig;
@@ -264,26 +264,26 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
             nanosleep(&movimento, &pausa);
         }
         taxip->posizione = c;
-        /*printf("creato taxi con in PID: %d dal padre %d e il semaforo START vale %d\n", getpid(), parent, getval_semaphore(sem_id, SEM_NUM_TAXI_START));*/
+        printf("Creato taxi con in PID: %d dal padre %d \n", getpid(), parent);
         increment_sem(sem_id, SEM_NUM_TAXI_INIT_READY);
         decrement_sem(sem_id, SEM_NUM_TAXI_START);
-        /*printf("PID %d sta partendo ed e' prima di semaforo %d che vale %d\n", getpid(), SEM_NUM_TAXI, getval_semaphore(sem_id, SEM_NUM_TAXI));*/
+        printf("PID %d sta partendo da coord: %d,%d ed e' prima di semaforo %d che vale %d\n",getpid(),
+               taxip->posizione->coordinate.riga, taxip->posizione->coordinate.colonna, SEM_NUM_TAXI, getval_semaphore(sem_id, SEM_NUM_TAXI));
         while (getval_semaphore(sem_id, SEM_NUM_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */
         {
             run_taxi(taxip, mappa, raccolta, sem_id, shm_id, shm_stat);
             nanosleep(&movimento, &pausa);
         }
-        /*printf("PID %d voglio chiudere il processo con semaforo %d valore %d\n", getpid(), sem_id, getval_semaphore(sem_id, SEM_NUM_TAXI));*/
-        /* TODO: Non mi tornano i numeri */
-        decrement_sem(sem_id, SEM_MUTEX_STAT);
+        printf("PID %d voglio chiudere il processo con semaforo %d valore %d\n", getpid(), sem_id, getval_semaphore(sem_id, SEM_NUM_TAXI));
+        decrement_sem(sem_id, SEM_NUM_MUTEX_STAT);
         if (taxip->richieste > raccolta->richieste[1])
         {
             raccolta->richieste[0] = getpid();
             raccolta->richieste[1] = taxip->richieste;
         }
-        increment_sem(sem_id, SEM_MUTEX_STAT);
+        increment_sem(sem_id, SEM_NUM_MUTEX_STAT);
         decrement_sem(sem_id, SEM_NUM_TAXI);                  /* se esci perche' semaforo > 0 --> decremento il semaforo di 1 */
-        /*printf("PID %d chiudo il processo con semaforo %d valore %d\n", getpid(), sem_id, getval_semaphore(sem_id, SEM_NUM_TAXI));*/
+        printf("PID %d chiudo il processo con semaforo %d valore %d\n", getpid(), sem_id, getval_semaphore(sem_id, SEM_NUM_TAXI));
         shmdt(raccolta);
         shmdt(mappa);
         exit(0);

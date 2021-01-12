@@ -12,6 +12,9 @@
 #define ERROR if (errno) {fprintf(stderr, "Errore in file: %s, riga: %d durante processo (pid) %ld; errno: %d (%s)\n",  \
               __FILE__, __LINE__, (long) getpid(), errno, strerror(errno)); exit(1);}
 
+#define ERROR_SEMA(sem_set_id, sem_num) if (errno) {fprintf(stderr, "Errore in file: %s, riga: %d durante processo (pid) %ld per sema  %d semnum %d; errno: %d (%s)\n",  \
+              __FILE__, __LINE__, (long) getpid(),sem_set_id, sem_num, errno, strerror(errno));}
+
 #define CLIENT_TOTALI           0
 #define CLIENT_COMPLETED        1
 #define CLIENT_ABORTED          2
@@ -21,10 +24,10 @@
 #define SEM_NUM_TAXI            1
 #define SEM_NUM_TAXI_START      2
 #define SEM_NUM_TAXI_INIT_READY 3
-#define SEM_MUTEX_STAT          4
+#define SEM_NUM_MUTEX_STAT          4
 
-#define SEM_KEY_SOURCE          0x1111  /* key per il set di semafori per i porcessi source e taxi */
-#define SEM_KEY_MUTEX           0x2222  /* key per il mutex per la shared memory */
+#define SEM_KEY_UTILITY         0x1111  /* key per il set di semafori per i porcessi source e taxi */
+#define SEM_KEY_MUTEX_CELLE     0x2222  /* key per il mutex per la shared memory */
 #define MAPPA_KEY               51213
 #define STAT_KEY                92345
 

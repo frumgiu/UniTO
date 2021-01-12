@@ -5,6 +5,7 @@
 
 static st_mappap mappa;     /* Puntatore alla zona della mappa */
 static st_raccoltap statistic;
+static int stop_print = 0;
 
 static void inizializza_configurazione() {
     printf("1. Lettura dal file .txt dei parametri di configurazione\n");
@@ -79,7 +80,7 @@ static void create_client(int sem_id, int valore, int shm_id) {
     if (setval_semaphore(sem_id, SEM_NUM_CLIENT, valore) == 0)
         for (i = 0; i < SO_HEIGHT; ++i) {
             for (j = 0; j < SO_WIDTH; ++j) {
-                if (is_source(&mappa->c[i][j]) == 1)
+                if (is_source(&mappa->c[i][j]))
                     new_client(i, j, sem_id, shm_id);
             }
         }
@@ -88,12 +89,15 @@ static void create_client(int sem_id, int valore, int shm_id) {
 static void chiudi_processi_child(int sem_id, int semnum, int valore, char* child) {
     printf("6. Terminazione dei processi %s\n", child);
     setval_semaphore(sem_id, semnum, valore);
-    while (semctl(sem_id, semnum, GETVAL) > 0)
-        sleep(1);                           /* Aspetto un attimo prima di ricontrollare */
+    while (getval_semaphore(sem_id, semnum) > 0) {
+        sleep(1);           /* Aspetto un attimo prima di ricontrollare */
+    }
 }
 
-static void termina_specifiche() {
+static void termina_specifiche()
+{
     int inevasi = statistic->viaggi[CLIENT_TOTALI] - (statistic->viaggi[CLIENT_COMPLETED] + statistic->viaggi[CLIENT_ABORTED]);
+
     printf("7. Stampa delle specifiche richieste a termine simulazione\n");
     printf("Numero di viaggi totali: %d\n- completati %d\n- abortiti %d\n- inevasi %d\n",
            statistic->viaggi[CLIENT_TOTALI], statistic->viaggi[CLIENT_COMPLETED], statistic->viaggi[CLIENT_ABORTED], inevasi);
@@ -108,12 +112,8 @@ static void termina_specifiche() {
 static void handler_close (int sig)
 {
     if (sig == SIGALRM) {
-        int key = semget(SEM_KEY_SOURCE, 0, 0);
-        int key_mutex = semget(SEM_KEY_MUTEX, 0, 0);
-        setval_semaphore(key_mutex, (DIM_MAPPA-get_so_holes()), 0); /* Chiudo il mutex per non far piu' stampare la mappa aggiornata */
+        stop_print = 1;
         printf("-- finito tempo simulazione --\n");
-        chiudi_processi_child(key, SEM_NUM_TAXI, get_so_taxi(), "taxi");      /* Chiusura processi taxi */
-        chiudi_processi_child(key, SEM_NUM_CLIENT, get_so_source(), "source");/* Chiusura processi source */
     }
     else if (sig == SIGINT)
     {
@@ -123,7 +123,7 @@ static void handler_close (int sig)
 
 int main(int argc, char **argv)
 {
-    int sem_set_id, sem_mutex_id, num_sem_mutex, shm_id;
+    int sem_set_utility_id, sem_mutex_celle_id, num_sem_mutex, shm_id;
     int shm_id_stat;
     unsigned int timer;
     struct sigaction new;
@@ -144,37 +144,39 @@ int main(int argc, char **argv)
     memset(statistic, 0, sizeof(st_raccolta));
 
     /* Preparazione mappa e allocazione in memoria condivisa */
-    num_sem_mutex = (DIM_MAPPA - get_so_holes() + 1);
-    sem_mutex_id = create_semaphore(SEM_KEY_MUTEX, num_sem_mutex);      /* Creo set semaforo per le celle (non holes) lo metto a 1 (aperto) */
-    shm_id = inizializza_mappa(sem_mutex_id);                           /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
+    num_sem_mutex = (DIM_MAPPA - get_so_holes());
+    sem_mutex_celle_id = create_semaphore(SEM_KEY_MUTEX_CELLE, num_sem_mutex);      /* Creo set semaforo per le celle (non holes) lo metto a 1 (aperto) */
+    shm_id = inizializza_mappa(sem_mutex_celle_id);                           /* Salvo l'ID della SM creata nell'inizializzazione della mappa */
 
     /* Creazione code di messaggi, processi source e taxi ~ settaggio dei semafori */
     create_source_queue();
-    sem_set_id = create_semaphore(SEM_KEY_SOURCE, NUM_SEM);
-    create_taxi(sem_set_id, 0, shm_id, shm_id_stat);
-    set_semop(sem_set_id, SEM_NUM_TAXI_INIT_READY, (0-get_so_taxi()));  /* Ogni taxi inizilizzato incrementa il semaforo, se non arriva a 0 manca qualcuno */
-    setval_semaphore(sem_set_id, SEM_MUTEX_STAT, 1);
-    setval_semaphore(sem_mutex_id, num_sem_mutex - 1, 1);
+    sem_set_utility_id = create_semaphore(SEM_KEY_UTILITY, NUM_SEM);
+    create_taxi(sem_set_utility_id, 0, shm_id, shm_id_stat);
+    set_semop(sem_set_utility_id, SEM_NUM_TAXI_INIT_READY, (0 - get_so_taxi()));  /* Ogni taxi inizilizzato incrementa il semaforo, se non arriva a 0 manca qualcuno */
+    setval_semaphore(sem_set_utility_id, SEM_NUM_MUTEX_STAT, 1);
 
     /* Dove parte la simulazione ~ movimento taxi e creazione richieste */
     printf("-- inizio simulazione --\n");
-    create_client(sem_set_id, 0, shm_id);
-    setval_semaphore(sem_set_id, SEM_NUM_TAXI_START, get_so_taxi());
+    create_client(sem_set_utility_id, 0, shm_id);
+    setval_semaphore(sem_set_utility_id, SEM_NUM_TAXI_START, get_so_taxi());
 
     alarm(timer);
-    while (getval_semaphore(sem_mutex_id, num_sem_mutex-1) == 1)
+    while (!stop_print)
     {
         print_map(mappa);
         printf("--------------------------------------------------------------------------------------------------------------------------------\n");
         sleep(1);
     }
+
+    chiudi_processi_child(sem_set_utility_id, SEM_NUM_TAXI, get_so_taxi(), "taxi");      /* Chiusura processi taxi */
+    chiudi_processi_child(sem_set_utility_id, SEM_NUM_CLIENT, get_so_source(), "source");/* Chiusura processi source */
     /* Si e' chiusa la simulazione ~ timer scaduto e cancello tutte le strutture IPC */
     termina_specifiche();
     remove_queue_source();                                                /* Chiudo le code di messaggi */
 
     printf("9. Chiudo i set di semafori creati\n");
-    remove_semaphore(sem_set_id);                                         /* Chiusura dei set di semafori */
-    remove_semaphore(sem_mutex_id);
+    remove_semaphore(sem_set_utility_id);                                         /* Chiusura dei set di semafori */
+    remove_semaphore(sem_mutex_celle_id);
 
     printf("10. Elimino l'area di memoria condivisa\n");
     shmdt(mappa);                                                         /* Stacco le shared memory dal processo master */

@@ -28,7 +28,7 @@ int setval_semaphore (int sem_id, int semnum, int value)
     int result;
     sem.val = value;
     if ((result = semctl(sem_id, semnum, SETVAL, sem.val)) < 0)
-        ERROR;
+        ERROR_SEMA(sem_id, semnum);
     return result;
 }
 
@@ -36,7 +36,7 @@ int getval_semaphore (int sem_id, int sem_num)
 {
     int valore;
     if((valore = semctl(sem_id, sem_num, GETVAL)) < 0)
-        ERROR;
+        ERROR_SEMA(sem_id, sem_num);
     return valore;
 }
 
@@ -57,20 +57,20 @@ int set_semop (int semId, int semNum, int value)
     sops.sem_op = value;
     sops.sem_flg = 0;
     if ((result = semop(semId, &sops, 1)) < 0)
-        ERROR;
+        ERROR_SEMA(semId, semNum);
     /*printf("Esco decremento con PID %d\n", getpid());*/
     return result;
 }
 
 int increment_sem (int semId, int semNum)
 {
-    /*printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);*/
+    printf("Incrementa con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
     return set_semop(semId, semNum, +1);
 }
 
 int decrement_sem (int semId, int semNum)
 {
-    /*printf("Decremento con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);*/
+    printf("Decremento con PID %d per il sem_id %d sem_num %d\n", getpid(), semId, semNum);
     return set_semop(semId, semNum, -1);
 }
 

@@ -42,7 +42,9 @@ int set_source(int sources, const int probability)
 {
     if (sources > 0)
     {
-        return random_num(0, probability);
+        sources /= 2;
+        sources++;
+        return sources > random_num(0, probability);
     }
     else
         return 0;
@@ -60,12 +62,12 @@ int set_holes (int holes, int flag_source)
 
 int is_hole (st_cellap c)
 {
-    return c->hole == 1 ? 1 : 0;
+    return c->hole != 0;
 }
 
 int is_source (st_cellap c)
 {
-    return c->source == 1 ? 1 : 0;
+    return c->source != 0;
 }
 
 static int is_full (st_cellap c)
@@ -80,7 +82,7 @@ void print_cella(st_cellap cellap)
     else if (is_hole(cellap) == 1)
         printf("  X, -  ");                                    /* Indica una cella inaccessibile */
     else
-        printf("  ., %d  ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
+        printf("  ., %d   ", cellap->statoCella.num_taxi);      /* Indica una cella generica */
 }
 
 int enter_cella(st_cellap c)
