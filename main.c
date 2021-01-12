@@ -111,7 +111,7 @@ static void handler_close (int sig)
         int key = semget(SEM_KEY_SOURCE, 0, 0);
         int key_mutex = semget(SEM_KEY_MUTEX, 0, 0);
         setval_semaphore(key_mutex, (DIM_MAPPA-get_so_holes()), 0); /* Chiudo il mutex per non far piu' stampare la mappa aggiornata */
-        printf("\n-- finito tempo simulazione --\n");
+        printf("-- finito tempo simulazione --\n");
         chiudi_processi_child(key, SEM_NUM_TAXI, get_so_taxi(), "taxi");      /* Chiusura processi taxi */
         chiudi_processi_child(key, SEM_NUM_CLIENT, get_so_source(), "source");/* Chiusura processi source */
     }
@@ -157,14 +157,14 @@ int main(int argc, char **argv)
     setval_semaphore(sem_mutex_id, num_sem_mutex - 1, 1);
 
     /* Dove parte la simulazione ~ movimento taxi e creazione richieste */
-    printf("-- inizio simulazione --\n\n");
+    printf("-- inizio simulazione --\n");
     create_client(sem_set_id, 0, shm_id);
     setval_semaphore(sem_set_id, SEM_NUM_TAXI_START, get_so_taxi());
 
     alarm(timer);
     while (getval_semaphore(sem_mutex_id, num_sem_mutex-1) == 1)
     {
-        /*print_map(mappa);*/
+        print_map(mappa);
         printf("--------------------------------------------------------------------------------------------------------------------------------\n");
         sleep(1);
     }

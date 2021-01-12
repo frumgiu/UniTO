@@ -29,6 +29,7 @@ CMakeFiles/TaxiCab.dir/main.c.o: main.c
 CMakeFiles/TaxiCab.dir/main.c.o: mappa.h
 CMakeFiles/TaxiCab.dir/main.c.o: taxi.h
 
+CMakeFiles/TaxiCab.dir/mappa.c.o: Common_IPC.h
 CMakeFiles/TaxiCab.dir/mappa.c.o: cella.h
 CMakeFiles/TaxiCab.dir/mappa.c.o: configurazione.h
 CMakeFiles/TaxiCab.dir/mappa.c.o: configurazione_private.h

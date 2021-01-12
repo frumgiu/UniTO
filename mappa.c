@@ -1,5 +1,6 @@
 #include <time.h>
 #include "mappa.h"
+#include "Common_IPC.h"
 
 void init_map(const int sources, const int holes, st_mappap mappa)
 {
@@ -12,7 +13,6 @@ void init_map(const int sources, const int holes, st_mappap mappa)
     {
         i = sources;
         j = holes;
-        /* TODO: va controllato, messo un timer? */
         probability_source = (DIM_MAPPA)/sources;
         memset(&mappa->c, 0, sizeof(mappa->c));  /* Mette a 0 tutta la memoria che contiene mappa */
 
@@ -26,7 +26,7 @@ void init_map(const int sources, const int holes, st_mappap mappa)
                     st_cellap cellap = &mappa->c[riga][colonna];
                     if (is_source(cellap) != 0 || is_hole(cellap) != 0)
                         continue;
-                    flagS = set_source(i, 2);
+                    flagS = set_source(i, probability_source);
                     flagH = set_holes(j, flagS);
                     create_cella(cellap, get_so_cap_min(), get_so_cap_max(),
                                  get_so_timensec_min(), get_so_timensec_max(), flagS, flagH, colonna, riga);

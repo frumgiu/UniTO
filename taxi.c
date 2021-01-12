@@ -141,13 +141,13 @@ static void move_taxi(st_taxip taxi, struct coordinate * arrivo, st_mappap mappa
 static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, int sem_id, int shm_id, int shm_stat)
 {
     int mex_que_id;
+    int parent;
     time_t current_time;
     st_cellap cella_taxi = taxi_p->posizione;
 
     switch (taxi_p->stato)
     {
         case TAXI_STATE_SEARCHING:
-            taxi_p->strada = 0;
             if (cella_taxi->source == 1)
             {
                 int result;
@@ -167,6 +167,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
                     increment_sem(sem_id, SEM_MUTEX_STAT);
                     taxi_p->stato = TAXI_STATE_RUNNING;
                     taxi_p->richieste++;
+                    taxi_p->strada = 0;
                     time(&taxi_p->move_client);
                 }
                 else
@@ -196,7 +197,6 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
                 raccolta->strada[1] = taxi_p->strada;
             }
             if (taxi_p->move_client > raccolta->vita)
-                /* TODO: Problema */
                 if ((current_time - taxi_p->move_client) > raccolta->vita)
                 {
                     raccolta->pid_taxi = getpid();
@@ -209,6 +209,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
             taxi_p->request.destinazione.colonna = SEARCHING;
             break;
         case TAXI_STATE_ABORTED:
+            parent = getpid();
             /*printf("Il taxi  PID %d e' morto, viene ricreato\n", getpid());*/
             exit_cella(taxi_p->posizione);
             decrement_sem(sem_id, SEM_MUTEX_STAT);
@@ -223,6 +224,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
             shmdt(mappa);
             shmdt(raccolta);
             free(taxi_p);
+            /*printf("Sto nuovo taxi  PID %d da %d\n", getpid(), parent);*/
             increment_sem(sem_id, SEM_NUM_TAXI_START); /* senno' non puo' partire */
             init_taxi(sem_id, shm_id, shm_stat);       /* crea un nuovo taxi */
             exit(0);
@@ -249,6 +251,7 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
     }
     else if (child == 0)                /* CHILD PROCESS */
     {
+        int parent = getpid();
         st_mappap mappa = shmat(shm_id, NULL, 0);
         st_raccoltap raccolta = shmat(shm_stat, NULL, 0);
         struct  sigaction sig;
@@ -261,9 +264,10 @@ void init_taxi(int sem_id, int shm_id, int shm_stat)
             nanosleep(&movimento, &pausa);
         }
         taxip->posizione = c;
-        /*printf("creato taxi con in PID: %d dal padre %d e il semaforo vale %d\n", getpid(), parent, getval_semaphore(sem_id, SEM_NUM_TAXI_START));*/
+        /*printf("creato taxi con in PID: %d dal padre %d e il semaforo START vale %d\n", getpid(), parent, getval_semaphore(sem_id, SEM_NUM_TAXI_START));*/
         increment_sem(sem_id, SEM_NUM_TAXI_INIT_READY);
         decrement_sem(sem_id, SEM_NUM_TAXI_START);
+        /*printf("PID %d sta partendo ed e' prima di semaforo %d che vale %d\n", getpid(), SEM_NUM_TAXI, getval_semaphore(sem_id, SEM_NUM_TAXI));*/
         while (getval_semaphore(sem_id, SEM_NUM_TAXI) == 0)   /* Controllare se il semaforo e' 0 per continuare il processo taxi */
         {
             run_taxi(taxip, mappa, raccolta, sem_id, shm_id, shm_stat);
