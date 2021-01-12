@@ -209,7 +209,7 @@ static void run_taxi(st_taxip taxi_p, st_mappap mappa, st_raccoltap raccolta, in
             taxi_p->request.destinazione.colonna = SEARCHING;
             break;
         case TAXI_STATE_ABORTED:
-            printf("Il taxi  PID %d e' morto, viene ricreato\n", getpid());
+            /*printf("Il taxi  PID %d e' morto, viene ricreato\n", getpid());*/
             exit_cella(taxi_p->posizione);
             decrement_sem(sem_id, SEM_MUTEX_STAT);
             if (taxi_p->request.destinazione.colonna != SEARCHING)

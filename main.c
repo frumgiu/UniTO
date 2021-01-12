@@ -164,7 +164,7 @@ int main(int argc, char **argv)
     alarm(timer);
     while (getval_semaphore(sem_mutex_id, num_sem_mutex-1) == 1)
     {
-        print_map(mappa);
+        /*print_map(mappa);*/
         printf("--------------------------------------------------------------------------------------------------------------------------------\n");
         sleep(1);
     }
