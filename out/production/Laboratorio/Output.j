@@ -46,11 +46,11 @@ L3:
 L4:
  iload 0
  ldc 1
- iadd 
+ imul 
  ldc 2
- iadd 
+ imul 
  ldc 3
- iadd 
+ imul 
  invokestatic Output/print(I)V
  goto L6
 L5:
@@ -66,6 +66,9 @@ L8:
  iload 1
  invokestatic Output/print(I)V
 L6:
+L11:
+ ldc 2
+ invokestatic Output/print(I)V
 L0:
  return
 .end method

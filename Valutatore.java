@@ -1,12 +1,12 @@
 import java.io.*;
-
+// ESERCIZIO 4.1
 public class Valutatore
 {
     private Lexer lex;
     private BufferedReader pbr;
     private Token look;
 
-    public Valutatore(Lexer l, BufferedReader br) //Costruttore
+    public Valutatore(Lexer l, BufferedReader br)
     {
         lex = l;
         pbr = br;
@@ -148,7 +148,7 @@ public class Valutatore
         {
             case Tag.NUM:
                 if (look instanceof NumberTok) //Devo fare il controllo prima del downcast
-                    fact_val = ((NumberTok)look).lexenum;//Va bene il cast?
+                    fact_val = ((NumberTok)look).lexenum;
                 match(Tag.NUM);
                 break;
             case'(':

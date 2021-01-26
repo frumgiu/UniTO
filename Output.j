@@ -46,11 +46,11 @@ L3:
 L4:
  iload 0
  ldc 1
- iadd 
+ imul 
  ldc 2
- iadd 
+ imul 
  ldc 3
- iadd 
+ imul 
  invokestatic Output/print(I)V
  goto L6
 L5:
