@@ -1,5 +1,12 @@
 import java.io.*;
+//ESERCIZIO 3.2
 
+//NOTAZIONE FORMA PREFISSA
+//Grammatica LL(1)
+//Varibili: prog, stat, statlist, statlistp, expr, exprlist, exprlistp, bexpr,
+//          whenitem, whenlist, whenlistp
+//Terminali: 0,...,9, +, -, *, /, (, ), ID, RELOP
+//Produzioni: in ogno metodo c'e' la sua produzione
 public class ParserProg
 {
     private Lexer lex;

@@ -1,12 +1,12 @@
 import java.io.*;
+//ESERCIZIO 3.1
+
 //NOTAZIONE FORMA INFISSA
-//Es. 2+2
 //Grammatica LL(1)
 //Varibili: start, expr, exprp, term, termp, fact
 //Terminali: 0,...,9, +, -, *, /, (, ) (3.1)
 //Produzioni: in ogno metodo c'e' la sua produzione
 
-//Problema lexer spazio con il /. RISOLTO
 public class Parser
 {
     private Lexer lex;
