@@ -1,13 +1,10 @@
 import java.io.*;
-//OK: 2.1, 2.2, 2.3
+//ESERCIZI 2.1, 2.2, 2.3
 
 public class Lexer
 {
     public static int line = 1;
     private char peek = ' ';
-    /* il controllo che uso per i commenti mi fa saltare un carattere, che puo' compromettere la riuscita del parser
-    dopo, se c'e' un / con un numero SENZA SPAZIO tra i due */
-    //RISOLTO
 
 //Legge un carattere dal testo di input, caricato nel BufferReader
     private void readch(BufferedReader br)
@@ -194,7 +191,7 @@ public class Lexer
         }
     }
 
-//Esercizio 1.2
+//Usato esercizio 1.2
 //Se e' un identificatore valido
     private boolean wordID(String s)
     {
@@ -230,7 +227,7 @@ public class Lexer
         }
         return state == 2;
     }
-//Usato esrcizio 1.9
+//Usato esercizio 1.9
 //Viene chiamato solo nel caso legga /*
 //Consumo caratteri finche' non si chiude il commento o finisce il testo (commento non viene chiuso)
     private boolean commento(BufferedReader br)
