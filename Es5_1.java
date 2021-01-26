@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Translator
+public class Es5_1
 {
     private Lexer lex;
     private BufferedReader pbr;
@@ -10,7 +10,7 @@ public class Translator
     CodeGenerator code = new CodeGenerator();
     int count = 0;
 
-    public Translator(Lexer l, BufferedReader br) {
+    public Es5_1(Lexer l, BufferedReader br) {
             lex = l;
             pbr = br;
             move();
@@ -345,7 +345,7 @@ public class Translator
         String path = "testParserProg.lft"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
-            Translator translator = new Translator(lex, br);
+            Es5_1 translator = new Es5_1(lex, br);
             translator.prog();
             System.out.println("Input OK");
             br.close();
