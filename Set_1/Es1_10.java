@@ -1,6 +1,6 @@
 package Set_1;
 
-public class Es1_10 //Risolto
+public class Es1_10
 {
     public static boolean scan(String s)
     {
@@ -48,12 +48,11 @@ public class Es1_10 //Risolto
                     break;
             }
         }
-        return stato == 3 || stato == 1 || stato == 0;
+        return stato == 1 || stato == 0;
     }
     
     public static void main(String[] args)
     {
         System.out.println(scan(args[0]) ? "OK" : "NOPE");  //Ok
-
     }
 }
