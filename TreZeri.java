@@ -1,5 +1,3 @@
-package Set_1;
-
 public class TreZeri
 {
     public static boolean scan(String s)

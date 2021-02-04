@@ -1,5 +1,3 @@
-package Set_1;
-
 public class Es1_5
 {
     public static boolean scan(String s)

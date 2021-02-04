@@ -36,9 +36,6 @@ L1:
  invokestatic Output/read()I
  istore 1
 L2:
- invokestatic Output/read()I
- istore 2
-L3:
  iload 0
  iload 1
  if_icmpeq L4
@@ -52,21 +49,21 @@ L4:
  ldc 3
  imul 
  invokestatic Output/print(I)V
- goto L6
+ goto L3
 L5:
  iload 0
  iload 1
- if_icmpgt L7
- goto L8
-L7:
+ if_icmpgt L6
+ goto L7
+L6:
  ldc 1
  invokestatic Output/print(I)V
- goto L6
-L8:
+ goto L3
+L7:
  iload 1
  invokestatic Output/print(I)V
-L6:
-L11:
+L3:
+L10:
  ldc 2
  invokestatic Output/print(I)V
 L0:

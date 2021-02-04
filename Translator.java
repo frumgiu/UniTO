@@ -128,8 +128,8 @@ public class Translator
             case Tag.COND:
                 match(Tag.COND);
                 int wl_false;// = code.newLabel();
-                int uscita; // = code.newLabel();
-                whenlist(code.newLabel(), (wl_false = code.newLabel()), (uscita = code.newLabel()));
+                int uscita = code.newLabel(); // = code.newLabel();
+                whenlist(code.newLabel(), (wl_false = code.newLabel()), uscita);
                 match(Tag.ELSE);
                 stat();
                 code.emitLabel(uscita);   //Deve essere l'uscita dei GOto

@@ -1,8 +1,6 @@
-package Set_1;
-
 public class Es1_1
 {
-    //Per fare il complementaredi un diagramma basta complementare gli stati
+    //Per fare il complementare di un diagramma basta complementare gli stati
     public static boolean scan_opposta(String s)
     {
         int stato = 0;

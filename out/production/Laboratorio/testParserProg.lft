@@ -1,6 +1,5 @@
 {   read(x);
     read(y);
-    read(z);
     cond
         when(== x y) do print(*(x 1 2 3))
         when(> x y) do print(1)

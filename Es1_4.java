@@ -1,5 +1,3 @@
-package Set_1;
-
 public class Es1_4
 {
     //Metodo che torna true se un elemento e' pari, false se e' dispari

@@ -1,6 +1,4 @@
-package Set_1;
-
-public class Es1_7 //Risolto
+public class Es1_6 //Risolto
 {
     public static boolean check(String s)
     {
@@ -11,16 +9,16 @@ public class Es1_7 //Risolto
             switch (stato)
             {
                 case 0:
-                    if (c == 'b')
-                        stato = 0;
-                    else if (c == 'a')
+                    if (c == 'a')
+                        stato = 3;
+                    else if (c == 'b')
                         stato = 1;
                     else
                         stato = -1;
                     break;
                 case 1:
                     if (c == 'a')
-                        stato = 1;
+                        stato = 3;
                     else if (c == 'b')
                         stato = 2;
                     else
@@ -28,27 +26,22 @@ public class Es1_7 //Risolto
                     break;
                 case 2:
                     if (c == 'a')
-                        stato = 1;
-                    else if (c == 'b')
                         stato = 3;
                     else
                         stato = -1;
                     break;
                 case 3:
-                    if (c == 'a')
-                        stato = 1;
-                    else if (c == 'b')
-                        stato = 0;
+                    if ((c == 'a') || (c == 'b'))
+                        stato = 3;
                     else
                         stato = -1;
                     break;
             }
         }
-        return stato == 1 || stato == 2 || stato == 3;
+        return stato == 3;
     }
-
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println(check(args[0]) ? "OK" : "NOPE");  //Ok
-
     }
 }
