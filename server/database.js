@@ -44,7 +44,8 @@ function getTable(lambdaFunction){
 }
 
 function getTableWithSearch(lambdaFunction, filter){
-    const query = `SELECT name FROM demo WHERE "name" == $2 OR "category" == $2;`;
+    const query = `SELECT DISTINCT name FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
+    console.log(query)
     client.query(query).then(res => {
         showResult(res);
         lambdaFunction(res);
@@ -54,6 +55,8 @@ function getTableWithSearch(lambdaFunction, filter){
 
 function showResult(res) {
     console.log("Table read successfully!");
+    if (res.rows.length === 0)
+        console.log("Empty table")
     const rows = res.rows;
     rows.map(row => {
         console.log(`read: ${JSON.stringify(row)}`);
