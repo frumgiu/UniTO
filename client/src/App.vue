@@ -44,7 +44,7 @@ export default {
       categories: ["Buildings", "Park", "Statues"],
     }
   },
-  created() {
+  mounted() {
     this.askTableData();
   },
   methods: {

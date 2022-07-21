@@ -20,6 +20,9 @@ client.connect(err => {
     }
 });
 
+/*
+ Create a demo table with some rows
+ */
 function createTableDemo() {
     const query = `DROP TABLE IF EXISTS demo;
         CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geometry null);
@@ -34,6 +37,9 @@ function createTableDemo() {
     }).catch(err => console.log(err))
 }
 
+/*
+ Get all the query inside the table
+ */
 function getTable(lambdaFunction){
     const query = `SELECT name FROM demo;`;
     client.query(query).then(res => {
@@ -43,6 +49,9 @@ function getTable(lambdaFunction){
     }).catch(err => console.log(err))
 }
 
+/*
+ Get the rows with filter as name or category
+ */
 function getTableWithSearch(lambdaFunction, filter){
     const query = `SELECT DISTINCT name FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
@@ -53,6 +62,9 @@ function getTableWithSearch(lambdaFunction, filter){
     }).catch(err => console.log(err))
 }
 
+/*
+ Used to print query's result
+ */
 function showResult(res) {
     console.log("Table read successfully!");
     if (res.rows.length === 0)
