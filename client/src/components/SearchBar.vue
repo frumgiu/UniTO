@@ -2,8 +2,8 @@
 <nav class="navbar navbar-expand-sm bg-light navbar-light ">
   <div class="container-fluid nav-container">
     <form class="d-flex input-group w-100" @submit.prevent>
-      <input id="search" v-model="searchText" type="search" class="search-text" placeholder="search a picture" autocomplete="off"/>
-      <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="getDataBySearch">
+      <input v-model="searchText" type="text" class="search-text" placeholder="search a picture" autocomplete="off" @change="textChanged"/>
+      <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
         <span class="material-icons"  style="vertical-align: middle">search</span>
       </button>
       <DropDown titleMenuCat="Category" :optionsCat='categories' :tag-selected="tagSelected"/>
@@ -48,9 +48,20 @@ export default {
     }
   },
   methods: {
-    getDataBySearch: function () {
-      this.$emit('getDataBySearch', this.searchText)
+    askDataBySearch: function() {
+      this.$emit('askDataBySearch', this.searchText)
+    },
+    textChanged: function() {
+      this.$emit('textChanged', this.searchText)
     }
+  },
+  watch: {
+    searchText: function(newValue) {
+      if (newValue === "") {
+        this.$emit('getData')
+      }
+    },
+    deep: true
   }
 }
 </script>

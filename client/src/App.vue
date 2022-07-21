@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SearchBar @getDataBySearch="getDataBySearch" :tag-selected="tagList"/>
+    <SearchBar @textChanged="textChanged" @getData="askTableData" @askDataBySearch="askDataBySearch" :tag-selected="tagList"/>
     <TagList v-if="tagList !== 0" :tagList='tagList'/>
     <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
     <div style="text-align: left; margin-top: 2rem; margin-left: 1rem">{{messageDemo}}</div>
@@ -26,7 +26,7 @@ import SearchBar from "@/components/SearchBar";
 import TagList from "@/components/TagList";
 import AlertWarning from "@/components/generic/AlertWarning";
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getDataBySearch} from '@/controllers/ControllerTableData'
+import {getData, getDataBySearch} from '@/../controllers/ControllerTableData'
 
 export default {
   name: 'App',
@@ -39,22 +39,21 @@ export default {
   data() {
     return {
       messageDemo: "Table elements:",
-      //searchText: "",
       savedData: [],
       tagList: [],
       categories: ["Buildings", "Park", "Statues"],
     }
   },
   created() {
-    this.getData();
+    this.askTableData();
   },
   methods: {
-    getData: function() {
+    askTableData: function() {
       getData().then(response => {
             this.savedData = response;
           }, error => { console.log(error); })
     },
-    getDataBySearch: function(searchText) {
+    askDataBySearch: function(searchText) {
       getDataBySearch(searchText).then(response => {
         if(response === "empty table"){
           this.$refs.alertWarning.setInvalidInput();
@@ -62,6 +61,9 @@ export default {
           this.savedData = response;
         }
       }, error => { console.log(error); })
+    },
+    textChanged: function() {
+
     }
   },
   computed: {

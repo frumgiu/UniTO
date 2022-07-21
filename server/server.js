@@ -5,7 +5,7 @@ const app = express(),
 const db = require('./database');
 port = 3080;
 
-var date = new Date();
+const date = new Date();
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/build')));
