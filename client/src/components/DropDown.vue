@@ -50,7 +50,7 @@ export default {
     width: available;
     background: none;
     border: none;
-    margin: 0;
+    margin-left: 0.2rem;
     padding: 0 !important;
   }
 
@@ -71,7 +71,7 @@ export default {
     width: 320% !important;
     max-width: 580% !important;
     border-radius: 0.6rem !important;
-    border: 0.1rem solid #967bdc !important;
+    border: none !important;
   }
 
   .two-colomuns-container {

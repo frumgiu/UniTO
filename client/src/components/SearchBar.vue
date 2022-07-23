@@ -3,7 +3,7 @@
   <div class="container-fluid nav-container">
     <form class="d-flex input-group w-100" @submit.prevent>
       <div class="search-group justify-content-center">
-        <input v-model="searchText" type="text" class="search-text" placeholder="Search pictures" autocomplete="off" @change="textChanged"/>
+        <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off" @change="textChanged"/>
         <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
           <span class="material-icons"  style="vertical-align: middle">search</span>
         </button>
@@ -60,6 +60,7 @@ export default {
   .nav-container {
     width: 100%;
     max-width: 100%;
+    padding: 0;
   }
 
   .search-group {
@@ -68,6 +69,10 @@ export default {
     border-radius: 1.2rem;
     background-color: white;
     padding: 0.06rem;
+  }
+
+  .search-group:focus-within{
+    border: 0.1rem solid #967bdc;
   }
 
   .search-text {
@@ -82,13 +87,8 @@ export default {
     align-items: center;
   }
 
-  .search-group:focus-within{
-    border: 0.1rem solid #967bdc;
-  }
-
   .search-text::placeholder {
     font-size: 0.95rem;
-    transition: all 0.3s;
     color: gray;
   }
 
