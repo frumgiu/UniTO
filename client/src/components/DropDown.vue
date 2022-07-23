@@ -54,7 +54,7 @@ export default {
     padding: 0 !important;
   }
 
-  .drop-btn > button {
+ .drop-btn > button {
     width: 100%;
     max-width: 100%;
     border: none;

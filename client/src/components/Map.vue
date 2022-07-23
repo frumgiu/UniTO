@@ -1,12 +1,13 @@
 <template>
   <VueDeckgl
-
     :viewState="viewState"
     @click="handleClick"
     @view-state-change="updateViewState" >
     <div id="map" ref="map"/>
   </VueDeckgl>
 </template>
+
+<!-- :layers="layers" -->
 
 <script>
 //import { PathLayer } from "@deck.gl/layers";
@@ -25,9 +26,9 @@ export default {
       mapStyle: "mapbox://styles/posie98/cl5xzs8te001614lidiwsno0m",
       pathData: this.dataGeo,
       viewState: {
-        latitude: 12.976387,
-        longitude: 77.571529,
-        zoom: 12,
+        latitude: 44.30905,
+        longitude: 8.47715,
+        zoom: 8,
         bearing: 0,
         pitch: 0,
       },

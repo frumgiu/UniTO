@@ -1,36 +1,18 @@
 <template>
-<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
+<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top my-navbar">
   <div class="container-fluid nav-container">
     <form class="d-flex input-group w-100" @submit.prevent>
-      <input v-model="searchText" type="text" class="search-text" placeholder="search a picture" autocomplete="off" @change="textChanged"/>
-      <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
-        <span class="material-icons"  style="vertical-align: middle">search</span>
-      </button>
+      <div class="search-group justify-content-center">
+        <input v-model="searchText" type="text" class="search-text" placeholder="Search pictures" autocomplete="off" @change="textChanged"/>
+        <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
+          <span class="material-icons"  style="vertical-align: middle">search</span>
+        </button>
+      </div>
       <DropDown titleMenuCat="Category" :optionsCat='categories' :tag-selected="tagSelected"/>
     </form>
   </div>
 </nav>
 </template>
-
-<!--
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <form class="card card-sm search-sec">
-      <div class="card-body row align-items-center search-sec-body">
-        <div class="col-xs-8 col-md-8 input-container">
-          <input id="search" type="text" class="search-text" placeholder="search a picture" autocomplete="off"/>
-          <button class="search-btn">
-            <span class="material-icons"  style="vertical-align: middle">search</span>
-          </button>
-        </div>
-        <div class="col-xs-4 col-md-4 tag-container">
-          <DropDown titleMenu="Category" :options='["Buildings", "Statues", "Parks"]'/>
-      </div>
-      </div>
-    </form>
-  </div>
-</div>
--->
 
 <script>
 import DropDown from './DropDown';
@@ -67,37 +49,51 @@ export default {
 </script>
 
 <style scoped>
+  .my-navbar {
+    width: fit-content;
+    max-width: 100%;
+    border-radius: 1.5rem;
+    margin: 1rem;
+    padding: 0.3rem 0.5rem;
+  }
+
   .nav-container {
     width: 100%;
     max-width: 100%;
   }
 
+  .search-group {
+    align-content: baseline;
+    border: 0.09rem solid #967bdc;
+    border-radius: 1.2rem;
+    background-color: white;
+    padding: 0.06rem;
+  }
+
   .search-text {
-    width: 40%;
+    width: fit-content;
     max-width: 100%;
-    font-size: 0.94rem;
+    font-size: 0.95rem;
     padding: 0.3rem;
-    border: 0.1rem solid gray;
-    border-radius: 0.6rem;
+    border: none;
+    border-radius: 1.2rem;
     outline: none;
     transition: all 0.3s;
     align-items: center;
   }
 
-  .search-text:focus {
+  .search-group:focus-within{
     border: 0.1rem solid #967bdc;
-    outline: none;
-    box-shadow: none;
   }
 
   .search-text::placeholder {
-    font-size: 14px;
+    font-size: 0.95rem;
     transition: all 0.3s;
     color: gray;
   }
 
   .search-btn {
-    width: available;
+    width: fit-content;
     max-width: 100%;
     cursor: pointer;
     background: none;

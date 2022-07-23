@@ -11,16 +11,6 @@
   </div>
 </template>
 
-<!--
-    <VueDeckgl
-        id="map"
-        :layers="layers"
-        :viewState="viewState"
-        @click="handleClick"
-        @view-state-change="handleViewStateChange">
-    </VueDeckgl>
--->
-
 <script>
 import SearchBar from "@/components/SearchBar";
 import TagList from "@/components/TagList";
