@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar navbar-expand-sm bg-light navbar-light ">
+<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
   <div class="container-fluid nav-container">
     <form class="d-flex input-group w-100" @submit.prevent>
       <input v-model="searchText" type="text" class="search-text" placeholder="search a picture" autocomplete="off" @change="textChanged"/>

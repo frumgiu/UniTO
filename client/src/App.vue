@@ -7,6 +7,7 @@
     <ul class="list-demo">
       <li v-for="(data, index) in savedData" :key="index" style="text-align: left" >{{data.name}}</li>
     </ul>
+    <Map/>
   </div>
 </template>
 
@@ -21,20 +22,20 @@
 -->
 
 <script>
-//import VueDeckgl from 'vue-deck.gl';
 import SearchBar from "@/components/SearchBar";
 import TagList from "@/components/TagList";
 import AlertWarning from "@/components/generic/AlertWarning";
+import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
 import {getData, getDataBySearch} from '@/../controllers/ControllerTableData'
 
 export default {
   name: 'App',
   components: {
-    //VueDeckgl,
+    Map,
     SearchBar,
     TagList,
-    AlertWarning
+    AlertWarning,
   },
   data() {
     return {
@@ -63,15 +64,6 @@ export default {
       }, error => { console.log(error); })
     },
     textChanged: function() {
-
-    }
-  },
-  computed: {
-    layers() {
-      // create layers using @deck.gl/layers
-      return [
-        //layers
-      ]
     }
   }
 }
@@ -83,17 +75,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: left;
-  }
-
-  #map {
-    position: absolute;
-    top: auto;
-    left: auto;
-    margin-top: 2em;
-    width: 100%;
-    height: 100%;
-    background: floralwhite;
-    overflow: hidden;
   }
 
   .list-demo {
