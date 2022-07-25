@@ -1,5 +1,6 @@
 <template>
   <VueDeckgl
+    :layers="layers"
     :viewState="viewState"
     @click="handleClick"
     @view-state-change="updateViewState" >
@@ -7,10 +8,8 @@
   </VueDeckgl>
 </template>
 
-<!-- :layers="layers" -->
-
 <script>
-//import { PathLayer } from "@deck.gl/layers";
+import { ScreenGridLayer } from "@deck.gl/aggregation-layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl'
 
@@ -68,6 +67,20 @@ export default {
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
+  },
+  computed: {
+    layers() {
+      const layer = new ScreenGridLayer({
+        id: "screen-grid-layer",
+        data: this.dataGeo,
+        visible: true,
+        cellSizePixels: 50,
+        opacity: 0.8,
+        getPosition: d => d.coordinates,
+        getWeight: () => 4
+      });
+      return [layer];
+    }
   }
 }
 </script>

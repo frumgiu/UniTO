@@ -5,9 +5,9 @@
     <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
     <div style="text-align: left; margin-top: 2rem; margin-left: 1rem">{{messageDemo}}</div>
     <ul class="list-demo">
-      <li v-for="(data, index) in savedData" :key="index" style="text-align: left" >{{data.name}}</li>
+      <li v-for="(data, index) in savedData" :key="index" style="text-align: left" >{{data.name}}, {{ data.coordinates}}</li>
     </ul>
-    <Map/>
+    <Map :data-geo="savedData"/>
   </div>
 </template>
 

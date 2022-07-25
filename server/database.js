@@ -9,6 +9,7 @@ const config = {
 const client = new pg.Client(config);
 
 module.exports = {
+    createTableDemo,
     getTable,
     getTableWithSearch
 }
@@ -26,11 +27,11 @@ client.connect(err => {
 function createTableDemo() {
     const query = `DROP TABLE IF EXISTS demo;
         CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geometry null);
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco del Valentino', 'Park', 'POINT(0 0)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Piazza Castello', 'Square', 'POINT(1 0)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco di Stupinigi', 'Park', 'POINT(3 10)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Toret', 'Other', 'POINT(2 1)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Palazzo Madama', 'Building', 'POINT(0 0)');`;
+        INSERT INTO demo (name, category, coordinates) VALUES ('Parco del Valentino', 'Park', 'POINT(45.054847 7.686736)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Piazza Castello', 'Square', 'POINT(45.071217 7.685089)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Parco di Stupinigi', 'Park', 'POINT(44.980997 7.587417)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Priamar', 'Other', 'POINT(44.30459 8.48426)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Torre del Brandale', 'Building', 'POINT(44.3072 8.484106)');`;
 
     client.query(query).then(() => {
         console.log("Table created successfully!");
@@ -41,7 +42,7 @@ function createTableDemo() {
  Get all the query inside the table
  */
 function getTable(lambdaFunction){
-    const query = `SELECT name FROM demo;`;
+    const query = `SELECT name, coordinates FROM demo;`;
     client.query(query).then(res => {
         showResult(res);
         lambdaFunction(res);
@@ -53,7 +54,7 @@ function getTable(lambdaFunction){
  Get the rows with filter as name or category
  */
 function getTableWithSearch(lambdaFunction, filter){
-    const query = `SELECT DISTINCT name FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
+    const query = `SELECT DISTINCT name, coordinates FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
         showResult(res);

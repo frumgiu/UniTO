@@ -12,6 +12,7 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get(`/api/getTable`, (req, res) => {
     console.log('api/getTable called! ' + date.toUTCString());
+    db.createTableDemo();
     db.getTable(result => {
         res.json(result.rows);
     });
