@@ -3,13 +3,16 @@
     <SearchBar @textChanged="textChanged" @getData="askTableData" @askDataBySearch="askDataBySearch" :tag-selected="tagList"/>
     <TagList v-if="tagList !== 0" :tagList='tagList'/>
     <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
+    <Map :data-geo="savedData"/>
+  </div>
+</template>
+
+<!--
     <div style="text-align: left; margin-top: 2rem; margin-left: 1rem">{{messageDemo}}</div>
     <ul class="list-demo">
       <li v-for="(data, index) in savedData" :key="index" style="text-align: left" >{{data.name}}, {{ data.coordinates}}</li>
     </ul>
-    <Map :data-geo="savedData"/>
-  </div>
-</template>
+-->
 
 <script>
 import SearchBar from "@/components/SearchBar";

@@ -3,7 +3,8 @@
     :layers="layers"
     :viewState="viewState"
     @click="handleClick"
-    @view-state-change="updateViewState" >
+    @view-state-change="updateViewState"
+    class="deck-class">
     <div id="map" ref="map"/>
   </VueDeckgl>
 </template>
@@ -12,6 +13,7 @@
 import { ScreenGridLayer } from "@deck.gl/aggregation-layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl'
+
 
 export default {
   name: "Map",
@@ -25,12 +27,13 @@ export default {
       mapStyle: "mapbox://styles/posie98/cl5xzs8te001614lidiwsno0m",
       pathData: this.dataGeo,
       viewState: {
-        latitude: 44.30905,
-        longitude: 8.47715,
-        zoom: 8,
+        latitude: 44.3072,
+        longitude: 8.484106,
+        zoom: 16,
         bearing: 0,
         pitch: 0,
       },
+
     };
   },
   created() {
@@ -70,12 +73,22 @@ export default {
   },
   computed: {
     layers() {
-      const layer = new ScreenGridLayer({
+      const layer =  new ScreenGridLayer({
         id: "screen-grid-layer",
         data: this.dataGeo,
         visible: true,
         cellSizePixels: 50,
         opacity: 0.8,
+        colorRange: [
+          [255, 255, 178, 25],
+          [254, 217, 118, 85],
+          [254, 178, 76, 127],
+          [253, 141, 60, 170],
+          [240, 59, 32, 212],
+          [189, 0, 38, 255]
+        ],
+        gpuAggregation: false,
+        aggregation: 'SUM',
         getPosition: d => d.coordinates,
         getWeight: () => 4
       });
@@ -86,6 +99,9 @@ export default {
 </script>
 
 <style scoped>
+  .deck-class {
+
+  }
   #map {
     position: absolute;
     top: 0;
