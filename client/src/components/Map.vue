@@ -14,7 +14,6 @@ import { ScreenGridLayer } from "@deck.gl/aggregation-layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl'
 
-
 export default {
   name: "Map",
   components: {
@@ -87,10 +86,10 @@ export default {
           [240, 59, 32, 212],
           [189, 0, 38, 255]
         ],
-        gpuAggregation: false,
+        gpuAggregation: true,
         aggregation: 'SUM',
         getPosition: d => d.coordinates,
-        getWeight: () => 4
+        getWeight: 4
       });
       return [layer];
     }
@@ -100,7 +99,11 @@ export default {
 
 <style scoped>
   .deck-class {
-
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
   #map {
     position: absolute;
