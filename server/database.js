@@ -26,12 +26,14 @@ client.connect(err => {
  */
 function createTableDemo() {
     const query = `DROP TABLE IF EXISTS demo;
-        CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geometry null);
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco del Valentino', 'Park', 'POINT(45.054847 7.686736)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Piazza Castello', 'Square', 'POINT(45.071217 7.685089)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco di Stupinigi', 'Park', 'POINT(44.980997 7.587417)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Priamar', 'Other', 'POINT(44.30459 8.48426)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Torre del Brandale', 'Building', 'POINT(44.3072 8.484106)');`;
+        CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geography(POINT) null);
+        INSERT INTO demo (name, category, coordinates) VALUES ('Parco del Valentino', 'Park', 'POINT(7.686736 45.054847)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Piazza Castello', 'Square', 'POINT(7.685089 45.071217)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Parco di Stupinigi', 'Park', 'POINT(7.587417 44.980997)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Priamar', 'Other', 'POINT(8.48426 44.30459)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Torre del Brandale', 'Building', 'POINT(8.484106 44.3072)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Sirenetta', 'Statue', 'POINT(12.5928976284 55.6890472438)');
+        INSERT INTO demo (name, category, coordinates) VALUES ('Cremlino', 'Building', 'POINT(37.629005 55.699336)');`;
 
     client.query(query).then(() => {
         console.log("Table created successfully!");
@@ -42,7 +44,7 @@ function createTableDemo() {
  Get all the query inside the table
  */
 function getTable(lambdaFunction){
-    const query = `SELECT name, coordinates FROM demo;`;
+    const query = `SELECT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" FROM demo;`;
     client.query(query).then(res => {
         showResult(res);
         lambdaFunction(res);
