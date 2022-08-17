@@ -10,16 +10,10 @@
 </template>
 
 <script>
-import { ScreenGridLayer } from "@deck.gl/aggregation-layers";
+import {ScreenGridLayer} from "@deck.gl/aggregation-layers";
+import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
-import VueDeckgl from 'vue-deck.gl'
-
-const pathData = [
-  {coordinates: [7.686736, 45.054847]},
-  {coordinates: [7.685089, 45.071217]},
-  {coordinates: [37.629005, 55.699336]},
-  {coordinates: [12.5928976284, 55.6890472438]}
-]
+import VueDeckgl from 'vue-deck.gl';
 
 export default {
   name: "Map",
@@ -29,9 +23,10 @@ export default {
   props: ['dataGeo'],
   data() {
     return {
+      iconSvg: require("../resources/polaroid-pictures-svgrepo-com.svg"),
+      image: require("../resources/test.png"),
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
       mapStyle: "mapbox://styles/posie98/cl5xzs8te001614lidiwsno0m",
-      myData: pathData,
       viewState: {
         latitude: 44.3072,
         longitude: 8.484106,
@@ -57,8 +52,10 @@ export default {
         pitch: viewState.pitch,
       });
     },
-
     handleClick() {
+    },
+    svgToDataUrl(svg) {
+      return `data:image/svg+xml;base64,${btoa(svg)}`;
     }
   },
   mounted() {
@@ -76,12 +73,11 @@ export default {
   },
   computed: {
     layers() {
-      const layer =  new ScreenGridLayer({
+      return [new ScreenGridLayer({
         id: "screen-grid-layer",
         data: this.dataGeo,
-        visible: true,
-        cellSizePixels: 20,
-        opacity: 0.8,
+        cellSizePixels: 14,
+        opacity: 1,
         colorRange: [
           [255, 255, 178, 25],
           [254, 217, 118, 85],
@@ -93,9 +89,20 @@ export default {
         gpuAggregation: true,
         aggregation: 'SUM',
         getPosition: (d) => [d.log, d.lat],
-        getWeight: 10
-      });
-      return [layer];
+        getWeight: 4
+      }),
+        new IconLayer({
+          id: 'icon-layer',
+          data: this.dataGeo,
+          iconAtlas: this.image,
+          iconMapping: {
+            marker: {x:0, y:0, width: 128, height: 128}
+          },
+          getPosition: (d) => [d.log, d.lat],
+          getSize: () => 5,
+          sizeScale: 15
+        })
+      ];
     }
   }
 }

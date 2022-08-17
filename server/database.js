@@ -56,7 +56,8 @@ function getTable(lambdaFunction){
  Get the rows with filter as name or category
  */
 function getTableWithSearch(lambdaFunction, filter){
-    const query = `SELECT DISTINCT name, coordinates FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
+    const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
+                   FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
         showResult(res);
