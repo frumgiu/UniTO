@@ -2,13 +2,13 @@
 <span class="drop-sec">
     <b-dropdown variant="none" class="drop-btn" no-caret>
       <template #button-content id="drop-btn">
-        <span class="material-icons" style="vertical-align: middle">dehaze</span>
+        <span class="material-icons" style="vertical-align: middle">tune</span>
       </template>
       <div class="advanced-search">Advanced search</div>
-      <div class="row two-colomuns-container w-100">
-        <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat" :tag-selected="tagSelected"/>
+      <b-dropdown-divider/>
+      <div class="row list-container w-100">
+        <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat"/>
       </div>
-
     </b-dropdown>
 </span>
 </template>
@@ -34,7 +34,7 @@ import DropDownColumn from "@/components/DropDownColumn";
 export default {
   name: "DropDown",
   components: {DropDownColumn},
-  props: ['titleMenuCat', 'optionsCat', 'tagSelected']
+  props: ['titleMenuCat', 'optionsCat']
 }
 </script>
 
@@ -42,6 +42,7 @@ export default {
   .advanced-search {
     width: 100%;
     max-width: 100%;
+    margin: 0.1rem 0.5rem;
     align-items: center;
     color: gray;
   }
@@ -50,7 +51,7 @@ export default {
     width: available;
     background: none;
     border: none;
-    margin-left: 0.2rem;
+    margin-left: 0.3rem;
     padding: 0 !important;
   }
 
@@ -74,7 +75,7 @@ export default {
     border: none !important;
   }
 
-  .two-colomuns-container {
+  .list-container {
     width: 100%;
     max-width: 100%;
     margin: 0 !important;

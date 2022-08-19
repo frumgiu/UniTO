@@ -11,7 +11,8 @@ const client = new pg.Client(config);
 module.exports = {
     createTableDemo,
     getTable,
-    getTableWithSearch
+    getTableWithSearch,
+    getTableWithTag
 }
 
 client.connect(err => {
@@ -46,21 +47,34 @@ function createTableDemo() {
 function getTable(lambdaFunction){
     const query = `SELECT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" FROM demo;`;
     client.query(query).then(res => {
-        showResult(res);
+        //showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
 }
 
 /*
- Get the rows with filter as name or category
+ Get the rows with filtered by name or category
  */
 function getTableWithSearch(lambdaFunction, filter){
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
-        showResult(res);
+        //showResult(res);
+        lambdaFunction(res);
+        console.log("Close connection\n")
+    }).catch(err => console.log(err))
+}
+
+/*
+ Get the rows filtered by category with tags list
+ */
+function getTableWithTag(lambdaFunction, filter){
+    const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
+                   FROM demo WHERE UPPER("category") LIKE UPPER('%${filter}%');`;
+    console.log(query)
+    client.query(query).then(res => {
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))

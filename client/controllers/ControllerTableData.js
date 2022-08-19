@@ -18,8 +18,10 @@ export async function getDataBySearch(searchText) {
     return response.data;
 }
 
-//TODO: not used for now
-export async function getDataByTag(tag) {
-    let response = await axios.get( `/api/getTableByTag/`, {params: {tagFilter: tag}});
+export async function getDataByFilter(tag) {
+    let response = await axios.get( `/api/getTableByFilter/`, {params: {tagFilter: tag}});
+    if (response.data.length === 0) {
+        return "empty table";
+    }
     return response.data;
 }

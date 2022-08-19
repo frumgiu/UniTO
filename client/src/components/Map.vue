@@ -52,7 +52,7 @@ export default {
     },
     handleClick() {
     }
-  },
+},
   mounted() {
     // creating the map
     this.map = new mapboxgl.Map({
@@ -78,7 +78,8 @@ export default {
           getIcon: () => 'marker',
           getPosition: (d) => [d.log, d.lat],
           getSize: () => 4,
-          sizeScale: 10
+          sizeScale: 10,
+          getColor: [72, 163, 106]
         })];
       } else {
         return [

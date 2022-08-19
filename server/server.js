@@ -26,6 +26,14 @@ app.get(`/api/getTableBySearch/`, (req, res) => {
     }, req.query.search);
 })
 
+app.get(`/api/getTableByFilter/`, (req, res) => {
+    console.log('api/getTableByFilter called! ' + date.toUTCString());
+    console.log(req.query.tagFilter + "\n")
+  /*  db.getTableWithSearch(result => {
+        res.json(result.rows);
+    }, req.query.tagFilter); */
+})
+
 app.get(`/`, (req,res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });

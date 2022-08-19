@@ -1,17 +1,17 @@
 <template>
-<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top my-navbar">
-  <div class="container-fluid nav-container">
-    <form class="d-flex input-group w-100" @submit.prevent>
-      <div class="search-group justify-content-center">
-        <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off" @change="textChanged"/>
-        <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
-          <span class="material-icons"  style="vertical-align: middle">search</span>
-        </button>
-      </div>
-      <DropDown titleMenuCat="Category" :optionsCat='categories' :tag-selected="tagSelected"/>
-    </form>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top my-navbar">
+    <div class="container-fluid nav-container">
+      <form class="d-flex input-group w-100" @submit.prevent>
+        <div class="search-group justify-content-center">
+          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off" @change="textChanged"/>
+          <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
+            <span class="material-icons"  style="vertical-align: middle">search</span>
+          </button>
+        </div>
+        <DropDown titleMenuCat="Category" :optionsCat='categories'/>
+      </form>
+    </div>
+  </nav>
 </template>
 
 <script>
@@ -22,7 +22,6 @@ export default {
   components: {
     DropDown
   },
-  props: ['tagSelected'],
   data() {
     return {
       searchText: "",
@@ -52,8 +51,9 @@ export default {
   .my-navbar {
     width: fit-content;
     max-width: 100%;
-    border-radius: 1.5rem;
-    margin: 1rem;
+    border-radius: 0.8rem;
+    margin-left: 2rem;
+    margin-top: 2rem;
     padding: 0.3rem 0.5rem;
   }
 
@@ -66,7 +66,7 @@ export default {
   .search-group {
     align-content: baseline;
     border: 0.09rem solid #967bdc;
-    border-radius: 1.2rem;
+    border-radius: 0.6rem;
     background-color: white;
     padding: 0.06rem;
   }

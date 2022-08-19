@@ -6,7 +6,6 @@
       <button class="delete-btn" data-toggle="tooltip" data-placement="top" title="Remove tag">
         <span class="material-icons"  style="vertical-align: middle; font-size: 0.95rem" @click="removeTag(tag)">clear</span>
       </button>
-
     </div>
   </div>
 </div>

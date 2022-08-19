@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SearchBar @textChanged="textChanged" @getData="askTableData" @askDataBySearch="askDataBySearch" :tag-selected="tagList"/>
+    <SearchBar @textChanged="textChanged" @getData="askTableData" @askDataBySearch="askDataBySearch" @filterByTag="askDataByFilter"/>
     <TagList v-if="tagList !== 0" :tagList='tagList'/>
     <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
     <Map :data-geo="savedData"/>
@@ -20,7 +20,7 @@ import TagList from "@/components/TagList";
 import AlertWarning from "@/components/generic/AlertWarning";
 import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getDataBySearch} from '@/../controllers/ControllerTableData'
+import {getData, getDataBySearch, getDataByFilter} from '@/../controllers/ControllerTableData'
 
 export default {
   name: 'App',
@@ -32,10 +32,8 @@ export default {
   },
   data() {
     return {
-      messageDemo: "Table elements:",
       savedData: [],
-      tagList: [],
-      categories: ["Buildings", "Park", "Statues"],
+      tagList: []
     }
   },
   mounted() {
@@ -57,6 +55,15 @@ export default {
       }, error => { console.log(error); })
     },
     textChanged: function() {
+    },
+    askDataByFilter: function(filterList) {
+      getDataByFilter(filterList).then(response => {
+        if(response === "empty table"){
+          this.$refs.alertWarning.setInvalidInput();
+        } else {
+          this.savedData = response;
+        }
+      }, error => { console.log(error); })
     }
   }
 }
@@ -68,9 +75,5 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: left;
-  }
-
-  .list-demo {
-    margin-top: 0.5rem;
   }
 </style>
