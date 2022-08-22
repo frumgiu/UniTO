@@ -47,7 +47,6 @@ function createTableDemo() {
 function getTable(lambdaFunction){
     const query = `SELECT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" FROM demo;`;
     client.query(query).then(res => {
-        //showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
@@ -72,9 +71,10 @@ function getTableWithSearch(lambdaFunction, filter){
  */
 function getTableWithTag(lambdaFunction, filter){
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
-                   FROM demo WHERE UPPER("category") LIKE UPPER('%${filter}%');`;
+                   FROM demo WHERE UPPER("category") LIKE UPPER('${filter}');`;
     console.log(query)
     client.query(query).then(res => {
+        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))

@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <SearchBar @textChanged="textChanged" @getData="askTableData" @askDataBySearch="askDataBySearch" @filterByTag="askDataByFilter"/>
-    <TagList v-if="tagList !== 0" :tagList='tagList'/>
+    <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch" @askDataByFilter="askDataByFilter"/>
     <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
     <Map :data-geo="savedData"/>
   </div>
@@ -16,24 +15,21 @@
 
 <script>
 import SearchBar from "@/components/SearchBar";
-import TagList from "@/components/TagList";
 import AlertWarning from "@/components/generic/AlertWarning";
 import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getDataBySearch, getDataByFilter} from '@/../controllers/ControllerTableData'
+import {getData, getDataBySearch, getDataByFilter} from '@/./controllers/ControllerTableData'
 
 export default {
   name: 'App',
   components: {
     Map,
     SearchBar,
-    TagList,
     AlertWarning,
   },
   data() {
     return {
       savedData: [],
-      tagList: []
     }
   },
   mounted() {
@@ -54,10 +50,8 @@ export default {
         }
       }, error => { console.log(error); })
     },
-    textChanged: function() {
-    },
-    askDataByFilter: function(filterList) {
-      getDataByFilter(filterList).then(response => {
+    askDataByFilter: function(tagsList) {
+      getDataByFilter(tagsList).then(response => {
         if(response === "empty table"){
           this.$refs.alertWarning.setInvalidInput();
         } else {

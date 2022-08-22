@@ -1,16 +1,16 @@
 <template>
-<span class="drop-sec">
-    <b-dropdown variant="none" class="drop-btn" no-caret>
-      <template #button-content id="drop-btn">
-        <span class="material-icons" style="vertical-align: middle">tune</span>
-      </template>
-      <div class="advanced-search">Advanced search</div>
-      <b-dropdown-divider/>
-      <div class="row list-container w-100">
-        <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat"/>
-      </div>
-    </b-dropdown>
-</span>
+  <span class="drop-sec">
+      <b-dropdown variant="none" class="drop-btn" no-caret>
+        <template #button-content id="drop-btn">
+          <span class="material-icons" style="vertical-align: middle">tune</span>
+        </template>
+        <div class="advanced-search">Advanced search</div>
+        <b-dropdown-divider/>
+        <div class="row list-container w-100">
+          <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat" @askDataByFilter="askDataByFilter"/>
+        </div>
+      </b-dropdown>
+  </span>
 </template>
 
 <!--
@@ -34,7 +34,12 @@ import DropDownColumn from "@/components/DropDownColumn";
 export default {
   name: "DropDown",
   components: {DropDownColumn},
-  props: ['titleMenuCat', 'optionsCat']
+  props: ['titleMenuCat', 'optionsCat'],
+  methods: {
+    askDataByFilter: function(options) {
+      this.$emit('askDataByFilter', options)
+    }
+  }
 }
 </script>
 

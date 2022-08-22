@@ -3,12 +3,12 @@
     <div class="container-fluid nav-container">
       <form class="d-flex input-group w-100" @submit.prevent>
         <div class="search-group justify-content-center">
-          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off" @change="textChanged"/>
+          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off"/>
           <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
-        <DropDown titleMenuCat="Category" :optionsCat='categories'/>
+        <DropDown titleMenuCat="Category" :optionsCat='categories' @askDataByFilter="askDataByFilter"/>
       </form>
     </div>
   </nav>
@@ -25,15 +25,15 @@ export default {
   data() {
     return {
       searchText: "",
-      categories: ["Buildings", "Park", "Statues"]
+      categories: ["Building", "Park", "Statue"]
     }
   },
   methods: {
     askDataBySearch: function() {
       this.$emit('askDataBySearch', this.searchText)
     },
-    textChanged: function() {
-      this.$emit('textChanged', this.searchText)
+    askDataByFilter: function(options) {
+      this.$emit('askDataByFilter', options)
     }
   },
   watch: {
