@@ -40,6 +40,8 @@ export default {
     searchText: function(newValue) {
       if (newValue === "") {
         this.$emit('getData')
+      } else {
+        this.$emit('askDataBySearch', this.searchText)
       }
     },
     deep: true

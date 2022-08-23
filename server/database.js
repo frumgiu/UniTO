@@ -24,7 +24,7 @@ client.connect(err => {
 
 /*
  Create a demo table with some rows
- */
+*/
 function createTableDemo() {
     const query = `DROP TABLE IF EXISTS demo;
         CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geography(POINT) null);
@@ -43,8 +43,8 @@ function createTableDemo() {
 
 /*
  Get all the query inside the table
- */
-function getTable(lambdaFunction){
+*/
+function getTable(lambdaFunction) {
     const query = `SELECT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" FROM demo;`;
     client.query(query).then(res => {
         lambdaFunction(res);
@@ -54,13 +54,13 @@ function getTable(lambdaFunction){
 
 /*
  Get the rows with filtered by name or category
- */
-function getTableWithSearch(lambdaFunction, filter){
+*/
+function getTableWithSearch(lambdaFunction, filter) {
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
-        //showResult(res);
+        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
@@ -68,10 +68,16 @@ function getTableWithSearch(lambdaFunction, filter){
 
 /*
  Get the rows filtered by category with tags list
- */
+*/
 function getTableWithTag(lambdaFunction, filter){
+    let test = ``;
+    filter.forEach(function (value) {
+        test += ` UPPER("category") LIKE UPPER('${value}') OR`;
+    })
+    test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last OR operator
+
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
-                   FROM demo WHERE UPPER("category") LIKE UPPER('${filter}');`;
+                   FROM demo WHERE` + test;
     console.log(query)
     client.query(query).then(res => {
         showResult(res);

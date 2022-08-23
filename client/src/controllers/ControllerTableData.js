@@ -20,10 +20,10 @@ export async function getDataBySearch(searchText) {
 
 export async function getDataByFilter(tag) {
     let response;
-    if (tag === "") {
+    if (tag.length === 0) {
         response = await axios.get( `/api/getTable`);
     } else {
-        let response = await axios.get(`/api/getTableByFilter/`, {params: {tagsList: tag}});
+        response = await axios.get(`/api/getTableByFilter/`, {params: {tagsList: tag}});
         if (response.data.length === 0) {
             return "empty table";
         }

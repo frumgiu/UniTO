@@ -4,7 +4,6 @@
     <b-form-checkbox-group v-for="(option, index) in options" :key="index">
       <b-form-checkbox @change="filterByTag" type="checkbox" :value="option" v-model="checkedOptions" class="text-item">{{option}}</b-form-checkbox>
     </b-form-checkbox-group>
-    <div>{{checkedOptions}}</div>
   </div>
 </template>
 
