@@ -2,9 +2,9 @@
   <span class="drop-sec">
       <b-dropdown variant="none" class="drop-btn" no-caret>
         <template #button-content id="drop-btn">
-          <span class="material-icons" style="vertical-align: middle">tune</span>
+          <span class="material-icons" style="vertical-align: middle">filter_list</span>
         </template>
-        <div class="advanced-search">Advanced search</div>
+        <div class="advanced-search">Filters</div>
         <b-dropdown-divider/>
         <div class="row list-container w-100">
           <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat" @askDataByFilter="askDataByFilter"/>
@@ -12,21 +12,6 @@
       </b-dropdown>
   </span>
 </template>
-
-<!--
-<span class="drop-sec">
-    <b-dropdown variant="none"  class="drop-btn" no-caret>
-      <template #button-content id="drop-btn">
-        <span class="material-icons" style="vertical-align: middle">dehaze</span>
-      </template>
-      <b-dropdown-text>{{titleMenu}}</b-dropdown-text>
-      <b-form-checkbox-group v-for="(option, index) in options" :key="index">
-        <b-form-checkbox>{{option}}</b-form-checkbox>
-      </b-form-checkbox-group>
-      <b-dropdown-divider></b-dropdown-divider>
-    </b-dropdown>
-  </span>
--->
 
 <script>
 import DropDownColumn from "@/components/DropDownColumn";
@@ -49,7 +34,7 @@ export default {
     max-width: 100%;
     margin: 0.1rem 0.5rem;
     align-items: center;
-    color: gray;
+    color: black;
   }
 
   .drop-sec {
@@ -73,9 +58,6 @@ export default {
   }
 
   .dropdown-menu {
-    min-width: 200% !important;
-    width: 320% !important;
-    max-width: 580% !important;
     border-radius: 0.6rem !important;
     border: none !important;
   }

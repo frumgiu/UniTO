@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       searchText: "",
-      categories: ["Building", "Park", "Statue"]
+      categories: ["Building", "Park", "Statue", "Other", "Castle"]
     }
   },
   methods: {
@@ -54,8 +54,8 @@ export default {
     width: fit-content;
     max-width: 100%;
     border-radius: 0.8rem;
-    margin-left: 2rem;
-    margin-top: 2rem;
+    margin-left: 1rem;
+    margin-top: 1.4rem;
     padding: 0.3rem 0.5rem;
   }
 

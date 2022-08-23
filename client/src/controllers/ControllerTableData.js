@@ -25,7 +25,7 @@ export async function getDataByFilter(tag) {
     } else {
         response = await axios.get(`/api/getTableByFilter/`, {params: {tagsList: tag}});
         if (response.data.length === 0) {
-            return "empty table";
+           return "empty table";
         }
     }
     return response.data;

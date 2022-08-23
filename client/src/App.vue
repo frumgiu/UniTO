@@ -43,16 +43,21 @@ export default {
     },
     askDataBySearch: function(searchText) {
       getDataBySearch(searchText).then(response => {
-       // if(response === "empty table"){
-         // this.$refs.alertWarning.setInvalidInput();
-       // } else {
+        if(response === "empty table"){
+          this.$refs.alertWarning.setInvalidInput();
+        } else {
           this.savedData = response;
-        //}
+        }
       }, error => { console.log(error); })
     },
     askDataByFilter: function(tagsList) {
       getDataByFilter(tagsList).then(response => {
+         if(response === "empty table"){
+         this.savedData = [];
+         //TODO: not working with empty data set
+         } else {
         this.savedData = response;
+        }
       }, error => { console.log(error); })
     }
   }
