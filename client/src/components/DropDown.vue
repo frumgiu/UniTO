@@ -1,14 +1,12 @@
 <template>
   <span class="drop-sec">
-      <b-dropdown variant="none" class="drop-btn" no-caret>
+      <b-dropdown variant="none" class="drop-btn" no-caret  :right="true">
         <template #button-content id="drop-btn">
           <span class="material-icons" style="vertical-align: middle">filter_list</span>
         </template>
         <div class="advanced-search">Filters</div>
         <b-dropdown-divider/>
-        <div class="row list-container w-100">
           <DropDownColumn :titleMenu="titleMenuCat" :options="optionsCat" @askDataByFilter="askDataByFilter"/>
-        </div>
       </b-dropdown>
   </span>
 </template>
@@ -32,20 +30,19 @@ export default {
   .advanced-search {
     width: 100%;
     max-width: 100%;
-    margin: 0.1rem 0.5rem;
-    align-items: center;
+    text-align: center;
     color: black;
   }
 
   .drop-sec {
-    width: available;
+    width: fit-content;
     background: none;
     border: none;
-    margin-left: 0.3rem;
+    margin-left: 0.2rem;
     padding: 0 !important;
   }
 
- .drop-btn > button {
+  .drop-btn > button {
     width: 100%;
     max-width: 100%;
     border: none;
@@ -58,8 +55,12 @@ export default {
   }
 
   .dropdown-menu {
+    width: 12rem !important;
+    min-width: available !important;
+    max-width: 15rem !important;
     border-radius: 0.6rem !important;
     border: none !important;
+    margin-top: 0.4rem !important;
   }
 
   .list-container {

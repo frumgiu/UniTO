@@ -8,7 +8,7 @@
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
-        <DropDown titleMenuCat="Category" :optionsCat='categories' @askDataByFilter="askDataByFilter"/>
+        <DropDown titleMenuCat="Categories" :optionsCat='categories' @askDataByFilter="askDataByFilter"/>
       </form>
     </div>
   </nav>

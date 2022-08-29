@@ -60,7 +60,6 @@ function getTableWithSearch(lambdaFunction, filter) {
                    FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
-        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
@@ -74,13 +73,12 @@ function getTableWithTag(lambdaFunction, filter){
     filter.forEach(function (value) {
         test += ` UPPER("category") LIKE UPPER('${value}') OR`;
     })
-    test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last OR operator
+    test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
 
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE` + test;
     console.log(query)
     client.query(query).then(res => {
-        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
