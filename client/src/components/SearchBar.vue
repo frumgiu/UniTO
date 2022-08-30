@@ -3,37 +3,27 @@
     <div class="container-fluid nav-container">
       <form class="d-flex input-group w-100" @submit.prevent>
         <div class="search-group justify-content-center">
-          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Search a picture" autocomplete="off"/>
+          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Insert name or category" autocomplete="off"/>
           <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
-        <DropDown titleMenuCat="Categories" :optionsCat='categories' @askDataByFilter="askDataByFilter"/>
       </form>
     </div>
   </nav>
 </template>
 
 <script>
-import DropDown from './DropDown';
-
 export default {
   name: "SearchBar",
-  components: {
-    DropDown
-  },
   data() {
     return {
-      searchText: "",
-      categories: ["Building", "Park", "Statue", "Other", "Castle"]
+      searchText: ""
     }
   },
   methods: {
-    askDataBySearch: function() {
+    askDataBySearch: function () {
       this.$emit('askDataBySearch', this.searchText)
-    },
-    askDataByFilter: function(options) {
-      this.$emit('askDataByFilter', options)
     }
   },
   watch: {
@@ -78,12 +68,11 @@ export default {
   }
 
   .search-text {
-    width: fit-content;
+    width: 85%;
     max-width: 100%;
     font-size: 0.95rem;
     padding: 0.3rem;
-    border: none;
-    border-radius: 1.2rem;
+    border: none; border-radius: 1.2rem;
     outline: none;
     transition: all 0.3s;
     align-items: center;

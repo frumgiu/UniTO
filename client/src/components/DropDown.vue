@@ -1,6 +1,6 @@
 <template>
   <span class="drop-sec">
-      <b-dropdown variant="none" class="drop-btn" no-caret  :right="true">
+      <b-dropdown variant="none" class="drop-btn" no-caret :right="true">
         <template #button-content id="drop-btn">
           <span class="material-icons" style="vertical-align: middle">filter_list</span>
         </template>
@@ -60,7 +60,7 @@ export default {
     max-width: 15rem !important;
     border-radius: 0.6rem !important;
     border: none !important;
-    margin-top: 0.4rem !important;
+    margin-top: 0.5rem !important;
   }
 
   .list-container {

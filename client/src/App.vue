@@ -1,21 +1,14 @@
 <template>
   <div id="app">
-    <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch" @askDataByFilter="askDataByFilter"/>
-    <alert-warning ref="alertWarning" :showDismissibleAlert="false"/>
+    <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch"/>
+    <FilterTable titleMenu="Categories" :options='categories' @askDataByFilter="askDataByFilter"/>
     <Map :data-geo="savedData"/>
   </div>
 </template>
 
-<!--
-    <div style="text-align: left; margin-top: 2rem; margin-left: 1rem">{{messageDemo}}</div>
-    <ul class="list-demo">
-      <li v-for="(data, index) in savedData" :key="index" style="text-align: left" >{{data.name}}, {{ data.coordinates}}</li>
-    </ul>
--->
-
 <script>
 import SearchBar from "@/components/SearchBar";
-import AlertWarning from "@/components/generic/AlertWarning";
+import FilterTable from "@/components/FilterTable";
 import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
 import {getData, getDataBySearch, getDataByFilter} from '@/./controllers/ControllerTableData'
@@ -25,11 +18,12 @@ export default {
   components: {
     Map,
     SearchBar,
-    AlertWarning,
+    FilterTable,
   },
   data() {
     return {
       savedData: [],
+      categories: ["Building", "Park", "Statue", "Other"]
     }
   },
   mounted() {
