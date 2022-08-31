@@ -47,6 +47,7 @@ export default {
     margin-left: 1rem;
     margin-top: 1.4rem;
     padding: 0.3rem 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0.122rem 0.122rem 0.163rem;
   }
 
   .nav-container {

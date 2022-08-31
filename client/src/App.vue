@@ -38,7 +38,7 @@ export default {
     askDataBySearch: function(searchText) {
       getDataBySearch(searchText).then(response => {
         if(response === "empty table"){
-          this.$refs.alertWarning.setInvalidInput();
+          this.savedData = [];
         } else {
           this.savedData = response;
         }

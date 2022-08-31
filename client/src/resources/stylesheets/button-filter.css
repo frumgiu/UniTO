@@ -1,0 +1,61 @@
+ul.ks-cboxtags {
+    width: 100%;
+    max-width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    position: relative;/* added */
+    justify-content: space-evenly;/* added */
+    display: flex; flex-flow: row wrap;
+}
+
+ul.ks-cboxtags li{
+    display: inline-block;
+    flex: 0 0 auto;
+    max-width: 100%;
+}
+
+ul.ks-cboxtags li label{
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .9);
+    border: 0.1rem solid #967bdc;
+    color: #967bdc;
+    border-radius: 0.6rem;
+    transition: all .2s;
+    padding: 0.25rem 0.3rem;
+    cursor: pointer;
+    box-shadow: #C0AFEA 0.122rem 0.122rem 0.163rem;
+}
+
+ul.ks-cboxtags li label::before {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Material Icons";
+    font-size: 0.9rem;
+    padding-right: 0.2rem;
+    content: "add";
+    transition: transform .3s ease-in-out;
+}
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
+    content: "remove";
+    transform: rotate(-360deg);
+    transition: transform .3s ease-in-out;
+}
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+    border: 0.1rem solid #967bdc;
+    background-color: #967bdc;
+    color: white;
+    transition: all .2s;
+    box-shadow: none;
+}
+
+ul.ks-cboxtags li input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+ul.ks-cboxtags li input[type="checkbox"]:focus + label {
+    border: 0.1rem solid #967bdc;
+}
