@@ -3,7 +3,7 @@
     <div class="container-fluid nav-container">
       <form class="d-flex input-group w-100" @submit.prevent>
         <div class="search-group justify-content-center">
-          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Insert name or category" autocomplete="off"/>
+          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Insert name" autocomplete="off"/>
           <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
@@ -69,7 +69,7 @@ export default {
   }
 
   .search-text {
-    width: 85%;
+    width: fit-content;
     max-width: 100%;
     font-size: 0.95rem;
     padding: 0.3rem;

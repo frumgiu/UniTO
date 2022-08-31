@@ -13,19 +13,13 @@
     </div>
     <div class="container-button-filter">
       <p class="title-list"> Years </p>
-      <p>From</p>
-      <b-form-select v-model="selectedMinYear" :options="minYearToChoice" class="mb-3">
-        <template #first>
-          <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
-        </template>
-      </b-form-select>
-      <p>To</p>
-      <b-form-select v-model="selectedMaxYear" :options="maxYearToChoice" class="mb-3">
-        <template #first>
-          <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
-        </template>
-      </b-form-select>
-      <div>{{this.minYear}} - {{this.maxYear}}</div>
+      <div class="row date-row">
+        <p class="date-label">From</p>
+        <b-form-select v-model="selectedMinYear" :options="minYearToChoice" class="date-picker" />
+        <p class="date-label">To</p>
+        <b-form-select v-model="selectedMaxYear" :options="maxYearToChoice" class="date-picker" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -75,11 +69,11 @@ export default {
 
 <style scoped>
   @import "../resources/stylesheets/button-filter.css";
-  @import "../resources/stylesheets/slider-filter.css";
+  @import "../resources/stylesheets/date-filter.css";
 
   .filter-table {
     width: 24%;
-    min-width: 15%; max-width: 25%;
+    min-width: 15%; max-width: 30%;
     position: absolute;
     bottom: 0; right: 0;
     margin-right: 1rem; margin-bottom: 1.4rem;

@@ -1,0 +1,25 @@
+.date-row {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-bottom: 0.8rem !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.date-label {
+    width: fit-content;
+    cursor: default;
+    font-size: 0.9rem;
+    margin: 0 !important;
+}
+
+.date-picker {
+    width: 30% !important;
+    min-width: 20% !important; max-width: 32% !important;
+    border-radius: 0.6rem !important;
+    border: 0.1rem solid #967bdc !important;
+    box-shadow: #C0AFEA 0.122rem 0.122rem 0.163rem;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+}

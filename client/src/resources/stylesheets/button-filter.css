@@ -18,13 +18,15 @@ ul.ks-cboxtags li{
 ul.ks-cboxtags li label{
     display: inline-block;
     background-color: rgba(255, 255, 255, .9);
+    border-radius: 0.6rem;
     border: 0.1rem solid #967bdc;
     color: #967bdc;
-    border-radius: 0.6rem;
+    box-shadow: #C0AFEA 0.122rem 0.122rem 0.163rem;
     transition: all .2s;
     padding: 0.25rem 0.3rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    box-shadow: #C0AFEA 0.122rem 0.122rem 0.163rem;
+
 }
 
 ul.ks-cboxtags li label::before {
