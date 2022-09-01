@@ -70,7 +70,7 @@ function getTableWithSearch(lambdaFunction, filter) {
 */
 function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
     let test = ``;
-    if (filter.length > 0) {
+    if (typeof filter !== 'undefined') {
         filter.forEach(function (value) {
             test += ` UPPER("region") LIKE UPPER('${value}') OR`;
         })
@@ -78,7 +78,7 @@ function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
         test += `AND `;
     }
 
-    test += `year >= '${minYear}' AND year <= '${maxYear}'`
+    test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     const query = `SELECT DISTINCT name, year, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE` + test;
     console.log(query)

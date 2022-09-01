@@ -19,11 +19,11 @@
       <div class="container-date-filter">
         <div class="sub-container-date-filter">
           <p class="date-label">From</p>
-          <b-form-select :options="minYearToChoice" v-model="selectedMinYear" :value="selectedMinYear" class="date-picker" @change.native="filterByMinYear"/>
+          <b-form-select :options="minYearToChoice" v-model="selectedMinYear" class="date-picker" @change="filterByTag"/>
         </div>
         <div class="sub-container-date-filter">
           <p class="date-label">To</p>
-          <b-form-select :options="maxYearToChoice" v-model="selectedMaxYear" :value="selectedMaxYear" class="date-picker" @change.native="filterByMaxYear"/>
+          <b-form-select :options="maxYearToChoice" v-model="selectedMaxYear" class="date-picker" @change="filterByTag"/>
         </div>
       </div>
     </b-collapse>
@@ -58,11 +58,10 @@
 <script>
 export default {
   name: "FilterTable",
-  props: ['titleMenu', 'options'],
+  props: ['titleMenu', 'options', 'defaultMin', 'defaultMax'],
   data() {
     return {
-      defaultMin: 2010, defaultMax: new Date().getFullYear(),
-      selectedMinYear: 2020, selectedMaxYear: 2020,
+      selectedMinYear: this.defaultMax, selectedMaxYear: this.defaultMax,
       minYearToChoice: [], maxYearToChoice: [],
       checkedOptions: [],
     }
@@ -77,22 +76,6 @@ export default {
     getNumbersMax: function () {
       this.maxYearToChoice = new Array(this.defaultMax - this.selectedMinYear + 1).fill(this.defaultMax).map((n, i) => n-i);
       this.maxYearToChoice.reverse();
-    },
-    filterByMinYear: function (evt) {
-      let val = evt.target.value;
-      if (val <= this.selectedMaxYear){
-        this.selectedMinYear = val;
-        this.getNumbersMax();
-        this.filterByTag();
-      }
-    },
-    filterByMaxYear: function (evt) {
-      let val = evt.target.value;
-      if (val >= this.selectedMinYear){
-        this.selectedMaxYear = val;
-        this.getNumbersMin();
-        this.filterByTag();
-      }
     }
   },
   mounted() {
@@ -102,11 +85,13 @@ export default {
   watch: {
     selectedMinYear: function (newValue) {
       if (newValue <= this.selectedMaxYear) {
+        this.selectedMinYear = newValue;
         this.getNumbersMax();
       }
     },
     selectedMaxYear: function (newValue) {
       if (newValue >= this.selectedMinYear) {
+        this.selectedMaxYear = newValue;
         this.getNumbersMin();
       }
     }

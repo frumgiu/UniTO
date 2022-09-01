@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch"/>
-    <FilterTable titleMenu="Regions" :options='categories' @askDataByFilter="askDataByFilter"/>
+    <FilterTable titleMenu="Regions" :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
     <Map :data-geo="savedData"/>
   </div>
 </template>
@@ -22,12 +22,14 @@ export default {
   },
   data() {
     return {
+      defaultMin: 2010,
+      defaultMax: new Date().getFullYear(),
       savedData: [],
       categories: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"]
     }
   },
   mounted() {
-    this.askTableData();
+    this.askDataByFilter([], this.defaultMax, this.defaultMax);
   },
   methods: {
     askTableData: function() {

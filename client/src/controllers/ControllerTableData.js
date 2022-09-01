@@ -20,13 +20,9 @@ export async function getDataBySearch(searchText) {
 
 export async function getDataByFilter(tag, minYear, maxYear) {
     let response;
-    if (tag.length === 0) {
-        response = await axios.get( `/api/getTable`);
-    } else {
-        response = await axios.get(`/api/getTableByFilter/`, {params: {tagsList: tag, min: minYear, max: maxYear}});
-        if (response.data.length === 0) {
-           return "empty table";
-        }
+    response = await axios.get(`/api/getTableByFilter/`, {params: {tagsList: tag, min: minYear, max: maxYear}});
+    if (response.data.length === 0) {
+       return "empty table";
     }
     return response.data;
 }
