@@ -1,25 +1,47 @@
-.date-row {
+.container-date-filter {
     width: 100%;
-    margin-left: 0 !important;
-    margin-bottom: 0.8rem !important;
-    display: flex !important;
+    max-width: 100%;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
+    flex-flow: row wrap;
+}
+
+.sub-container-date-filter {
+    margin-bottom: 0.4rem;
 }
 
 .date-label {
     width: fit-content;
+    display: inline-block;
     cursor: default;
     font-size: 0.9rem;
     margin: 0 !important;
 }
 
 .date-picker {
-    width: 30% !important;
-    min-width: 20% !important; max-width: 32% !important;
+    width: fit-content !important;
+    height: fit-content !important;
     border-radius: 0.6rem !important;
-    border: 0.1rem solid #967bdc !important;
-    box-shadow: #C0AFEA 0.122rem 0.122rem 0.163rem;
+    border: 0.1rem solid #3a5a40 !important;
+    box-shadow: #9dbbae 0.122rem 0.122rem 0.163rem;
     cursor: pointer !important;
     font-size: 0.9rem !important;
+    padding-top: 0.2rem!important; padding-bottom: 0.2rem!important;
+    margin-left: 0.5rem;margin-right: 0.5rem;
+}
+
+/* NOT USED */
+.date-row {
+    width: 100%;
+    display: flex !important;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0 !important;
 }

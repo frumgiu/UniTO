@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express(), bodyParser = require("body-parser");
 const db = require('./database');
+const {createTableDemo} = require("./database");
 port = 3080;
 const date = new Date();
 
@@ -22,7 +23,7 @@ app.get(`/api/getTableBySearch/`, (req, res) => {
 app.get(`/api/getTableByFilter/`, (req, res) => {
     console.log('api/getTableByFilter called! ' + date.toUTCString());
     console.log('Tag list: ' + req.query.tagsList + "\n")
-    db.getTableWithTag(result => {res.json(result.rows);}, req.query.tagsList);
+    db.getTableWithTag(result => {res.json(result.rows);}, req.query.tagsList, req.query.min, req.query.max);
 })
 
 app.get(`/`, (req,res) => {

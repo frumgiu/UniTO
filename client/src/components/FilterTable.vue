@@ -1,4 +1,36 @@
 <template>
+  <div class="container-test">
+    <button class="filter-btn" type="button" v-b-toggle="'collapse-2'">
+      <span class="material-icons filter-icon">filter_list</span>
+      <span class="filter-title">Filters</span>
+    </button>
+    <b-collapse id="collapse-2" visible>
+      <hr class="solid"/>
+      <p class="title-list"> {{titleMenu}} </p>
+      <div class="container-button-filter">
+        <ul class="ks-cboxtags">
+          <li v-for="(option, index) in options" :key="index" >
+            <input v-model="checkedOptions" type="checkbox" :id="index" :value="option" @change="filterByTag">
+            <label :for="index">{{ option }}</label>
+          </li>
+        </ul>
+      </div>
+      <p class="title-list"> Years </p>
+      <div class="container-date-filter">
+        <div class="sub-container-date-filter">
+          <p class="date-label">From</p>
+          <b-form-select :options="minYearToChoice" v-model="selectedMinYear" :value="selectedMinYear" class="date-picker" @change.native="filterByMinYear"/>
+        </div>
+        <div class="sub-container-date-filter">
+          <p class="date-label">To</p>
+          <b-form-select :options="maxYearToChoice" v-model="selectedMaxYear" :value="selectedMaxYear" class="date-picker" @change.native="filterByMaxYear"/>
+        </div>
+      </div>
+    </b-collapse>
+  </div>
+</template>
+
+<!--
   <div class="filter-table">
     <span class="filter-title">Filters</span>
     <hr class="solid">
@@ -19,10 +51,9 @@
         <p class="date-label">To</p>
         <b-form-select v-model="selectedMaxYear" :options="maxYearToChoice" class="date-picker" />
       </div>
-
     </div>
   </div>
-</template>
+-->
 
 <script>
 export default {
@@ -32,13 +63,13 @@ export default {
     return {
       defaultMin: 2010, defaultMax: new Date().getFullYear(),
       selectedMinYear: 2020, selectedMaxYear: 2020,
-      checkedOptions: [],
       minYearToChoice: [], maxYearToChoice: [],
+      checkedOptions: [],
     }
   },
   methods: {
     filterByTag: function () {
-      this.$emit('askDataByFilter', this.checkedOptions);
+      this.$emit('askDataByFilter', this.checkedOptions, this.selectedMinYear, this.selectedMaxYear);
     },
     getNumbersMin: function () {
       this.minYearToChoice = new Array(this.selectedMaxYear - this.defaultMin + 1).fill(this.defaultMin).map((n, i) => n+i);
@@ -46,6 +77,22 @@ export default {
     getNumbersMax: function () {
       this.maxYearToChoice = new Array(this.defaultMax - this.selectedMinYear + 1).fill(this.defaultMax).map((n, i) => n-i);
       this.maxYearToChoice.reverse();
+    },
+    filterByMinYear: function (evt) {
+      let val = evt.target.value;
+      if (val <= this.selectedMaxYear){
+        this.selectedMinYear = val;
+        this.getNumbersMax();
+        this.filterByTag();
+      }
+    },
+    filterByMaxYear: function (evt) {
+      let val = evt.target.value;
+      if (val >= this.selectedMinYear){
+        this.selectedMaxYear = val;
+        this.getNumbersMin();
+        this.filterByTag();
+      }
     }
   },
   mounted() {
@@ -70,49 +117,17 @@ export default {
 <style scoped>
   @import "../resources/stylesheets/button-filter.css";
   @import "../resources/stylesheets/date-filter.css";
-
-  .filter-table {
-    width: 24%;
-    min-width: 15%; max-width: 30%;
-    position: absolute;
-    bottom: 0; right: 0;
-    margin-right: 1rem; margin-bottom: 1.4rem;
-    z-index: 9;
-    background: rgba(255,255,255, 0.8);
-    border-radius: 0.8rem;
-    padding: 0.2rem 0.2rem;
-    text-align: center;
-    box-shadow: rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem;
-  }
-
-  .filter-title {
-    font-size: 1.2rem;
-    vertical-align: middle;
-    cursor: default;
-  }
-  .filter-title:before {
-    font-family: "Material Icons";
-    font-size: 1.2rem;
-    padding: 0;
-    content: "filter_list";
-    margin-right: 0.4rem;
-  }
+  @import "../resources/stylesheets/collapse-filter.css";
 
   hr.solid {
-    border-top: 0.09rem solid #967bdc;
+    border-top: 0.09rem solid #dabeca;
     margin: 0.5rem;
   }
 
   .title-list{
-    width: 100%;
+    width: fit-content;
     max-width: 100%;
     font-size: 0.95rem;
     cursor: default;
-  }
-
-  .container-button-filter {
-    width: 100%;
-    max-width: 100%;
-    font-size: 0.9rem;
   }
 </style>

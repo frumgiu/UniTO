@@ -27,14 +27,14 @@ client.connect(err => {
 */
 function createTableDemo() {
     const query = `DROP TABLE IF EXISTS demo;
-        CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), category VARCHAR(50), coordinates geography(POINT) null);
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco del Valentino', 'Park', 'POINT(7.686736 45.054847)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Piazza Castello', 'Square', 'POINT(7.685089 45.071217)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Parco di Stupinigi', 'Park', 'POINT(7.587417 44.980997)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Priamar', 'Other', 'POINT(8.48426 44.30459)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Torre del Brandale', 'Building', 'POINT(8.484106 44.3072)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Sirenetta', 'Statue', 'POINT(12.5928976284 55.6890472438)');
-        INSERT INTO demo (name, category, coordinates) VALUES ('Cremlino', 'Building', 'POINT(37.629005 55.699336)');`;
+        CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), year INT, region VARCHAR(50), coordinates geography(POINT) null);
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Parco del Valentino', 2020, 'Europe', 'POINT(7.686736 45.054847)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Piazza Castello', 2018, 'Europe', 'POINT(7.685089 45.071217)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Parco di Stupinigi', 2020, 'Europe', 'POINT(7.587417 44.980997)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Priamar', 2012, 'Europe', 'POINT(8.48426 44.30459)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Torre del Brandale', 2015, 'Europe', 'POINT(8.484106 44.3072)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Sirenetta', 2011, 'Europe', 'POINT(12.5928976284 55.6890472438)');
+        INSERT INTO demo (name, year, region, coordinates) VALUES ('Cremlino', 2015, 'Europe', 'POINT(37.629005 55.699336)');`;
 
     client.query(query).then(() => {
         console.log("Table created successfully!");
@@ -53,11 +53,11 @@ function getTable(lambdaFunction) {
 }
 
 /*
- Get the rows with filtered by name or category
+ Get the rows with filtered by name
 */
 function getTableWithSearch(lambdaFunction, filter) {
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
-                   FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%') OR UPPER("category") LIKE UPPER('%${filter}%');`;
+                   FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%');`;
     console.log(query)
     client.query(query).then(res => {
         lambdaFunction(res);
@@ -66,19 +66,24 @@ function getTableWithSearch(lambdaFunction, filter) {
 }
 
 /*
- Get the rows filtered by category with tags list
+ Get the rows filtered by country with tags list
 */
-function getTableWithTag(lambdaFunction, filter){
+function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
     let test = ``;
-    filter.forEach(function (value) {
-        test += ` UPPER("category") LIKE UPPER('${value}') OR`;
-    })
-    test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
+    if (filter.length > 0) {
+        filter.forEach(function (value) {
+            test += ` UPPER("region") LIKE UPPER('${value}') OR`;
+        })
+        test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
+        test += `AND `;
+    }
 
-    const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
+    test += `year >= '${minYear}' AND year <= '${maxYear}'`
+    const query = `SELECT DISTINCT name, year, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE` + test;
     console.log(query)
     client.query(query).then(res => {
+        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))

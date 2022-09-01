@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch"/>
-    <FilterTable titleMenu="Categories" :options='categories' @askDataByFilter="askDataByFilter"/>
+    <FilterTable titleMenu="Regions" :options='categories' @askDataByFilter="askDataByFilter"/>
     <Map :data-geo="savedData"/>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       savedData: [],
-      categories: ["Building", "Park", "Statue", "Other"]
+      categories: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"]
     }
   },
   mounted() {
@@ -44,8 +44,8 @@ export default {
         }
       }, error => { console.log(error); })
     },
-    askDataByFilter: function(tagsList) {
-      getDataByFilter(tagsList).then(response => {
+    askDataByFilter: function(tagsList, minYear, maxYear) {
+      getDataByFilter(tagsList, minYear, maxYear).then(response => {
          if(response === "empty table"){
          this.savedData = [];
          //TODO: not working with empty data set
