@@ -83,7 +83,6 @@ function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
                    FROM demo WHERE` + test;
     console.log(query)
     client.query(query).then(res => {
-        showResult(res);
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))

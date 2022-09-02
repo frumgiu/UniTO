@@ -1,12 +1,13 @@
 /* RESPONSIVE */
 .filter-sidebar-container {
-    height: 38%;
-    max-height: 45%;
-    width: 25%;
-    max-width: 30%;
+    height: fit-content;
+    max-height: 100%;
+    width: 30%;
+    max-width: 50%;
     position: fixed!important;
     top: 0; right: 0;
-    margin-top: 30rem; margin-right: 1.4rem;
+    margin-top: 3%;
+    margin-right: 1.4rem;
     z-index: 9;
     overflow: auto;
     background-color: transparent;
@@ -15,19 +16,29 @@
 }
 
 @media (min-width: 993px) {
-    .filter-sidebar-container.collapse-container {
+    .filter-sidebar-container {
         display: block !important;
     }
 }
 
 @media (max-width: 992px) {
-    .filter-sidebar-container.collapse-container {
-        display: none !important;
+    .filter-sidebar-container {
+        display: none;
+        width: 70%;
+        max-width: 70%;
+        height: fit-content;
+        max-height: 80%;
+        margin-top: 6rem;
+    }
+
+    .filter-icon {
+        color: #48a36a;
     }
 }
 
 .filter-sidebar-inner {
     height: 100%;
+    max-height: 100%;
     width: 100%;
     border-radius: 0.8rem;
     background: rgba(255,255,255, 0.6);

@@ -31,7 +31,7 @@ export default {
     openMenu: function() {
       const sideNav = document.getElementById("sidenav");
       if (sideNav.style.display === "none") {
-        sideNav.style.display = "block !important";
+        sideNav.style.display = "block";
       } else {
         sideNav.style.display = "none";
       }
@@ -111,6 +111,23 @@ export default {
   @media (min-width: 993px) {
     .hide-btn-lg {
       display: none!important;
+    }
+  }
+
+  @media (max-width: 300px) {
+    .my-navbar {
+      width: 100%;
+      margin: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+    .search-group {
+      width: 80%;
+    }
+
+    .search-text {
+      width: 70%;
+      font-size: 0.9rem;
     }
   }
 </style>
