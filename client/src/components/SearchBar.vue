@@ -8,6 +8,9 @@
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
+        <button class="search-btn hide-btn-lg" type="button" @click="openMenu">
+          <span class="material-icons"  style="vertical-align: middle">filter_list</span>
+        </button>
       </form>
     </div>
   </nav>
@@ -22,8 +25,16 @@ export default {
     }
   },
   methods: {
-    askDataBySearch: function () {
+    askDataBySearch: function() {
       this.$emit('askDataBySearch', this.searchText)
+    },
+    openMenu: function() {
+      const sideNav = document.getElementById("sidenav");
+      if (sideNav.style.display === "none") {
+        sideNav.style.display = "block !important";
+      } else {
+        sideNav.style.display = "none";
+      }
     }
   },
   watch: {
@@ -60,7 +71,7 @@ export default {
     align-content: baseline;
     border: 0.09rem solid #967bdc;
     border-radius: 0.6rem;
-    background-color: white;
+    background-color: #fff;
     padding: 0.06rem;
   }
 
@@ -95,5 +106,11 @@ export default {
 
   .search-btn:hover {
     color: #48a36a;
+  }
+
+  @media (min-width: 993px) {
+    .hide-btn-lg {
+      display: none!important;
+    }
   }
 </style>

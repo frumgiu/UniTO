@@ -1,11 +1,9 @@
 <template>
-  <div class="container-test">
-    <button class="filter-btn" type="button" v-b-toggle="'collapse-2'">
+  <div class="filter-sidebar-container collapse-container" id="sidenav">
+    <div class="filter-sidebar-inner">
       <span class="material-icons filter-icon">filter_list</span>
       <span class="filter-title">Filters</span>
-    </button>
-    <b-collapse id="collapse-2" visible>
-      <hr class="solid"/>
+      <hr class="solid">
       <p class="title-list"> {{titleMenu}} </p>
       <div class="container-button-filter">
         <ul class="ks-cboxtags">
@@ -26,7 +24,7 @@
           <b-form-select :options="maxYearToChoice" v-model="selectedMaxYear" class="date-picker" @change="filterByTag"/>
         </div>
       </div>
-    </b-collapse>
+    </div>
   </div>
 </template>
 
@@ -53,6 +51,34 @@
       </div>
     </div>
   </div>
+
+      <button class="filter-btn" type="button" v-b-toggle="'collapse-2'">
+      <span class="material-icons filter-icon">filter_list</span>
+      <span class="filter-title">Filters</span>
+    </button>
+    <b-collapse id="collapse-2" visible>
+      <hr class="solid"/>
+      <p class="title-list"> {{titleMenu}} </p>
+      <div class="container-button-filter">
+        <ul class="ks-cboxtags">
+          <li v-for="(option, index) in options" :key="index" >
+            <input v-model="checkedOptions" type="checkbox" :id="index" :value="option" @change="filterByTag">
+            <label :for="index">{{ option }}</label>
+          </li>
+        </ul>
+      </div>
+      <p class="title-list"> Years </p>
+      <div class="container-date-filter">
+        <div class="sub-container-date-filter">
+          <p class="date-label">From</p>
+          <b-form-select :options="minYearToChoice" v-model="selectedMinYear" class="date-picker" @change="filterByTag"/>
+        </div>
+        <div class="sub-container-date-filter">
+          <p class="date-label">To</p>
+          <b-form-select :options="maxYearToChoice" v-model="selectedMaxYear" class="date-picker" @change="filterByTag"/>
+        </div>
+      </div>
+    </b-collapse>
 -->
 
 <script>
