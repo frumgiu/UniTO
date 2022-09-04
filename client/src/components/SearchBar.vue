@@ -38,12 +38,8 @@ export default {
     }
   },
   watch: {
-    searchText: function(newValue) {
-      if (newValue === "") {
-        this.$emit('getData')
-      } else {
-        this.$emit('askDataBySearch', this.searchText)
-      }
+    searchText: function() {
+      this.$emit('askDataBySearch', this.searchText)
     },
     deep: true
   }
@@ -59,12 +55,14 @@ export default {
     margin-top: 1.4rem;
     padding: 0.3rem 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem;
+
   }
 
   .nav-container {
-    width: 100%;
+    width:fit-content;
     max-width: 100%;
     padding: 0;
+    margin: 0;
   }
 
   .search-group {
@@ -114,7 +112,7 @@ export default {
     }
   }
 
-  @media (max-width: 300px) {
+  @media (max-width: 539px) {
     .my-navbar {
       width: 100%;
       margin: 0;
@@ -122,11 +120,11 @@ export default {
       border-top-right-radius: 0;
     }
     .search-group {
-      width: 80%;
+      width: fit-content;
     }
 
     .search-text {
-      width: 70%;
+      width: fit-content;
       font-size: 0.9rem;
     }
   }

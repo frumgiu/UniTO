@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <SearchBar @getData="askTableData" @askDataBySearch="askDataBySearch"/>
-    <FilterTable titleMenu="Regions" :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
+    <SearchBar @askDataBySearch="askDataBySearch"/>
+    <FilterTable :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
     <Map :data-geo="savedData"/>
   </div>
 </template>
@@ -11,7 +11,7 @@ import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getDataBySearch, getDataByFilter} from '@/./controllers/ControllerTableData'
+import {getData} from '@/./controllers/ControllerTableData'
 
 export default {
   name: 'App',
@@ -22,39 +22,38 @@ export default {
   },
   data() {
     return {
-      defaultMin: 2010,
-      defaultMax: new Date().getFullYear(),
+      defaultMin: 2010, defaultMax: new Date().getFullYear(),
+      lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
+      lastSearchText: "",
+      lastCheckedTag: [],
       savedData: [],
       categories: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"]
     }
   },
   mounted() {
-    this.askDataByFilter([], this.defaultMax, this.defaultMax);
+    this.askDataByFilter([], this.lastSelectedMin, this.lastSelectedMax);
   },
   methods: {
-    askTableData: function() {
-      getData().then(response => {
-            this.savedData = response;
-          }, error => { console.log(error); })
-    },
-    askDataBySearch: function(searchText) {
-      getDataBySearch(searchText).then(response => {
-        if(response === "empty table"){
+    contactDB: function () {
+      getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax).then(response => {
+        if (response === "empty table") {
           this.savedData = [];
         } else {
           this.savedData = response;
         }
-      }, error => { console.log(error); })
+      }, error => {
+        console.log(error);
+      })
     },
-    askDataByFilter: function(tagsList, minYear, maxYear) {
-      getDataByFilter(tagsList, minYear, maxYear).then(response => {
-         if(response === "empty table"){
-         this.savedData = [];
-         //TODO: not working with empty data set
-         } else {
-        this.savedData = response;
-        }
-      }, error => { console.log(error); })
+    askDataBySearch: function(searchText) {
+      this.lastSearchText = searchText;
+      this.contactDB();
+    },
+   askDataByFilter: function(tagsList, minYear, maxYear) {
+      this.lastCheckedTag = tagsList;
+      this.lastSelectedMin = minYear;
+      this.lastSelectedMax = maxYear;
+      this.contactDB();
     }
   }
 }

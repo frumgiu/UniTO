@@ -1,10 +1,10 @@
 <template>
-  <div class="filter-sidebar-container collapse-container" id="sidenav">
+  <div class="filter-sidebar-container" id="sidenav">
     <div class="filter-sidebar-inner">
       <span class="material-icons filter-icon">filter_list</span>
       <span class="filter-title">Filters</span>
       <hr class="solid">
-      <p class="title-list"> {{titleMenu}} </p>
+      <p class="title-list"> Regions </p>
       <div class="container-button-filter">
         <ul class="ks-cboxtags">
           <li v-for="(option, index) in options" :key="index" >
@@ -31,7 +31,7 @@
 <script>
 export default {
   name: "FilterTable",
-  props: ['titleMenu', 'options', 'defaultMin', 'defaultMax'],
+  props: ['options', 'defaultMin', 'defaultMax'],
   data() {
     return {
       selectedMinYear: this.defaultMax, selectedMaxYear: this.defaultMax,

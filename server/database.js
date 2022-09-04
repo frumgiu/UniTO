@@ -10,9 +10,8 @@ const client = new pg.Client(config);
 
 module.exports = {
     createTableDemo,
-    getTable,
     getTableWithSearch,
-    getTableWithTag
+    getTableWithFilters
 }
 
 client.connect(err => {
@@ -42,22 +41,12 @@ function createTableDemo() {
 }
 
 /*
- Get all the query inside the table
-*/
-function getTable(lambdaFunction) {
-    const query = `SELECT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" FROM demo;`;
-    client.query(query).then(res => {
-        lambdaFunction(res);
-        console.log("Close connection\n")
-    }).catch(err => console.log(err))
-}
-
-/*
  Get the rows with filtered by name
 */
-function getTableWithSearch(lambdaFunction, filter) {
+function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
+    let test = createTagsQuery(tags, minYear, maxYear);
     const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
-                   FROM demo WHERE UPPER("name") LIKE UPPER('%${filter}%');`;
+                   FROM demo WHERE UPPER("name") LIKE UPPER('%${search}%') AND` + test;
     console.log(query)
     client.query(query).then(res => {
         lambdaFunction(res);
@@ -66,19 +55,10 @@ function getTableWithSearch(lambdaFunction, filter) {
 }
 
 /*
- Get the rows filtered by country with tags list
+ Get the rows filtered by country, from the tags list, and years
 */
-function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
-    let test = ``;
-    if (typeof filter !== 'undefined') {
-        filter.forEach(function (value) {
-            test += ` UPPER("region") LIKE UPPER('${value}') OR`;
-        })
-        test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
-        test += `AND `;
-    }
-
-    test += ` year >= '${minYear}' AND year <= '${maxYear}'`
+function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
+    let test = createTagsQuery(tags, minYear, maxYear);
     const query = `SELECT DISTINCT name, year, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE` + test;
     console.log(query)
@@ -86,6 +66,22 @@ function getTableWithTag(lambdaFunction, filter, minYear, maxYear){
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
+}
+
+/*
+ Create a part of the query, checking if there are any tags
+*/
+function createTagsQuery(tags, minYear, maxYear) {
+    let test = ``;
+    if (typeof tags !== 'undefined') {
+        tags.forEach(function (value) {
+            test += ` UPPER("region") LIKE UPPER('${value}') OR`;
+        })
+        test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
+        test += `AND `;
+    }
+    test += ` year >= '${minYear}' AND year <= '${maxYear}'`
+    return test;
 }
 
 /*

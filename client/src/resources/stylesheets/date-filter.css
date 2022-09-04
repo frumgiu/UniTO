@@ -35,13 +35,3 @@
     padding-top: 0.2rem!important; padding-bottom: 0.2rem!important;
     margin-left: 0.5rem;margin-right: 0.5rem;
 }
-
-/* NOT USED */
-.date-row {
-    width: 100%;
-    display: flex !important;
-    flex-flow: row wrap;
-    align-items: center;
-    justify-content: space-evenly;
-    margin: 0 !important;
-}
