@@ -51,11 +51,13 @@ export default {
       });
     },
     handleClick: function() {},
-    showIcon: function() {
+    showIcon: function(info) {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "flex";
-     /* cardPictureId.style.top = info.y;
-      cardPictureId.style.left = info.x; */
+      cardPictureId.style.position = "absolute";
+      cardPictureId.style.top = info.y + "px";
+      cardPictureId.style.left = info.x + "50px";
+      console.log(info.y + " and " + info.x);
     }
 },
   mounted() {
@@ -86,7 +88,7 @@ export default {
           sizeScale: 10,
           getColor: [72, 163, 106],
           pickable: true,
-          onClick: () => this.showIcon()
+          onClick: (info) => this.showIcon(info)
         })];
       } else {
         return [
