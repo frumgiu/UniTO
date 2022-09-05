@@ -110,7 +110,7 @@ export default {
     color: #48a36a;
   }
 
-  @media (min-width: 993px) {
+  @media (min-width: 1025px) {
     .hide-btn-lg {
       display: none!important;
     }

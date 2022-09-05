@@ -38,7 +38,7 @@ export default {
     this.map = null;
   },
   methods: {
-    updateViewState(viewState) {
+    updateViewState: function(viewState) {
       console.log("updating view state...");
       this.viewState = {
         ...viewState
@@ -50,7 +50,12 @@ export default {
         pitch: viewState.pitch,
       });
     },
-    handleClick() {
+    handleClick: function() {},
+    showIcon: function() {
+      const cardPictureId = document.getElementById("cardpicture");
+      cardPictureId.style.display = "flex";
+     /* cardPictureId.style.top = info.y;
+      cardPictureId.style.left = info.x; */
     }
 },
   mounted() {
@@ -68,7 +73,7 @@ export default {
   },
   computed: {
     layers() {
-      if (this.viewState.zoom <= 20 && this.viewState.zoom >= 10) {
+      if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
         return [
           new IconLayer({
           id: 'icon-layer',
@@ -79,7 +84,9 @@ export default {
           getPosition: (d) => [d.log, d.lat],
           getSize: () => 4,
           sizeScale: 10,
-          getColor: [72, 163, 106]
+          getColor: [72, 163, 106],
+          pickable: true,
+          onClick: () => this.showIcon()
         })];
       } else {
         return [

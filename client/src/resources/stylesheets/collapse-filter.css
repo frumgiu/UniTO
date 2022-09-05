@@ -1,4 +1,3 @@
-/* RESPONSIVE */
 .filter-sidebar-container {
     height: fit-content;
     max-height: 100%;
@@ -15,15 +14,16 @@
     box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
 }
 
-@media (min-width: 993px) {
+@media (min-width: 1025px) {
     .filter-sidebar-container {
         display: block !important;
     }
 }
 
-@media (min-width: 768px) and (max-width: 992px){
+@media (min-width: 768px) and (max-width: 1024px){
     .filter-sidebar-container {
-        width: 50%;
+        display: none;
+        width: 45%;
     }
 }
 

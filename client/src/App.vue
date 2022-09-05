@@ -2,12 +2,12 @@
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch"/>
     <FilterTable :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
-    <div class="card card-style" id="cardpicture">
+    <div class="card card-style" id="cardpicture" style="display: none">
       <img class="card-img-top" src="https://picsum.photos/600/300/?image=25" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Picture title</h5>
         <hr class="solid">
-        <p class="card-text">Country name, Region name<br/> Year number</p>
+        <p class="card-text">Country, Region <br/> Year </p>
         <div>
           <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
             <button class="card-btn">
@@ -73,10 +73,6 @@ export default {
       this.lastSelectedMin = minYear;
       this.lastSelectedMax = maxYear;
       this.contactDB();
-    },
-    openCard: function() {
-      const cardPictureId = document.getElementById("cardpicture");
-      cardPictureId.style.display = "flex";
     },
     closeCard: function() {
       const cardPictureId = document.getElementById("cardpicture");
