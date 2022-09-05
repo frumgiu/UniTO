@@ -56,7 +56,7 @@ export default {
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
       cardPictureId.style.top = info.y + "px";
-      cardPictureId.style.left = info.x + "50px";
+      cardPictureId.style.left = info.x + "px";
       console.log(info.y + " and " + info.x);
     }
 },

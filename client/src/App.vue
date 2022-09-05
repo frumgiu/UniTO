@@ -8,7 +8,7 @@
         <h5 class="card-title">Picture title</h5>
         <hr class="solid">
         <p class="card-text">Country, Region <br/> Year </p>
-        <div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
             <button class="card-btn">
               <span class="material-icons" style="vertical-align: middle">link</span>
@@ -66,12 +66,14 @@ export default {
     },
     askDataBySearch: function(searchText) {
       this.lastSearchText = searchText;
+      this.closeCard();
       this.contactDB();
     },
    askDataByFilter: function(tagsList, minYear, maxYear) {
       this.lastCheckedTag = tagsList;
       this.lastSelectedMin = minYear;
       this.lastSelectedMax = maxYear;
+      this.closeCard(); //chiude la foto selezionata se cambio i parametri di ricerca
       this.contactDB();
     },
     closeCard: function() {
