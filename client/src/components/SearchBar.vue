@@ -51,5 +51,85 @@ export default {
 </script>
 
 <style scoped>
-@import "../resources/stylesheets/responsive-navbar.css";
+.my-navbar {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 0.8rem;
+  margin-left: 1rem;
+  margin-top: 1.4rem;
+  padding: 0.3rem 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem;
+}
+
+.nav-container {
+  width:fit-content;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.search-group {
+  align-content: baseline;
+  border: 0.09rem solid #967bdc;
+  border-radius: 0.6rem;
+  background-color: #fff;
+  padding: 0.06rem;
+}
+
+.search-group:focus-within{
+  border: 0.1rem solid #967bdc;
+}
+
+.search-text {
+  width: fit-content;
+  max-width: 100%;
+  font-size: 0.95rem;
+  padding: 0.3rem;
+  border: none; border-radius: 1.2rem;
+  outline: none;
+  transition: all 0.3s;
+  align-items: center;
+}
+
+.search-text::placeholder {
+  font-size: 0.95rem;
+  color: gray;
+}
+
+.search-btn {
+  width: fit-content;
+  max-width: 100%;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: black;
+}
+
+.search-btn:hover {
+  color: #48a36a;
+}
+
+@media (min-width: 1025px) {
+  .hide-btn-lg {
+    display: none!important;
+  }
+}
+
+@media (max-width: 539px) {
+  .my-navbar {
+    width: 100%;
+    margin: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .search-group {
+    width: fit-content;
+  }
+
+  .search-text {
+    width: fit-content;
+    font-size: 0.9rem;
+  }
+}
 </style>

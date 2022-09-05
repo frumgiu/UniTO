@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style>
-  @import "resources/stylesheets/card-picture-style.css";
+  @import url("resources/stylesheets/card-picture-style.css");
 
   #app {
     font-family: Noto Sans, sans-serif;

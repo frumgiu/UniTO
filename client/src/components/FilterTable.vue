@@ -73,9 +73,9 @@ export default {
 </script>
 
 <style scoped>
-  @import "../resources/stylesheets/button-filter.css";
-  @import "../resources/stylesheets/date-filter.css";
-  @import "../resources/stylesheets/collapse-filter.css";
+  @import url("../resources/stylesheets/button-filter.css");
+  @import url("../resources/stylesheets/date-filter.css");
+  @import url("../resources/stylesheets/collapse-filter.css");
 
   hr.solid {
     border-top: 0.09rem solid #967bdc;
