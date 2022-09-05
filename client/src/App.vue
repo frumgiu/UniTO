@@ -73,7 +73,7 @@ export default {
       this.lastCheckedTag = tagsList;
       this.lastSelectedMin = minYear;
       this.lastSelectedMax = maxYear;
-      this.closeCard(); //chiude la foto selezionata se cambio i parametri di ricerca
+      this.closeCard();
       this.contactDB();
     },
     closeCard: function() {

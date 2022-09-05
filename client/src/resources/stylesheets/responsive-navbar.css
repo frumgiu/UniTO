@@ -1,3 +1,4 @@
+/* BASE */
 .my-navbar {
     width: fit-content;
     max-width: 100%;
@@ -56,6 +57,7 @@
     color: #48a36a;
 }
 
+/* RESPONSIVE */
 @media (min-width: 1025px) {
     .hide-btn-lg {
         display: none!important;
@@ -69,11 +71,9 @@
         border-top-left-radius: 0;
         border-top-right-radius: 0;
     }
-
     .search-group {
         width: fit-content;
     }
-
     .search-text {
         width: fit-content;
         font-size: 0.9rem;
