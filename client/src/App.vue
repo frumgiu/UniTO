@@ -2,6 +2,25 @@
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch"/>
     <FilterTable :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
+    <div class="card card-style" id="cardpicture">
+      <img class="card-img-top" src="https://picsum.photos/600/300/?image=25" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Picture title</h5>
+        <hr class="solid">
+        <p class="card-text">Country name, Region name<br/> Year number</p>
+        <div>
+          <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
+            <button class="card-btn">
+              <span class="material-icons" style="vertical-align: middle">link</span>
+              <span class="card-link-text">View on wikipedia</span>
+            </button>
+          </a>
+          <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
+            <span class="material-icons"  style="vertical-align: middle">close</span>
+          </button>
+        </div>
+      </div>
+    </div>
     <Map :data-geo="savedData"/>
   </div>
 </template>
@@ -54,12 +73,22 @@ export default {
       this.lastSelectedMin = minYear;
       this.lastSelectedMax = maxYear;
       this.contactDB();
+    },
+    openCard: function() {
+      const cardPictureId = document.getElementById("cardpicture");
+      cardPictureId.style.display = "flex";
+    },
+    closeCard: function() {
+      const cardPictureId = document.getElementById("cardpicture");
+      cardPictureId.style.display = "none";
     }
   }
 }
 </script>
 
 <style>
+  @import "resources/stylesheets/card-picture-style.css";
+
   #app {
     font-family: Noto Sans, sans-serif;
     -webkit-font-smoothing: antialiased;

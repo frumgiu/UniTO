@@ -2,7 +2,7 @@
 .filter-sidebar-container {
     height: fit-content;
     max-height: 100%;
-    width: 30%;
+    width: 20%;
     max-width: 50%;
     position: fixed!important;
     top: 0; right: 0;
@@ -21,7 +21,13 @@
     }
 }
 
-@media (max-width: 992px) {
+@media (min-width: 768px) and (max-width: 992px){
+    .filter-sidebar-container {
+        width: 50%;
+    }
+}
+
+@media (max-width: 767px) {
     .filter-sidebar-container {
         display: none;
         width: 70%;

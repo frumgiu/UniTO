@@ -30,7 +30,11 @@ export default {
     },
     openMenu: function() {
       const sideNav = document.getElementById("sidenav");
+      const cardPictureId = document.getElementById("cardpicture");
       if (sideNav.style.display === "none") {
+        if (window.innerWidth < 993 && cardPictureId.style.display === "flex") {
+          cardPictureId.style.display = "none";
+        }
         sideNav.style.display = "block";
       } else {
         sideNav.style.display = "none";
