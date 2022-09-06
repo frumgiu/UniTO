@@ -89,7 +89,7 @@ export default {
           getPosition: (d) => [d.log, d.lat],
           getSize: () => 4,
           sizeScale: 10,
-          getColor: [72, 163, 106],
+          getColor: [150, 123, 220],
           pickable: true,
           onClick: (info) => this.showIcon(info)
         })];
@@ -101,12 +101,12 @@ export default {
             cellSizePixels: 14,
             opacity: 1,
             colorRange: [
-              [255, 255, 178, 25],
-              [254, 217, 118, 85],
-              [254, 178, 76, 127],
-              [253, 141, 60, 170],
-              [240, 59, 32, 212],
-              [189, 0, 38, 255]
+              [255, 255, 178, 100],
+              [254, 217, 118, 140],
+              [254, 178, 76, 180],
+              [253, 141, 60, 200],
+              [240, 59, 32, 220],
+              [189, 0, 38, 240]
             ],
             gpuAggregation: true,
             aggregation: 'SUM',

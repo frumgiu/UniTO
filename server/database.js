@@ -48,7 +48,7 @@ function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
    /* const query = `SELECT DISTINCT name, year, region, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat"
                    FROM demo WHERE UPPER("name") LIKE UPPER('%${search}%') AND` + test; */
     const query = `SELECT DISTINCT filename, year, country_formal, region, x "log", y "lat" 
-                   FROM wlm_data WHERE UPPER("filename") LIKE UPPER('%${search}%') AND` + test;
+                   FROM wlm_data WHERE UPPER("filename") LIKE UPPER('%${search}%') AND ` + test;
     console.log(query)
     client.query(query).then(res => {
         lambdaFunction(res);
