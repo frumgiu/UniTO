@@ -2,25 +2,7 @@
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch"/>
     <FilterTable :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
-    <div class="card card-style" id="cardpicture" style="display: none">
-      <img class="card-img-top" src="https://picsum.photos/600/300/?image=25" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">{{ currentNamePicture }}</h5>
-        <hr class="solid">
-        <p class="card-text">{{ currentCountryPicture }}, {{ currentRegionPicture }} <br/> {{ currentYearPicture }} </p>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
-            <button class="card-btn">
-              <span class="material-icons" style="vertical-align: middle">link</span>
-              <span class="card-link-text">View on wikipedia</span>
-            </button>
-          </a>
-          <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
-            <span class="material-icons"  style="vertical-align: middle">close</span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <CardPicture :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
   </div>
 </template>
@@ -31,20 +13,22 @@ import FilterTable from "@/components/FilterTable";
 import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
 import {getData} from '@/./controllers/ControllerTableData'
+import CardPicture from "@/components/CardPicture";
 
 export default {
   name: 'App',
   components: {
-    Map,
+    CardPicture,
     SearchBar,
     FilterTable,
+    Map
   },
   data() {
     return {
-      currentNamePicture: "",
-      currentYearPicture: 0,
-      currentRegionPicture: "",
-      currentCountryPicture: "",
+      namePicture: "",
+      yearPicture: 0,
+      regionPicture: "",
+      countryPicture: "",
 
       defaultMin: 2010, defaultMax: new Date().getFullYear(),
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
@@ -91,18 +75,16 @@ export default {
       cardPictureId.style.position = "absolute";
       cardPictureId.style.top = coordTop + "px";
       cardPictureId.style.left = coordLeft + "px";
-      this.currentNamePicture = namePicture;
-      this.currentCountryPicture = countryPicture;
-      this.currentRegionPicture = regionPicture;
-      this.currentYearPicture = yearPicture;
+      this.namePicture = namePicture;
+      this.countryPicture = countryPicture;
+      this.regionPicture = regionPicture;
+      this.yearPicture = yearPicture;
     }
   }
 }
 </script>
 
 <style>
-  @import url("resources/stylesheets/card-picture-style.css");
-
   #app {
     font-family: Noto Sans, sans-serif;
     -webkit-font-smoothing: antialiased;
