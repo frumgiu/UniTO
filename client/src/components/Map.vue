@@ -2,7 +2,7 @@
   <VueDeckgl
       :layers="layers"
       :viewState="viewState"
-      @click="handleClick"
+      @click="closeNavMenuSmallDevice"
       @view-state-change="updateViewState"
       class="deck-class">
     <div id="map" ref="map"/>
@@ -49,14 +49,17 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
+      this.closeNavMenuSmallDevice();
     },
-    handleClick: function() {},
-    showIcon: function(info) {
-      const cardPictureId = document.getElementById("cardpicture");
+    closeNavMenuSmallDevice: function() {
       const sideNav = document.getElementById("sidenav");
       if (sideNav.style.display === "block" && window.innerWidth <= 768) {
         sideNav.style.display = "none";
       }
+    },
+    showIcon: function(info) {
+      const cardPictureId = document.getElementById("cardpicture");
+      this.closeNavMenuSmallDevice();
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
       cardPictureId.style.top = info.y + "px";
