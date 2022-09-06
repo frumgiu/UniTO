@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch"/>
-    <FilterTable :options="categories" :defaultMin="defaultMin" :defaultMax="defaultMax" @askDataByFilter="askDataByFilter"/>
-    <CardPicture :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
+    <FilterTable :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
+    <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
   </div>
 </template>
@@ -25,21 +25,20 @@ export default {
   },
   data() {
     return {
-      namePicture: "",
-      yearPicture: 0,
-      regionPicture: "",
-      countryPicture: "",
-
-      defaultMin: 2010, defaultMax: new Date().getFullYear(),
+      /* card info to display */
+      namePicture: "", yearPicture: 0,
+      regionPicture: "", countryPicture: "",
+      /* latest filter info */
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
-      lastSearchText: "",
-      lastCheckedTag: [],
-      savedData: [],
-      categories: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"]
+      lastSearchText: "", lastCheckedTag: [],
+      /* filter values */
+      regions: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"],
+      /* saved data to display */
+      savedData: []
     }
   },
   mounted() {
-    this.askDataByFilter([], this.lastSelectedMin, this.lastSelectedMax);
+    this.askDataByFilter([], this.lastSelectedMin, this.lastSelectedMax); // start with only data from current year
   },
   methods: {
     contactDB: function () {
@@ -66,19 +65,10 @@ export default {
       this.contactDB();
     },
     closeCard: function() {
-      const cardPictureId = document.getElementById("cardpicture");
-      cardPictureId.style.display = "none";
+      this.$refs.cardRef.closeCard();
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
-      const cardPictureId = document.getElementById("cardpicture");
-      cardPictureId.style.display = "flex";
-      cardPictureId.style.position = "absolute";
-      cardPictureId.style.top = coordTop + "px";
-      cardPictureId.style.left = coordLeft + "px";
-      this.namePicture = namePicture;
-      this.countryPicture = countryPicture;
-      this.regionPicture = regionPicture;
-      this.yearPicture = yearPicture;
+      this.$refs.cardRef.openCard(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture);
     }
   }
 }
