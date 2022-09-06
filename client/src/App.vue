@@ -32,7 +32,7 @@ export default {
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
       lastSearchText: "", lastCheckedTag: [],
       /* filter values */
-      regions: ["Europe", "Asia", "Caribbean", "Africa", "Central America", "North America", "Oceania", "South America"],
+      regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
       /* saved data to display */
       savedData: []
     }
