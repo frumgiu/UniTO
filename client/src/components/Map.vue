@@ -49,6 +49,7 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
+      this.$emit('askCloseCard');
       this.closeNavMenuSmallDevice();
     },
     closeNavMenuSmallDevice: function() {
@@ -58,12 +59,8 @@ export default {
       }
     },
     showIcon: function(info) {
-      const cardPictureId = document.getElementById("cardpicture");
       this.closeNavMenuSmallDevice();
-      cardPictureId.style.display = "flex";
-      cardPictureId.style.position = "absolute";
-      cardPictureId.style.top = info.y + "px";
-      cardPictureId.style.left = info.x + "px";
+      this.$emit('askOpenCard', info.x, info.y, info.object.name, "unknown", info.object.region, info.object.year);
       console.log(info.y + " and " + info.x);
     }
 },

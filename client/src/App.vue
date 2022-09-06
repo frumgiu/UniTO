@@ -5,9 +5,9 @@
     <div class="card card-style" id="cardpicture" style="display: none">
       <img class="card-img-top" src="https://picsum.photos/600/300/?image=25" alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title">Picture title</h5>
+        <h5 class="card-title">{{ currentNamePicture }}</h5>
         <hr class="solid">
-        <p class="card-text">Country, Region <br/> Year </p>
+        <p class="card-text">{{ currentCountryPicture }}, {{ currentRegionPicture }} <br/> {{ currentYearPicture }} </p>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
             <button class="card-btn">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <Map :data-geo="savedData"/>
+    <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
   </div>
 </template>
 
@@ -41,6 +41,11 @@ export default {
   },
   data() {
     return {
+      currentNamePicture: "",
+      currentYearPicture: 0,
+      currentRegionPicture: "",
+      currentCountryPicture: "",
+
       defaultMin: 2010, defaultMax: new Date().getFullYear(),
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
       lastSearchText: "",
@@ -79,6 +84,17 @@ export default {
     closeCard: function() {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "none";
+    },
+    openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
+      const cardPictureId = document.getElementById("cardpicture");
+      cardPictureId.style.display = "flex";
+      cardPictureId.style.position = "absolute";
+      cardPictureId.style.top = coordTop + "px";
+      cardPictureId.style.left = coordLeft + "px";
+      this.currentNamePicture = namePicture;
+      this.currentCountryPicture = countryPicture;
+      this.currentRegionPicture = regionPicture;
+      this.currentYearPicture = yearPicture;
     }
   }
 }

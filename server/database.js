@@ -45,7 +45,7 @@ function createTableDemo() {
 */
 function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
     let test = createTagsQuery(tags, minYear, maxYear);
-    const query = `SELECT DISTINCT name, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
+    const query = `SELECT DISTINCT name, year, region, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE UPPER("name") LIKE UPPER('%${search}%') AND` + test;
     console.log(query)
     client.query(query).then(res => {
@@ -59,7 +59,7 @@ function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
 */
 function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
     let test = createTagsQuery(tags, minYear, maxYear);
-    const query = `SELECT DISTINCT name, year, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
+    const query = `SELECT DISTINCT name, year, region, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat" 
                    FROM demo WHERE` + test;
     console.log(query)
     client.query(query).then(res => {

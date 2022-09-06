@@ -23,16 +23,16 @@ hr.solid {
 }
 
 .card-title {
-    font-size: 1.35rem;
+    font-size: 1.1rem;
     margin-bottom: 0 !important;
 }
 
 .card-text {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
 }
 
 .card-link-text {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     margin-left: 0.3rem;
 }
 
@@ -52,7 +52,7 @@ hr.solid {
 .close-btn {
     width: fit-content;
     max-width: 100%;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
     background: none;
     border: none;
@@ -110,6 +110,7 @@ hr.solid {
     }
     .card-link-text {
         font-size: 0;
+        margin-left: 0;
     }
     .close-btn {
         color: #e25a25;
@@ -123,6 +124,7 @@ hr.solid {
     }
     .card-link-text {
         font-size: 0;
+        margin-left: 0;
     }
     .close-btn {
         color: #e25a25;
@@ -136,6 +138,7 @@ hr.solid {
     }
     .card-link-text {
         font-size: 0;
+        margin-left: 0;
     }
     .close-btn {
         color: #e25a25;
