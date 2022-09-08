@@ -80,7 +80,7 @@ function createTagsQuery(tags, minYear, maxYear) {
             test += ` UPPER("region") LIKE UPPER('${value}') OR`;
         })
         test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
-        test += `AND `;
+        test += ` AND `;
     }
     test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     return test;

@@ -86,6 +86,7 @@ export default {
     width: fit-content;
     max-width: 100%;
     font-size: 0.95rem;
+    font-weight: bold;
     cursor: default;
   }
 </style>

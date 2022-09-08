@@ -1,6 +1,6 @@
 <template>
   <div class="card card-style" id="cardpicture" style="display: none">
-    <img class="card-img-top" src="https://picsum.photos/600/300/?image=25" alt="Card image cap">
+    <img class="card-img-top" src="https://www.wikimedia.it/wp-content/uploads/2020/08/loggiato.jpg" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title">{{ namePicture }}</h5>
       <hr class="solid">
