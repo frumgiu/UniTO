@@ -25,6 +25,7 @@
 .filter-title {
     width: fit-content;
     font-size: 1.2rem;
+    font-weight: bold;
     color: black;
     vertical-align: middle;
     cursor: default;
@@ -34,6 +35,19 @@
     width: fit-content;
     vertical-align: middle;
     margin: 0 0.3rem;
+}
+
+hr.solid {
+    border-top: 0.09rem solid #967bdc;
+    margin: 0.5rem;
+}
+
+.title-list{
+    width: fit-content;
+    max-width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: default;
 }
 
 /* RESPONSIVE */

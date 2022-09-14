@@ -73,20 +73,7 @@ export default {
 </script>
 
 <style scoped>
+  @import url("../resources/stylesheets/collapse-filter.css");
   @import url("../resources/stylesheets/button-filter.css");
   @import url("../resources/stylesheets/date-filter.css");
-  @import url("../resources/stylesheets/collapse-filter.css");
-
-  hr.solid {
-    border-top: 0.09rem solid #967bdc;
-    margin: 0.5rem;
-  }
-
-  .title-list{
-    width: fit-content;
-    max-width: 100%;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: default;
-  }
 </style>

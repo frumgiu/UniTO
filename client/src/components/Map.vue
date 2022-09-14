@@ -2,7 +2,7 @@
   <VueDeckgl
       :layers="layers"
       :viewState="viewState"
-      @click="closeNavMenuSmallDevice"
+      @click="nothing"
       @view-state-change="updateViewState"
       class="deck-class">
     <div id="map" ref="map"/>
@@ -28,7 +28,7 @@ export default {
       viewState: {
         latitude: 44.3072,
         longitude: 8.484106,
-        zoom: 8,
+        zoom: 5,
         bearing: 0,
         pitch: 0,
       },
@@ -62,7 +62,8 @@ export default {
       this.closeNavMenuSmallDevice();
       this.$emit('askOpenCard', info.x, info.y, info.object.filename, info.object.country_formal, info.object.region, info.object.year);
       console.log(info.y + " and " + info.x);
-    }
+    },
+    nothing: function() {}
 },
   mounted() {
     this.map = new mapboxgl.Map({

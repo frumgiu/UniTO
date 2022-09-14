@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SearchBar @askDataBySearch="askDataBySearch"/>
+    <SearchBar @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
@@ -75,8 +75,11 @@ export default {
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
   #app {
-    font-family: Noto Sans, sans-serif;
+    font-family: "Dosis", sans-serif;
+    font-weight: 500;
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: left;

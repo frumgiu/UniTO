@@ -38,10 +38,7 @@ export default {
       }
     },
     closeCard: function() {
-      const cardPictureId = document.getElementById("cardpicture");
-      if (cardPictureId.style.display === "flex") {
-        cardPictureId.style.display = "none";
-      }
+      this.$emit('askCloseCard');
     }
   },
   watch: {
@@ -88,7 +85,7 @@ export default {
 .search-text {
   width: fit-content;
   max-width: 100%;
-  font-size: 0.95rem;
+  font-size: 1rem;
   padding: 0.3rem;
   border: none; border-radius: 1.2rem;
   outline: none;
@@ -97,7 +94,7 @@ export default {
 }
 
 .search-text::placeholder {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: gray;
 }
 
