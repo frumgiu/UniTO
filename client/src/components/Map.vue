@@ -60,8 +60,8 @@ export default {
     },
     showIcon: function(info) {
       this.closeNavMenuSmallDevice();
-      this.$emit('askOpenCard', info.x, info.y, info.object.filename, info.object.country_formal, info.object.region, info.object.year);
-      console.log(info.y + " and " + info.x);
+      this.$emit('askOpenCard', info.y, info.x, info.object.filename, info.object.country_formal, info.object.region, info.object.year);
+      console.log("INFO y and x: " + info.y + " and " + info.x);
     },
     nothing: function() {}
 },
