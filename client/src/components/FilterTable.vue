@@ -29,6 +29,7 @@
 </template>
 
 <script>
+
 export default {
   name: "FilterTable",
   props: ['options', 'defaultMin', 'defaultMax'],
@@ -54,7 +55,7 @@ export default {
   mounted() {
     this.getNumbersMin();
     this.getNumbersMax();
-  },
+  } ,
   watch: {
     selectedMinYear: function (newValue) {
       if (newValue <= this.selectedMaxYear) {

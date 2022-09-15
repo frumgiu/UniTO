@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top my-navbar">
+  <div class="fixed-top my-navbar">
     <div class="nav-container">
       <form class="input-group" @submit.prevent>
         <div class="search-group">
@@ -8,12 +8,18 @@
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
-        <button class="search-btn hide-btn-lg" type="button" data-placement="top" title="Search options" @click="openMenu">
-          <span class="material-icons"  style="vertical-align: middle">filter_list</span>
-        </button>
+        <div class="btn-container hide-btn-lg">
+          <button class="search-btn" type="button" data-placement="top" title="Search options" @click="openMenuFilter">
+            <span class="material-icons"  style="vertical-align: middle">filter_list</span>
+          </button>
+          <button class="search-btn" type="button" data-placement="top" title="Map options" @click="openMenuMap">
+          <span class="material-icons"  style="vertical-align: middle">explore</span>
+          </button>
+        </div>
+
       </form>
     </div>
-  </nav>
+  </div>
 </template>
 
 <script>
@@ -28,13 +34,20 @@ export default {
     askDataBySearch: function() {
       this.$emit('askDataBySearch', this.searchText)
     },
-    openMenu: function() {
+    openMenuFilter: function() {
       const sideNav = document.getElementById("sidenav");
-      if (sideNav.style.display === "none") {
+      this.openMenu(sideNav);
+    },
+    openMenuMap: function() {
+      const sidemap = document.getElementById("sidemap");
+      this.openMenu(sidemap);
+    },
+    openMenu: function (menuId) {
+      if (menuId.style.display === "none") {
         this.closeCard();
-        sideNav.style.display = "block";
+        menuId.style.display = "block";
       } else {
-        sideNav.style.display = "none";
+        menuId.style.display = "none";
       }
     },
     closeCard: function() {
@@ -59,6 +72,7 @@ export default {
   margin-left: 1rem;
   margin-top: 1.4rem;
   padding: 0.3rem 0.6rem !important;
+  background-color: white;
   box-shadow: rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem;
 }
 
@@ -71,7 +85,10 @@ export default {
 
 .search-group {
   width: fit-content;
-  align-content: baseline;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
   border: 0.09rem solid #967bdc;
   border-radius: 0.6rem;
   background-color: #fff;
@@ -111,6 +128,13 @@ export default {
   color: #48a36a;
 }
 
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
+}
+
 /* RESPONSIVE */
 @media screen and (min-width: 1281px) {
   .hide-btn-lg {
@@ -122,7 +146,6 @@ export default {
   .hide-btn-lg {
     display: none!important;
   }
-
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -143,6 +166,9 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+  .hide-btn-sm-m {
+    display: none!important;
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -157,6 +183,9 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+  .hide-btn-sm-m {
+    display: none!important;
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) and (orientation: landscape) {
@@ -170,6 +199,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .hide-btn-sm-m {
+    display: none!important;
   }
 }
 
@@ -197,6 +229,9 @@ export default {
     width: 65%;
     display: flex;
     justify-content: space-between;
+  }
+  .hide-btn-sm-m {
+    display: none!important;
   }
 }
 </style>

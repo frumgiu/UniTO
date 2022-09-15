@@ -35,11 +35,7 @@
     width: fit-content;
     vertical-align: middle;
     margin: 0 0.3rem;
-}
-
-hr.solid {
-    border-top: 0.09rem solid #967bdc;
-    margin: 0.5rem;
+    cursor: default;
 }
 
 .title-list{
