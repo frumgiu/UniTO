@@ -34,7 +34,7 @@ export default {
   props: ['options', 'defaultMin', 'defaultMax'],
   data() {
     return {
-      selectedMinYear: this.defaultMax, selectedMaxYear: this.defaultMax,
+      selectedMinYear: this.defaultMax - 1, selectedMaxYear: this.defaultMax - 1,
       minYearToChoice: [], maxYearToChoice: [],
       checkedOptions: [],
     }

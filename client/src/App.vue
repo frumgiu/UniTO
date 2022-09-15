@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted() {
-    this.askDataByFilter([], this.lastSelectedMin, this.lastSelectedMax); // start with only data from current year
+    this.askDataByFilter([], this.lastSelectedMin - 1, this.lastSelectedMax - 1); // start with only data from current year
   },
   methods: {
     contactDB: function () {

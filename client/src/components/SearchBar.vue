@@ -3,12 +3,12 @@
     <div class="nav-container">
       <form class="input-group" @submit.prevent>
         <div class="search-group">
-          <input id="searchTxt" v-model="searchText" type="text" class="search-text" placeholder="Insert name" autocomplete="off"/>
+          <input id="searchTxt" v-model.lazy="searchText" type="text" class="search-text" placeholder="Insert name or country" autocomplete="off"/>
           <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Submit" @click="askDataBySearch">
             <span class="material-icons"  style="vertical-align: middle">search</span>
           </button>
         </div>
-        <button class="search-btn hide-btn-lg" type="button" @click="openMenu">
+        <button class="search-btn hide-btn-lg" type="button" data-placement="top" title="Search options" @click="openMenu">
           <span class="material-icons"  style="vertical-align: middle">filter_list</span>
         </button>
       </form>
