@@ -6,7 +6,7 @@
       <hr class="solid">
       <p class="card-text">Location: {{ countryPicture }}, {{ regionPicture }} <br/>Year: {{ yearPicture }} </p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <a href="https://deck.gl/docs/developer-guide/interactivity" target="_blank">
+        <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">
             <span class="material-icons" style="vertical-align: middle">link</span>
             <span class="card-link-text">Wikipedia</span>
@@ -39,6 +39,11 @@ export default {
     closeCard: function () {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "none";
+    }
+  },
+  computed: {
+    wikiPageUrl() {
+      return "https://commons.wikimedia.org/wiki/File:" + this.namePicture;
     }
   }
 }
