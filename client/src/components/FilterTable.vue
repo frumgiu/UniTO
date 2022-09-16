@@ -50,6 +50,10 @@ export default {
     getNumbersMax: function () {
       this.maxYearToChoice = new Array(this.defaultMax - this.selectedMinYear + 1).fill(this.defaultMax).map((n, i) => n-i);
       this.maxYearToChoice.reverse();
+    },
+    closeMenu: function () {
+      const menuId = document.getElementById("sidenav");
+      menuId.style.display = "none";
     }
   },
   mounted() {
@@ -74,7 +78,7 @@ export default {
 </script>
 
 <style scoped>
-  @import url("../resources/stylesheets/collapse-filter.css");
+  @import url("../resources/stylesheets/collapse-filter-menu.css");
   @import url("../resources/stylesheets/button-filter.css");
   @import url("../resources/stylesheets/date-filter.css");
 </style>

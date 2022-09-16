@@ -1,28 +1,8 @@
 <template>
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
-    <FilterTable :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
-    <div class="nav-options-container">
-      <div class="nav-options-inner">
-        <span class="material-icons nav-icon">explore</span>
-        <span class="filter-title">Navigation</span>
-        <hr class="solid">
-        <button class="btn-position" >
-          <span class="material-icons"  style="vertical-align: middle; margin-right: 0.2rem">my_location</span>
-          Go to my location
-        </button>
-        <div class="layer-options-container">
-          <p>Type of layer</p>
-          <div class="layer-options-inner">
-            <button class="layer-options">2D</button>
-            <span style="color: white; margin:0 0.15rem">|</span>
-            <button class="layer-options">3D</button>
-            <span style="color: white; margin:0 0.15rem">|</span>
-            <button class="layer-options">icons</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
+    <MapOptionMenu ref="mapOptionsRef" />
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
   </div>
@@ -35,10 +15,12 @@ import Map from "@/components/Map";
 import 'material-icons/iconfont/material-icons.css';
 import {getData} from '@/./controllers/ControllerTableData'
 import CardPicture from "@/components/CardPicture";
+import MapOptionMenu from "@/components/MapOptionMenu";
 
 export default {
   name: 'App',
   components: {
+    MapOptionMenu,
     CardPicture,
     SearchBar,
     FilterTable,
@@ -89,6 +71,11 @@ export default {
       this.$refs.cardRef.closeCard();
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
+      if (document.documentElement.clientWidth < 1024) {
+        console.log(document.documentElement.clientWidth);
+        this.$refs.mapOptionsRef.closeMenu();
+        this.$refs.filterOptionRef.closeMenu();
+      }
       this.$refs.cardRef.openCard(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture);
     }
   }
@@ -97,6 +84,7 @@ export default {
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
+
   #app {
     font-family: "Dosis", sans-serif;
     font-weight: 500;
@@ -107,74 +95,6 @@ export default {
 
   hr.solid {
     border-top: 0.09rem solid #967bdc;
-    margin: 0.5rem;
-  }
-
-  .nav-options-container {
-    width: fit-content;
-    z-index: 9;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin-bottom: 1.4rem;
-    margin-right: 1.4rem;
-    overflow: auto;
-    background-color: transparent;
-    border-radius: 0.8rem;
-    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
-  }
-
-  .nav-options-inner {
-    width: 100%;
-    height: 100%;
-    border-radius: 0.8rem;
-    background: rgba(255,255,255, 0.4);
-    padding: 0.5rem 0.8rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .nav-icon {
-    width: fit-content;
-    vertical-align: middle;
-    margin: 0 0.3rem;
-    cursor: default;
-  }
-
-  .btn-position {
-    background: none;
-    border: none;
-    color: black;
-    width: fit-content;
-  }
-
-  .btn-position:hover {
-    color: #48a36a;
-  }
-
-  .layer-options-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: row wrap;
-  }
-
-  .layer-options-inner {
-    background-color: #48a36a;
-    margin-left: 0.9rem;
-    border-radius: 0.6rem;
-    box-shadow: #7EBE96 0.122rem 0.122rem 0.163rem;
-    padding: 0.3rem 0.6rem;
-  }
-
-  .layer-options {
-    border: none;
-    border-radius: 0.35rem;
-    background-color: #48a36a;
-    color: white;
-  }
-
-  .layer-options:hover {
-    background-color: #7EBE96;
+    margin: 0.6rem;
   }
 </style>

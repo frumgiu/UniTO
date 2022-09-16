@@ -1,0 +1,145 @@
+.nav-options-container {
+    z-index: 9;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 1.4rem;
+    margin-right: 1.4rem;
+    overflow: auto;
+    background-color: transparent;
+    border-radius: 0.8rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+}
+
+.nav-options-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.8rem;
+    background: rgba(255,255,255, 0.4);
+    padding: 0.5rem 0.8rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.nav-icon {
+    width: fit-content;
+    vertical-align: middle;
+    margin: 0 0.3rem;
+    cursor: default;
+}
+
+.btn-position {
+    width: 100%;
+    background: none;
+    border: none;
+    color: black;
+    margin-bottom: 0.8rem;
+}
+
+.btn-position:hover {
+    color: #48a36a;
+}
+
+.layer-title {
+    cursor: default;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.layer-options-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    row-gap: 0.4rem;
+}
+
+.layer-options-inner {
+    background-color: #48a36a;
+    margin: 0 0.8rem;
+    border-radius: 0.6rem;
+    box-shadow: #7EBE96 0.122rem 0.122rem 0.163rem;
+    padding: 0.3rem 0.5rem;
+}
+
+.layer-options {
+    border: none;
+    border-radius: 0.35rem;
+    background-color: #48a36a;
+    color: white;
+}
+
+.layer-options:hover {
+    background-color: #7EBE96;
+}
+
+/* RESPONSIVE */
+@media screen and (min-width: 1281px) {
+    .nav-options-container {
+        display: block;
+        width: 20%;
+        max-width: 22%;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1280px){
+    .nav-options-container {
+        display: block;
+        width: 25%;
+        max-width: 40%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .nav-options-container {
+        display: none;
+        width: 32%;
+        max-width: 35%;
+        height: fit-content;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .nav-options-container {
+        display: none;
+        width: 34%;
+        max-width: 40%;
+        height: fit-content;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 767px) {
+    .nav-options-container {
+        display: none;
+        width: 45%;
+        max-width: 50%;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .nav-options-container {
+        display: none;
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) and (orientation: landscape) {
+    .nav-options-container {
+        display: none;
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+@media screen and (max-width: 319px) {
+    .nav-options-container {
+        display: none;
+        width: 85%;
+        max-width: 90%;
+    }
+
+    .layer-title {
+        font-size: 0.9rem;
+    }
+}
