@@ -1,10 +1,11 @@
 <template>
   <div class="card card-style" id="cardpicture" style="display: none">
-    <img class="card-img-top" src="https://www.wikimedia.it/wp-content/uploads/2020/08/loggiato.jpg" alt="Card image cap">
+    <img class="card-img-top" v-bind:src="getBigPictureUrl" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title">{{ namePicture }}</h5>
       <hr class="solid">
       <p class="card-text">Location: {{ countryPicture }}, {{ regionPicture }} <br/>Year: {{ yearPicture }} </p>
+      <p>{{getSmallPictureUrl}}</p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">
@@ -24,6 +25,11 @@
 export default {
   name: "CardPicture",
   props: ["namePicture", "countryPicture", "regionPicture", "yearPicture"],
+  data() {
+    return {
+      cryptoNode: require('crypto')
+    }
+  },
   methods: {
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
       const cardPictureId = document.getElementById("cardpicture");
@@ -39,9 +45,25 @@ export default {
     closeCard: function () {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "none";
+    },
+    getPrefix: function () {
+      const md5sum = this.cryptoNode.createHash('md5');
+      md5sum.update(new Buffer(this.namePicture, 'utf8'));
+      const md5val = md5sum.digest('hex');
+      return md5val[0] + "/" + md5val[0] + md5val[1] + "/";
     }
   },
   computed: {
+    getSmallPictureUrl() {
+      const prefix = this.getPrefix();
+      return "https://upload.wikimedia.org/wikipedia/commons/" + prefix
+          + this.namePicture + "/320px-" + this.namePicture;
+    },
+    getBigPictureUrl() {
+      const prefix = this.getPrefix();
+      return "https://upload.wikimedia.org/wikipedia/commons/" + prefix
+          + this.namePicture;
+    },
     wikiPageUrl() {
       return "https://commons.wikimedia.org/wiki/File:" + this.namePicture;
     }
