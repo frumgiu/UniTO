@@ -9,11 +9,11 @@
 </template>
 
 <script>
+import 'material-icons/iconfont/material-icons.css';
+import {getData} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import Map from "@/components/Map";
-import 'material-icons/iconfont/material-icons.css';
-import {getData} from '@/./controllers/ControllerTableData'
 import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 
@@ -60,7 +60,7 @@ export default {
       this.closeCard();
       this.contactDB();
     },
-   askDataByFilter: function(tagsList, minYear, maxYear) {
+    askDataByFilter: function(tagsList, minYear, maxYear) {
       this.lastCheckedTag = tagsList;
       this.lastSelectedMin = minYear;
       this.lastSelectedMax = maxYear;
