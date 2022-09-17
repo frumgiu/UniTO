@@ -15,8 +15,8 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">
-            <span class="material-icons" style="vertical-align: center; font-size: 1.2rem">launch</span>
-            <span class="card-link-text">Wikipedia</span>
+            <span class="material-icons" style="font-size: 1.2rem">launch</span>
+            <div class="card-link-text">Wikimedia</div>
           </button>
         </a>
         <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
