@@ -1,9 +1,9 @@
 <template>
   <div class="card card-style" id="cardpicture" style="display: none">
-    <div >
+    <div>
       <img class="card-img-top" v-bind:src="getBigPictureUrl" alt="Card image cap">
       <a v-bind:href="getBigPictureUrl" target="_blank">
-        <button class="open-img-btn">
+        <button class="open-img-btn" data-toggle="tooltip" data-placement="top" title="Open picture">
           <span class="material-icons"  style="vertical-align: middle">launch</span>
         </button>
       </a>
@@ -15,11 +15,11 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">
-            <span class="material-icons" style="vertical-align: middle">link</span>
+            <span class="material-icons" style="vertical-align: center; font-size: 1.2rem">launch</span>
             <span class="card-link-text">Wikipedia</span>
           </button>
         </a>
-        <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close picture" @click="closeCard">
+        <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
           <span class="material-icons"  style="vertical-align: middle">close</span>
         </button>
       </div>

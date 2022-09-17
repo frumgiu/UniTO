@@ -1,8 +1,8 @@
+/* BASE */
 .nav-options-container {
     z-index: 9;
-    position: fixed;
-    bottom: 0;
-    right: 0;
+    position: fixed !important;
+    bottom: 0; right: 0;
     margin-bottom: 1.4rem;
     margin-right: 1.4rem;
     overflow: auto;
@@ -76,7 +76,7 @@
 /* RESPONSIVE */
 @media screen and (min-width: 1281px) {
     .nav-options-container {
-        display: block;
+        display: block !important;
         width: 20%;
         max-width: 22%;
     }
@@ -84,7 +84,7 @@
 
 @media screen and (min-width: 1025px) and (max-width: 1280px){
     .nav-options-container {
-        display: block;
+        display: block !important;
         width: 25%;
         max-width: 40%;
     }
