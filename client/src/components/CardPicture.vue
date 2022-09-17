@@ -1,11 +1,17 @@
 <template>
   <div class="card card-style" id="cardpicture" style="display: none">
-    <img class="card-img-top" v-bind:src="getBigPictureUrl" alt="Card image cap">
+    <div >
+      <img class="card-img-top" v-bind:src="getBigPictureUrl" alt="Card image cap">
+      <a v-bind:href="getBigPictureUrl" target="_blank">
+        <button class="open-img-btn">
+          <span class="material-icons"  style="vertical-align: middle">launch</span>
+        </button>
+      </a>
+    </div>
     <div class="card-body">
       <h5 class="card-title">{{ namePicture }}</h5>
       <hr class="solid">
       <p class="card-text">Location: {{ countryPicture }}, {{ regionPicture }} <br/>Year: {{ yearPicture }} </p>
-      <p>{{getSmallPictureUrl}}</p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">

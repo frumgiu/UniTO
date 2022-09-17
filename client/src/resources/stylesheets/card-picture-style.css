@@ -18,6 +18,15 @@ hr.solid {
     border-radius: 0.8rem !important;
 }
 
+.open-img-btn {
+    position: absolute;
+    top: 18px;
+    right: 14px;
+    border: none;
+    background: none;
+    color: white;
+}
+
 .card-body {
     padding: 0.8rem !important;
 }
