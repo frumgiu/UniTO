@@ -53,15 +53,27 @@ export default {
       this.closeNavMenuSmallDevice();
     },
     closeNavMenuSmallDevice: function() {
-      const sideNav = document.getElementById("sidenav");
-      if (sideNav.style.display === "block" && window.innerWidth <= 768) {
-        sideNav.style.display = "none";
+      if (window.innerWidth <= 768) {
+        this.$emit('askCloseMenus');
       }
     },
     showIcon: function(info) {
+      /* TODO: muove solo la mappa e non il layer */
+
       this.closeNavMenuSmallDevice();
       this.$emit('askOpenCard', info.y, info.x, info.object.filename, info.object.country_formal, info.object.region, info.object.year);
+      this.centerView(info.object)
       console.log("INFO y and x: " + info.y + " and " + info.x);
+    },
+    centerView: function(obj) {
+      this.viewState = {
+        longitude: obj.log,
+        latitude: obj.lat,
+        zoom: this.viewState.zoom,
+        bearing: this.viewState.bearing,
+        pitch: this.viewState.pitch,
+        transitionDuration: 1000
+      };
     },
     nothing: function() {}
 },
@@ -76,6 +88,8 @@ export default {
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
+    this.map.dragRotate.disable(); /* TODO ruota comunque */
+    this.map.touchZoomRotate.disable();
   },
   computed: {
     layers() {

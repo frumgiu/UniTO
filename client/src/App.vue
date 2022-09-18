@@ -4,7 +4,7 @@
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <MapOptionMenu ref="mapOptionsRef" />
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
-    <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard"/>
+    <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
 </template>
 
@@ -67,14 +67,17 @@ export default {
       this.closeCard();
       this.contactDB();
     },
+    closeMenu: function() {
+      this.$refs.mapOptionsRef.closeMenu();
+      this.$refs.filterOptionRef.closeMenu();
+    },
     closeCard: function() {
       this.$refs.cardRef.closeCard();
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
       if (document.documentElement.clientWidth < 1024) {
         console.log(document.documentElement.clientWidth);
-        this.$refs.mapOptionsRef.closeMenu();
-        this.$refs.filterOptionRef.closeMenu();
+        this.closeMenu();
       }
       this.$refs.cardRef.openCard(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture);
     }
