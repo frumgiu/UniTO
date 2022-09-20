@@ -37,12 +37,12 @@ export default {
     }
   },
   methods: {
-    openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
+    openCard: function(namePicture, countryPicture, regionPicture, yearPicture) {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
-      cardPictureId.style.top = coordTop + "px";
-      cardPictureId.style.left = coordLeft + "px";
+      cardPictureId.style.top = "50%";
+      cardPictureId.style.left = "50%";
       this.namePicture = namePicture;
       this.countryPicture = countryPicture;
       this.regionPicture = regionPicture;

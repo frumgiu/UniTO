@@ -1,9 +1,4 @@
 /* BASE */
-hr.solid {
-    border-top: 0.09rem solid #967bdc;
-    margin: 0.8rem;
-}
-
 .card-style {
     z-index: 9;
     display: none;
@@ -15,6 +10,9 @@ hr.solid {
 }
 
 .card-img-top {
+    width: 15vw;
+    height: 30vh;
+    object-fit: cover;
     border-radius: 0.8rem !important;
 }
 
@@ -91,6 +89,10 @@ hr.solid {
     .card-body {
         padding: 0.6rem 0.4rem;
     }
+    .card-img-top {
+        width: 15vw;
+        height: 29vh;
+    }
 }
 
 @media (min-width: 1025px) and (max-width: 1280px){
@@ -102,6 +104,10 @@ hr.solid {
     }
     .card-body {
         padding: 0.6rem 0.4rem;
+    }
+    .card-img-top {
+        width: 15vw;
+        height: 27vh;
     }
 }
 
@@ -115,6 +121,10 @@ hr.solid {
     .close-btn {
         color: #e25a25;
     }
+    .card-img-top {
+        width: 20vw;
+        height: 26vh;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
@@ -126,6 +136,10 @@ hr.solid {
     .close-btn {
         color: #e25a25;
     }
+    .card-img-top {
+        width: 16vw;
+        height: 22vh;
+    }
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
@@ -134,9 +148,12 @@ hr.solid {
         min-width: 45%;
         max-width: 48%;
     }
-
     .close-btn {
         color: #e25a25;
+    }
+    .card-img-top {
+        width: 16vw;
+        height: 22vh;
     }
 }
 
@@ -145,9 +162,12 @@ hr.solid {
         width: 55%;
         max-width: 60%;
     }
-
     .close-btn {
         color: #e25a25;
+    }
+    .card-img-top {
+        width: 6vw;
+        height: 18vh;
     }
 }
 
@@ -156,8 +176,11 @@ hr.solid {
         width: 70%;
         max-width: 70%;
     }
-
     .close-btn {
         color: #e25a25;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 20vh;
     }
 }

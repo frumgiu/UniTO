@@ -78,7 +78,7 @@ export default {
       this.$refs.cardRef.closeCard();
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
-      this.$refs.cardRef.openCard(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture);
+      this.$refs.cardRef.openCard(namePicture, countryPicture, regionPicture, yearPicture);
     }
   }
 }
