@@ -56,7 +56,7 @@ export default {
       this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
-        zoom: (typeof zoom === undefined ? this.viewState.zoom : zoom),
+        zoom: zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
         transitionDuration: 800
@@ -88,6 +88,14 @@ export default {
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
+
+    navigator.geolocation.getCurrentPosition(position => {
+      const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
+      this.setViewState(startPositon, 8);
+    },
+    () => {
+      console.log("User did not allow geolocation. Starting from a default location")
+    })
   },
   computed: {
     layers() {

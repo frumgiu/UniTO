@@ -9,7 +9,6 @@ const config = {
 const client = new pg.Client(config);
 
 module.exports = {
-    createTableDemo,
     getTableWithSearch,
     getTableWithFilters
 }
@@ -45,8 +44,6 @@ function createTableDemo() {
 */
 function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
     let test = createTagsQuery(tags, minYear, maxYear);
-   /* const query = `SELECT DISTINCT name, year, region, ST_X(coordinates::geometry) "log", ST_Y(coordinates::geometry) "lat"
-                   FROM demo WHERE UPPER("name") LIKE UPPER('%${search}%') AND` + test; */
     const query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE UPPER("filename") LIKE UPPER('%${search}%') OR UPPER("country_formal") LIKE UPPER('${search}') AND ` + test;
     console.log(query)
@@ -76,11 +73,12 @@ function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
 function createTagsQuery(tags, minYear, maxYear) {
     let test = ``;
     if (typeof tags !== 'undefined') {
+        test += `(`;
         tags.forEach(function (value) {
             test += ` UPPER("region") LIKE UPPER('${value}') OR`;
         })
         test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
-        test += ` AND `;
+        test += `) AND `;
     }
     test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     return test;
