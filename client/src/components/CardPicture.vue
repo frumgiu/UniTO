@@ -1,7 +1,7 @@
 <template>
   <div class="card card-style" id="cardpicture" style="display: none">
     <div>
-      <img class="card-img-top" v-bind:src="getBigPictureUrl" alt="Card image cap">
+      <img class="card-img-top" v-bind:src="getSmallPictureUrl" alt="Card image cap">
       <a v-bind:href="getBigPictureUrl" target="_blank">
         <button class="open-img-btn" data-toggle="tooltip" data-placement="top" title="Open picture">
           <span class="material-icons"  style="vertical-align: middle">launch</span>
@@ -62,8 +62,8 @@ export default {
   computed: {
     getSmallPictureUrl() {
       const prefix = this.getPrefix();
-      return "https://upload.wikimedia.org/wikipedia/commons/" + prefix
-          + this.namePicture + "/320px-" + this.namePicture;
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/" + prefix
+          + this.namePicture + "/300px-" + this.namePicture;
     },
     getBigPictureUrl() {
       const prefix = this.getPrefix();
