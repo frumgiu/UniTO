@@ -40,6 +40,10 @@
     color: #48a36a;
 }
 
+.btn-position:disabled, .btn-position[disabled] {
+    color: gray;
+}
+
 .layer-title {
     cursor: default;
     font-size: 1rem;

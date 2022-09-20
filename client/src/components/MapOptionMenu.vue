@@ -4,7 +4,7 @@
       <span class="material-icons nav-icon">explore</span>
       <span class="filter-title">Navigation</span>
       <hr class="solid">
-      <button class="btn-position" @click="getUserPosition">
+      <button class="btn-position" :disabled="!acceptedGeolocation" @click="getUserPosition">
         <span class="material-icons" style="vertical-align: middle; margin-right: 0.2rem">my_location</span>
         Go to my location
       </button>
@@ -23,13 +23,20 @@
 <script>
 export default {
   name: "MapOptionMenu",
+  data() {
+    return {
+      acceptedGeolocation: ("geolocation" in navigator)
+    }
+  },
   methods: {
     getUserPosition() {
+      console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(position => {
         const userPosition = {log: position.coords.longitude, lat: position.coords.latitude}
         this.$emit('askUserPosition', userPosition);
       },
       error => {
+        this.acceptedGeolocation = false;
         console.log(error.message);
       })
     },
