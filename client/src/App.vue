@@ -6,6 +6,10 @@
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
+
+  <!--
+  <Test :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+  -->
 </template>
 
 <script>
@@ -13,18 +17,18 @@ import 'material-icons/iconfont/material-icons.css';
 import {getData} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
-import Map from "@/components/Map";
 import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
+import Map from "@/components/Map";
 
 export default {
   name: 'App',
   components: {
+    Map,
     MapOptionMenu,
     CardPicture,
     SearchBar,
-    FilterTable,
-    Map
+    FilterTable
   },
   data() {
     return {
@@ -75,10 +79,6 @@ export default {
       this.$refs.cardRef.closeCard();
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
-      if (document.documentElement.clientWidth < 1024) {
-        console.log(document.documentElement.clientWidth);
-        this.closeMenu();
-      }
       this.$refs.cardRef.openCard(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture);
     }
   }

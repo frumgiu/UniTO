@@ -4,6 +4,7 @@
       :viewState="viewState"
       @click="nothing"
       @view-state-change="updateViewState"
+      @drag="closeCard"
       class="deck-class">
     <div id="map" ref="map"/>
   </VueDeckgl>
@@ -49,31 +50,30 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
-      this.$emit('askCloseCard');
       this.closeNavMenuSmallDevice();
     },
-    closeNavMenuSmallDevice: function() {
-      if (window.innerWidth <= 768) {
-        this.$emit('askCloseMenus');
-      }
-    },
-    showIcon: function(info) {
-      /* TODO: muove solo la mappa e non il layer */
-
-      this.closeNavMenuSmallDevice();
-      this.$emit('askOpenCard', info.y, info.x, info.object.filename, info.object.country_formal, info.object.region, info.object.year);
-      this.centerView(info.object)
-      console.log("INFO y and x: " + info.y + " and " + info.x);
-    },
-    centerView: function(obj) {
+    setViewState: function(obj) {
       this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
         zoom: this.viewState.zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
-        transitionDuration: 1000
+        transitionDuration: 800
       };
+    },
+    closeNavMenuSmallDevice: function() {
+      if (window.innerWidth <= 1024) {
+        this.$emit('askCloseMenus');
+      }
+    },
+    showIcon: function(info) {
+      this.setViewState(info.object);
+      this.$emit('askOpenCard', (window.innerWidth/2 - 100), (window.innerHeight/2 - 100), info.object.filename, info.object.country_formal, info.object.region, info.object.year);
+      },
+    closeCard: function() {
+      console.log("close card because I'm dragging the map")
+      this.$emit('askCloseCard');
     },
     nothing: function() {}
 },
@@ -88,26 +88,25 @@ export default {
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
-    this.map.dragRotate.disable(); /* TODO ruota comunque */
-    this.map.touchZoomRotate.disable();
   },
   computed: {
     layers() {
       if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
         return [
-          new IconLayer({
-          id: 'icon-layer',
-          data: this.dataGeo,
-          iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-          iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
-          getIcon: () => 'marker',
-          getPosition: (d) => [d.log, d.lat],
-          getSize: () => 4,
-          sizeScale: 10,
-          getColor: [150, 123, 220],
-          pickable: true,
-          onClick: (info) => this.showIcon(info)
-        })];
+            new IconLayer({
+            id: 'icon-layer',
+            data: this.dataGeo,
+            iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+            iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
+            getIcon: () => 'marker',
+            getPosition: (d) => [d.log, d.lat],
+            getSize: () => 4,
+            sizeScale: 10,
+            getColor: [150, 123, 220],
+            pickable: true,
+            onClick: (info) => this.showIcon(info)
+          })
+        ];
       } else {
         return [
           new ScreenGridLayer({
