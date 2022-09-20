@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const app = express(), bodyParser = require("body-parser");
 const db = require('./database');
-const {createTableDemo} = require("./database");
 port = 3080;
 const date = new Date();
 

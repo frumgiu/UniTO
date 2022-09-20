@@ -4,8 +4,8 @@
       <span class="material-icons nav-icon">explore</span>
       <span class="filter-title">Navigation</span>
       <hr class="solid">
-      <button class="btn-position" >
-        <span class="material-icons"  style="vertical-align: middle; margin-right: 0.2rem">my_location</span>
+      <button class="btn-position" @click="getUserPosition">
+        <span class="material-icons" style="vertical-align: middle; margin-right: 0.2rem">my_location</span>
         Go to my location
       </button>
       <div class="layer-options-container">
@@ -24,6 +24,15 @@
 export default {
   name: "MapOptionMenu",
   methods: {
+    getUserPosition() {
+      navigator.geolocation.getCurrentPosition(position => {
+        const userPosition = {log: position.coords.longitude, lat: position.coords.latitude}
+        this.$emit('askUserPosition', userPosition);
+      },
+      error => {
+        console.log(error.message);
+      })
+    },
     closeMenu() {
       const menuId = document.getElementById("sidemapnav");
       menuId.style.display = "none";

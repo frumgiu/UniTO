@@ -52,11 +52,11 @@ export default {
       });
       this.closeNavMenuSmallDevice();
     },
-    setViewState: function(obj) {
+    setViewState: function(obj, zoom) {
       this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
-        zoom: this.viewState.zoom,
+        zoom: (typeof zoom === undefined ? this.viewState.zoom : zoom),
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
         transitionDuration: 800
@@ -68,7 +68,7 @@ export default {
       }
     },
     showIcon: function(info) {
-      this.setViewState(info.object);
+      this.setViewState(info.object, this.viewState.zoom);
       this.$emit('askOpenCard', (window.innerWidth/2 - 100), (window.innerHeight/2 - 100), info.object.filename, info.object.country_formal, info.object.region, info.object.year);
       },
     closeCard: function() {

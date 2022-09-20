@@ -2,14 +2,10 @@
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
-    <MapOptionMenu ref="mapOptionsRef" />
+    <MapOptionMenu ref="mapOptionsRef" @askUserPosition="askUserPosition"/>
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
-    <Map :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+    <Map ref="mapRef" :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
-
-  <!--
-  <Test :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
-  -->
 </template>
 
 <script>
@@ -70,6 +66,9 @@ export default {
       this.lastSelectedMax = maxYear;
       this.closeCard();
       this.contactDB();
+    },
+    askUserPosition: function(location) {
+      this.$refs.mapRef.setViewState(location, 10);
     },
     closeMenu: function() {
       this.$refs.mapOptionsRef.closeMenu();

@@ -63,7 +63,7 @@ export default {
     getSmallPictureUrl() {
       const prefix = this.getPrefix();
       return "https://upload.wikimedia.org/wikipedia/commons/thumb/" + prefix
-          + this.namePicture + "/300px-" + this.namePicture;
+          + this.namePicture + "/320px-" + this.namePicture;
     },
     getBigPictureUrl() {
       const prefix = this.getPrefix();
