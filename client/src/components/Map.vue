@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {ScreenGridLayer} from "@deck.gl/aggregation-layers";
+import {ScreenGridLayer, HexagonLayer} from "@deck.gl/aggregation-layers";
 import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl';
@@ -24,6 +24,7 @@ export default {
   props: ['dataGeo'],
   data() {
     return {
+      layerStyle: "3d",
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
       mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
       viewState: {
@@ -141,7 +142,27 @@ export default {
               })
             ];
           } else {
-            return [];
+            console.log("Creating 3D layer");
+            return [
+                new HexagonLayer({
+                  id: "hexagon-layer",
+                  data: this.dataGeo,
+                  colorRange: [
+                    [255, 255, 178, 100],
+                    [254, 217, 118, 140],
+                    [254, 178, 76, 180],
+                    [253, 141, 60, 200],
+                    [240, 59, 32, 220],
+                    [189, 0, 38, 240]
+                  ],
+                  pickable: false,
+                  extruded: true,
+                  radius: 2000,
+                  coverage: 1,
+                  elevationScale: 4,
+                  getPosition: (d) => [d.log, d.lat],
+                })
+            ];
           }
         }
       }
