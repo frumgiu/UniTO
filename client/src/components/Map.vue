@@ -103,7 +103,7 @@ export default {
       if (this.dataGeo.length === 0) {
         return [];
       } else {
-        if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
+        if (this.viewState.zoom <= 20 && this.viewState.zoom > 12) {
           return [
             new IconLayer({
               id: 'icon-layer',
@@ -148,17 +148,18 @@ export default {
                   id: "hexagon-layer",
                   data: this.dataGeo,
                   colorRange: [
-                    [255, 255, 178, 100],
-                    [254, 217, 118, 140],
-                    [254, 178, 76, 180],
-                    [253, 141, 60, 200],
-                    [240, 59, 32, 220],
-                    [189, 0, 38, 240]
+                    [1, 152, 189],
+                    [73, 227, 206],
+                    [216, 254, 181],
+                    [254, 237, 177],
+                    [254, 173, 84],
+                    [209, 55, 78]
                   ],
                   pickable: false,
                   extruded: true,
-                  radius: 2000,
+                  radius: 300,
                   coverage: 1,
+                  elevationRange: [0, 3000],
                   elevationScale: 4,
                   getPosition: (d) => [d.log, d.lat],
                 })
