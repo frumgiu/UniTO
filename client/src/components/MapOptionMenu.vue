@@ -11,9 +11,9 @@
       <div class="layer-options-container">
         <p class="layer-title">Type of layer</p>
         <div class="layer-options-inner">
-          <button class="layer-options">2D</button>
-          <button class="layer-options">3D</button>
-          <button class="layer-options">icons</button>
+          <button class="layer-options" @click="set2dLayer">2D</button>
+          <button class="layer-options" @click="set3dLayer">3D</button>
+          <button class="layer-options" @click="setIconLayer">icons</button>
         </div>
       </div>
     </div>
@@ -25,10 +25,22 @@ export default {
   name: "MapOptionMenu",
   data() {
     return {
-      acceptedGeolocation: ("geolocation" in navigator)
+      acceptedGeolocation: ("geolocation" in navigator),
     }
   },
   methods: {
+    set2dLayer: function() {
+      console.log("2D button pressed");
+      this.$emit('setLayer', "2d");
+    },
+    set3dLayer: function() {
+      console.log("3D button pressed");
+      this.$emit('setLayer', "3d");
+    },
+    setIconLayer: function() {
+      console.log("icon button pressed");
+      this.$emit('setLayer', "icon");
+    },
     getUserPosition() {
       console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(position => {

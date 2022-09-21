@@ -38,6 +38,26 @@ export default {
   created() {
     this.map = null;
   },
+  mounted() {
+    this.map = new mapboxgl.Map({
+      accessToken: this.accessToken,
+      container: this.$refs.map,
+      interactive: false,
+      style: this.mapStyle || "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
+      center: [this.viewState.longitude, this.viewState.latitude],
+      zoom: this.viewState.zoom,
+      pitch: this.viewState.pitch,
+      bearing: this.viewState.bearing,
+    });
+
+    navigator.geolocation.getCurrentPosition(position => {
+          const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
+          this.setViewState(startPositon, 8);
+        },
+        () => {
+          console.log("User did not allow geolocation. Starting from a default location")
+        })
+  },
   methods: {
     updateViewState: function(viewState) {
       console.log("updating view state...");
@@ -76,76 +96,54 @@ export default {
       this.$emit('askCloseCard');
     },
     nothing: function() {}
-},
-  mounted() {
-    this.map = new mapboxgl.Map({
-      accessToken: this.accessToken,
-      container: this.$refs.map,
-      interactive: false,
-      style: this.mapStyle || "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
-      center: [this.viewState.longitude, this.viewState.latitude],
-      zoom: this.viewState.zoom,
-      pitch: this.viewState.pitch,
-      bearing: this.viewState.bearing,
-    });
-
-    navigator.geolocation.getCurrentPosition(position => {
-      const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-      this.setViewState(startPositon, 8);
-    },
-    () => {
-      console.log("User did not allow geolocation. Starting from a default location")
-    })
   },
   computed: {
     layers() {
-      if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
-        console.log("--- Creating icon layer ---");
-        return [
-            new IconLayer({
-            id: 'icon-layer',
-            data: this.dataGeo,
-            iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
-            getIcon: () => 'marker',
-            getPosition: (d) => [d.log, d.lat],
-            getSize: () => 4,
-            sizeScale: 10,
-            getColor: [150, 123, 220],
-            pickable: true,
-            onClick: (info) => this.showIcon(info)
-          })
-        ];
+      if (this.dataGeo.length === 0) {
+        return [];
       } else {
-        if (this.dataGeo.length === 0) {
-          console.log("--- Creating no layer ---");
-          return [];
-        }
-        else {
-          console.log("--- Creating screen-grid layer ---");
-          console.log("Data: " + this.dataGeo.length);
+        if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
           return [
-            new ScreenGridLayer({
-              id: "screen-grid-layer",
+            new IconLayer({
+              id: 'icon-layer',
               data: this.dataGeo,
-              cellSizePixels: 14,
-              opacity: 1,
-              colorRange: [
-                [255, 255, 178, 100],
-                [254, 217, 118, 140],
-                [254, 178, 76, 180],
-                [253, 141, 60, 200],
-                [240, 59, 32, 220],
-                [189, 0, 38, 240]
-              ],
-              gpuAggregation: true,
-              aggregation: 'SUM',
+              iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+              iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
+              getIcon: () => 'marker',
               getPosition: (d) => [d.log, d.lat],
-              getWeight: 4
+              getSize: () => 4,
+              sizeScale: 10,
+              getColor: [150, 123, 220],
+              pickable: true,
+              onClick: (info) => this.showIcon(info)
             })
           ];
+        } else {
+          if (this.layerStyle === "2d") {
+            return [
+              new ScreenGridLayer({
+                id: "screen-grid-layer",
+                data: this.dataGeo,
+                cellSizePixels: 14,
+                opacity: 1,
+                colorRange: [
+                  [255, 255, 178, 100],
+                  [254, 217, 118, 140],
+                  [254, 178, 76, 180],
+                  [253, 141, 60, 200],
+                  [240, 59, 32, 220],
+                  [189, 0, 38, 240]
+                ],
+                gpuAggregation: true,
+                aggregation: 'SUM',
+                getPosition: (d) => [d.log, d.lat],
+                getWeight: 4
+              })
+            ];
+          } else {
+            return [];
+          }
         }
-
       }
     }
   }

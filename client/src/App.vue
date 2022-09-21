@@ -2,7 +2,7 @@
   <div id="app">
     <SearchBar @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
-    <MapOptionMenu ref="mapOptionsRef" @askUserPosition="askUserPosition"/>
+    <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
     <Map ref="mapRef" :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
@@ -36,6 +36,7 @@ export default {
       lastSearchText: "", lastCheckedTag: [],
       /* filter values */
       regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
+      layerStyle: "2d",
       /* saved data to display */
       savedData: []
     }
@@ -68,7 +69,7 @@ export default {
       this.contactDB();
     },
     askUserPosition: function(location) {
-      this.$refs.mapRef.setViewState(location, 10);
+      this.$refs.mapRef.setViewState(location, 12);
     },
     closeMenu: function() {
       this.$refs.mapOptionsRef.closeMenu();
@@ -79,6 +80,10 @@ export default {
     },
     openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
       this.$refs.cardRef.openCard(namePicture, countryPicture, regionPicture, yearPicture);
+    },
+    setLayerMap: function(style) {
+      this.layerStyle = style;
+      console.log("New style in APP.Vue: " + this.layerStyle);
     }
   }
 }
