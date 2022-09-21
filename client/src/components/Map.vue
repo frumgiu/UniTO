@@ -100,6 +100,7 @@ export default {
   computed: {
     layers() {
       if (this.viewState.zoom <= 20 && this.viewState.zoom >= 9) {
+        console.log("--- Creating icon layer ---");
         return [
             new IconLayer({
             id: 'icon-layer',
@@ -116,26 +117,35 @@ export default {
           })
         ];
       } else {
-        return [
-          new ScreenGridLayer({
-            id: "screen-grid-layer",
-            data: this.dataGeo,
-            cellSizePixels: 14,
-            opacity: 1,
-            colorRange: [
-              [255, 255, 178, 100],
-              [254, 217, 118, 140],
-              [254, 178, 76, 180],
-              [253, 141, 60, 200],
-              [240, 59, 32, 220],
-              [189, 0, 38, 240]
-            ],
-            gpuAggregation: true,
-            aggregation: 'SUM',
-            getPosition: (d) => [d.log, d.lat],
-            getWeight: 4
-          })
-        ];
+        if (this.dataGeo.length === 0) {
+          console.log("--- Creating no layer ---");
+          return [];
+        }
+        else {
+          console.log("--- Creating screen-grid layer ---");
+          console.log("Data: " + this.dataGeo.length);
+          return [
+            new ScreenGridLayer({
+              id: "screen-grid-layer",
+              data: this.dataGeo,
+              cellSizePixels: 14,
+              opacity: 1,
+              colorRange: [
+                [255, 255, 178, 100],
+                [254, 217, 118, 140],
+                [254, 178, 76, 180],
+                [253, 141, 60, 200],
+                [240, 59, 32, 220],
+                [189, 0, 38, 240]
+              ],
+              gpuAggregation: true,
+              aggregation: 'SUM',
+              getPosition: (d) => [d.log, d.lat],
+              getWeight: 4
+            })
+          ];
+        }
+
       }
     }
   }
