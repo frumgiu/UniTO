@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {ScreenGridLayer, HexagonLayer} from "@deck.gl/aggregation-layers";
+import {ScreenGridLayer, HexagonLayer, HeatmapLayer} from "@deck.gl/aggregation-layers";
 import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl';
@@ -31,7 +31,7 @@ export default {
         longitude: 8.484106,
         zoom: 5,
         bearing: 0,
-        pitch: 0,
+        pitch: 50,
       },
     };
   },
@@ -140,7 +140,8 @@ export default {
                 getWeight: 4
               })
             ];
-          } else {
+          }
+          else if (this.layerStyle === "3d") {
             return [
                 new HexagonLayer({
                   id: "hexagon-layer",
@@ -159,9 +160,27 @@ export default {
                   coverage: 1,
                   elevationRange: [0, 3000],
                   elevationScale: 4,
-                  getPosition: (d) => [d.log, d.lat],
+                  getPosition: (d) => [d.log, d.lat]
                 })
             ];
+          } else {
+           return new HeatmapLayer({
+             id: "heat-layer",
+             data: this.dataGeo,
+             colorRange: [
+               [1, 152, 189],
+               [73, 227, 206],
+               [216, 254, 181],
+               [254, 237, 177],
+               [254, 173, 84],
+               [209, 55, 78]
+             ],
+             pickable: false,
+             getPosition: (d) => [d.log, d.lat],
+             aggregation: "SUM",
+             intensity: 1,
+             threshold: 0.4
+           })
           }
         }
       }

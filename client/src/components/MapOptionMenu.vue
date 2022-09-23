@@ -13,7 +13,7 @@
         <div class="layer-options-inner">
           <button class="layer-options" @click="set2dLayer">2D</button>
           <button class="layer-options" @click="set3dLayer">3D</button>
-          <button class="layer-options" @click="setIconLayer">icons</button>
+          <button class="layer-options" @click="setIconLayer">intensity</button>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ export default {
       this.$emit('setLayer', "3d");
     },
     setIconLayer: function() {
-      this.$emit('setLayer', "icon");
+      this.$emit('setLayer', "intensity");
     },
     getUserPosition() {
       console.log(navigator.geolocation);
