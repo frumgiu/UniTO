@@ -116,8 +116,7 @@ export default {
               getColor: [150, 123, 220],
               pickable: true,
               onClick: (info) => this.showIcon(info)
-            })
-          ];
+            }) ];
         } else {
           if (this.layerStyle === "2d") {
             return [
@@ -138,12 +137,10 @@ export default {
                 aggregation: 'SUM',
                 getPosition: (d) => [d.log, d.lat],
                 getWeight: 4
-              })
-            ];
-          }
-          else if (this.layerStyle === "3d") {
+              }) ];
+          } else if (this.layerStyle === "3d") {
             return [
-                new HexagonLayer({
+                  new HexagonLayer({
                   id: "hexagon-layer",
                   data: this.dataGeo,
                   colorRange: [
@@ -161,8 +158,7 @@ export default {
                   elevationRange: [0, 3000],
                   elevationScale: 4,
                   getPosition: (d) => [d.log, d.lat]
-                })
-            ];
+                }) ];
           } else {
            return new HeatmapLayer({
              id: "heat-layer",
