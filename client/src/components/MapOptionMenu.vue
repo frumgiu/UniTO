@@ -30,15 +30,12 @@ export default {
   },
   methods: {
     set2dLayer: function() {
-      console.log("2D button pressed");
       this.$emit('setLayer', "2d");
     },
     set3dLayer: function() {
-      console.log("3D button pressed");
       this.$emit('setLayer', "3d");
     },
     setIconLayer: function() {
-      console.log("icon button pressed");
       this.$emit('setLayer', "icon");
     },
     getUserPosition() {

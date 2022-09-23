@@ -21,10 +21,9 @@ export default {
   components: {
     VueDeckgl
   },
-  props: ['dataGeo'],
+  props: ['dataGeo', 'layerStyle'],
   data() {
     return {
-      layerStyle: "3d",
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
       mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
       viewState: {
@@ -90,7 +89,7 @@ export default {
     },
     showIcon: function(info) {
       this.setViewState(info.object, this.viewState.zoom);
-      this.$emit('askOpenCard', (window.innerWidth/2 - 100), (window.innerHeight/2 - 100), info.object.filename, info.object.country_formal, info.object.region, info.object.year);
+      this.$emit('askOpenCard', info.object.filename, info.object.country_formal, info.object.region, info.object.year);
       },
     closeCard: function() {
       console.log("close card because I'm dragging the map")
@@ -103,7 +102,7 @@ export default {
       if (this.dataGeo.length === 0) {
         return [];
       } else {
-        if (this.viewState.zoom <= 20 && this.viewState.zoom > 12) {
+        if (this.viewState.zoom <= 20 && this.viewState.zoom > 11) {
           return [
             new IconLayer({
               id: 'icon-layer',
@@ -142,7 +141,6 @@ export default {
               })
             ];
           } else {
-            console.log("Creating 3D layer");
             return [
                 new HexagonLayer({
                   id: "hexagon-layer",
@@ -157,7 +155,7 @@ export default {
                   ],
                   pickable: false,
                   extruded: true,
-                  radius: 300,
+                  radius: 2000,
                   coverage: 1,
                   elevationRange: [0, 3000],
                   elevationScale: 4,
@@ -167,6 +165,12 @@ export default {
           }
         }
       }
+    }
+  },
+  watch: {
+    layerStyle: function() {
+      const obj = {log: this.viewState.longitude, lat: this.viewState.latitude};
+      this.setViewState(obj, this.viewState.zoom);
     }
   }
 }

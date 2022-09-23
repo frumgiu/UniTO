@@ -4,7 +4,7 @@
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
-    <Map ref="mapRef" :data-geo="savedData" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+    <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
 </template>
 
@@ -78,12 +78,11 @@ export default {
     closeCard: function() {
       this.$refs.cardRef.closeCard();
     },
-    openCard: function(coordTop, coordLeft, namePicture, countryPicture, regionPicture, yearPicture) {
+    openCard: function(namePicture, countryPicture, regionPicture, yearPicture) {
       this.$refs.cardRef.openCard(namePicture, countryPicture, regionPicture, yearPicture);
     },
     setLayerMap: function(style) {
       this.layerStyle = style;
-      console.log("New style in APP.Vue: " + this.layerStyle);
     }
   }
 }
