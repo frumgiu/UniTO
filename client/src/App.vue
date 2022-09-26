@@ -10,7 +10,7 @@
 
 <script>
 import 'material-icons/iconfont/material-icons.css';
-import {getData} from '@/./controllers/ControllerTableData'
+import {getData, getCoordsForLocation} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import CardPicture from "@/components/CardPicture";
@@ -52,6 +52,7 @@ export default {
         } else {
           this.savedData = response;
         }
+        getCoordsForLocation(this.lastSearchText);
       }, error => {
         console.log(error);
       })
