@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SearchBar @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
+    <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
     <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
@@ -10,7 +10,7 @@
 
 <script>
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getCoordsForLocation} from '@/./controllers/ControllerTableData'
+import {getData, getCoordsForLocation, getNameForCoord} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import CardPicture from "@/components/CardPicture";
@@ -79,7 +79,9 @@ export default {
       this.contactDB();
     },
     askUserPosition: function(location) {
-      this.$refs.mapRef.setViewState(location, 12);
+      getNameForCoord(location).then(response => {
+        this.$refs.searchBarRef.setSearchOnUserPalce(response);
+      });
     },
     closeMenu: function() {
       this.$refs.mapOptionsRef.closeMenu();

@@ -37,6 +37,11 @@ export async function getCoordsForLocation(searchText) {
     return returnData;
 }
 
-export async function getNameForCoord(log, lat) {
-    console.log(log + ", " + lat);
+export async function getNameForCoord(location) {
+    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + location.log + ',' + location.lat +
+        '.json?access_token=pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ&limit=1';
+    let response = await axios.get(url);
+    console.log(response);
+    console.log(response.data.features[0].context[2].text)
+    return response.data.features[0].context[2].text;
 }

@@ -52,6 +52,9 @@ export default {
     },
     closeCard: function() {
       this.$emit('askCloseCard');
+    },
+    setSearchOnUserPalce: function(newSearchKey) {
+      this.searchText = newSearchKey;
     }
   },
   watch: {
