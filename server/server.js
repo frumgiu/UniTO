@@ -8,6 +8,10 @@ const date = new Date();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/build')));
 
+/*
+* Fa una richiesta di interrogazione per il db con i dati che gli sono stati passati. Vengono distinti due casi:
+* quello in cui e' presente una parola chiave e quello il filtraggio avviene solo attraverso il menu di scelta
+*/
 app.get(`/api/getTable/`, (req, res) => {
     console.log('api/getTable called! ' + date.toUTCString());
     if (req.query.search === '') {
@@ -19,6 +23,9 @@ app.get(`/api/getTable/`, (req, res) => {
     }
 })
 
+/*
+* Fa una richiesta di interrogazione del db sapendo che la parola chiave passata e' un luogo (citta' o stato).
+*/
 app.get(`/api/getTableWithBBox/`, (req, res) => {
     console.log('api/getTableWithBBox called! ' + date.toUTCString());
     db.getTableWithSearch(result => {res.json(result.rows);}, req.query.search, req.query.tagsList, req.query.min, req.query.max, req.query.bbox, req.query.infoPlace);

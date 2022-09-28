@@ -22,7 +22,12 @@ client.connect(err => {
 });
 
 /*
- Get the rows with filtered by name
+* Interroga il db filtrando i dati per la parola cercata. Per mantenere la vista consistente bisogna tenere
+* conto dei parametri non modificati della ricerca precedente (tags attivi, minyear e maxyear).
+*
+* Se la parola chiave e' uno stato posso comparare search con i parametri della colonna 'country_formal' (nome intero)
+* Se la parola e' una citta' posso utilizzare il bounding box per selezionare i dati con coordinate comprese al suo intervallo
+* Altrimenti comparo search per 'namefile'
 */
 function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox, infoSearch) {
    let query;
@@ -63,7 +68,7 @@ function getTableByCity(search, tags, minYear, maxYear, bbox) {
 }
 
 /*
- Get the rows filtered by country, from the tags list, and years
+* Interrogo il db filtrando i dati per i parametri del menu di scelta, senza avere una parola chiave
 */
 function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
     let test = createTagsQuery(tags, minYear, maxYear);
@@ -77,7 +82,7 @@ function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
 }
 
 /*
- Create a part of the query, checking if there are any tags
+ Create a part of the query, checking if there are any tags or bbox
 */
 function createTagsQuery(tags, minYear, maxYear, bbox) {
     let test = ``;

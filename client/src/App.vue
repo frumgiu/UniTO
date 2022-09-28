@@ -34,31 +34,30 @@ export default {
       /* latest filter info */
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
       lastSearchText: "", lastCheckedTag: [],
-      /* filter values */
+      /* filter values for regions */
       regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
+      /* default data layer */
       layerStyle: "2d",
       /* saved data to display */
       savedData: []
     }
   },
   mounted() {
-    this.askDataByFilter([], this.lastSelectedMin - 1, this.lastSelectedMax - 1); // start with only data from current year
+    this.askDataByFilter([], this.lastSelectedMin - 1, this.lastSelectedMax - 1); // start with data from previous year
   },
   methods: {
     contactDB: function () {
       let coords;
+      /* Controllo se ho nella search bar una stringa che si riferisce a un luogo */
       getCoordsForLocation(this.lastSearchText).then(response => {
         if (response !== "not valid location") {
           coords = response;
           let zoom = coords.info === "country"  ? 5 : 10;
           this.$refs.mapRef.setViewState(coords, zoom);
         }
+        /* Chiedo che venga interrogato il db */
         getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax, coords).then(response => {
-          if (response === "empty table") {
-            this.savedData = [];
-          } else {
-            this.savedData = response;
-          }
+          this.savedData = response;
         }, error => {
           console.log(error);
         })

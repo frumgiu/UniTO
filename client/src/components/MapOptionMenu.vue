@@ -38,6 +38,7 @@ export default {
     setIconLayer: function() {
       this.$emit('setLayer', "density");
     },
+    /* Utilizza la funzione della API geolocation di HTML per localizzare l'utente */
     getUserPosition() {
       console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(position => {

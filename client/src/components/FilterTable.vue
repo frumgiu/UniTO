@@ -35,7 +35,9 @@ export default {
   props: ['options', 'defaultMin', 'defaultMax'],
   data() {
     return {
+      /* Intervallo di anni selezionato */
       selectedMinYear: this.defaultMax - 1, selectedMaxYear: this.defaultMax - 1,
+      /* Intervallo di anni disponibile, calcolato in base ai parametri selezionati */
       minYearToChoice: [], maxYearToChoice: [],
       checkedOptions: [],
     }

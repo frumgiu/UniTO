@@ -19,7 +19,8 @@
     "mapbox-gl": "^2.9.2",
     "material-icons": "^1.11.4",
     "supercluster": "^7.1.5",
-    "vue-deck.gl": "2.0.0"
+    "vue-deck.gl": "2.0.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",

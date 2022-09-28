@@ -70,8 +70,10 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
+      /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
+    /* Metodo usato per spostare la visuale */
     setViewState: function(obj, zoom) {
       this.viewState = {
         longitude: obj.log,
@@ -87,10 +89,12 @@ export default {
         this.$emit('askCloseMenus');
       }
     },
+    /* Metodo che apre la card */
     showIcon: function(info) {
       this.setViewState(info.object, this.viewState.zoom);
       this.$emit('askOpenCard', info.object.filename, info.object.country_formal, info.object.region, info.object.year);
       },
+    /* Metodo che chiude la card quando viene spostata la visuale */
     closeCard: function() {
       console.log("close card because I'm dragging the map")
       this.$emit('askCloseCard');

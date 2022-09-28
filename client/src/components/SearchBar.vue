@@ -41,6 +41,7 @@ export default {
       const sidemapnav = document.getElementById("sidemapnav");
       this.openMenu(sidemapnav);
     },
+    /* Metodo usato quando mi trovo su un device piu' piccolo e voglio richiedere di aprire un menu */
     openMenu: function (menuId) {
       if (menuId.style.display === "none") {
         this.closeCard();
