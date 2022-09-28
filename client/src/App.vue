@@ -50,7 +50,7 @@ export default {
       getCoordsForLocation(this.lastSearchText).then(response => {
         if (response !== "not valid location") {
           coords = response;
-          let zoom = coords.info === "place" ? 10 : 5;
+          let zoom = coords.info === "country"  ? 5 : 10;
           this.$refs.mapRef.setViewState(coords, zoom);
         }
         getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax, coords).then(response => {

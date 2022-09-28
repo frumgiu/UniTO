@@ -29,7 +29,7 @@ function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox
    console.log(infoSearch);
     if (infoSearch === "country") {
         query = getTableByCountry(search, tags, minYear, maxYear);
-    } else if (infoSearch === "place") {
+    } else if (infoSearch === "place" || infoSearch === "region") {
         query = getTableByCity(search, tags, minYear, maxYear, bbox);
     } else {
         query = getTableByName(search, tags, minYear, maxYear);
