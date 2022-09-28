@@ -1,4 +1,5 @@
 const pg = require('pg');
+const {info} = require("fancy-log");
 const config = {
     host: 'localhost',
     user: 'postgres',
@@ -21,36 +22,44 @@ client.connect(err => {
 });
 
 /*
- Create a demo table with some rows
-*/
-function createTableDemo() {
-    const query = `DROP TABLE IF EXISTS demo;
-        CREATE TABLE demo (id serial PRIMARY KEY, name VARCHAR(50), year INT, region VARCHAR(50), coordinates geography(POINT) null);
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Parco del Valentino', 2020, 'Europe', 'POINT(7.686736 45.054847)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Piazza Castello', 2018, 'Europe', 'POINT(7.685089 45.071217)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Parco di Stupinigi', 2020, 'Europe', 'POINT(7.587417 44.980997)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Priamar', 2012, 'Europe', 'POINT(8.48426 44.30459)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Torre del Brandale', 2015, 'Europe', 'POINT(8.484106 44.3072)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Sirenetta', 2011, 'Europe', 'POINT(12.5928976284 55.6890472438)');
-        INSERT INTO demo (name, year, region, coordinates) VALUES ('Cremlino', 2015, 'Europe', 'POINT(37.629005 55.699336)');`;
-
-    client.query(query).then(() => {
-        console.log("Table created successfully!");
-    }).catch(err => console.log(err))
-}
-
-/*
  Get the rows with filtered by name
 */
-function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear) {
-    let test = createTagsQuery(tags, minYear, maxYear);
-    const query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
-                   FROM wlm_data WHERE (UPPER("filename") LIKE UPPER('%${search}%') OR UPPER("country_formal") LIKE UPPER('${search}')) AND ` + test;
+function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox, infoSearch) {
+   let query;
+   console.log(infoSearch);
+    if (infoSearch === "country") {
+        query = getTableByCountry(search, tags, minYear, maxYear);
+    } else if (infoSearch === "place") {
+        query = getTableByCity(search, tags, minYear, maxYear, bbox);
+    } else {
+        query = getTableByName(search, tags, minYear, maxYear);
+    }
     console.log(query)
     client.query(query).then(res => {
         lambdaFunction(res);
         console.log("Close connection\n")
     }).catch(err => console.log(err))
+}
+
+function getTableByName(search, tags, minYear, maxYear) {
+    console.log("search name");
+    let test = createTagsQuery(tags, minYear, maxYear);
+    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
+                   FROM wlm_data WHERE (UPPER("filename") LIKE UPPER('%${search}%')) AND ` + test;
+}
+
+function getTableByCountry(search, tags, minYear, maxYear) {
+    console.log("search country");
+    let test = createTagsQuery(tags, minYear, maxYear);
+    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
+                   FROM wlm_data WHERE (UPPER("country_formal") LIKE UPPER('${search}')) AND ` + test;
+}
+
+function getTableByCity(search, tags, minYear, maxYear, bbox) {
+    console.log("search city");
+    let test = createTagsQuery(tags, minYear, maxYear, bbox);
+    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
+                   FROM wlm_data WHERE ` + test;
 }
 
 /*
@@ -70,7 +79,7 @@ function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
 /*
  Create a part of the query, checking if there are any tags
 */
-function createTagsQuery(tags, minYear, maxYear) {
+function createTagsQuery(tags, minYear, maxYear, bbox) {
     let test = ``;
     if (typeof tags !== 'undefined') {
         test += `(`;
@@ -79,6 +88,10 @@ function createTagsQuery(tags, minYear, maxYear) {
         })
         test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
         test += `) AND `;
+    }
+    if (typeof bbox !== 'undefined') {
+        test += `( ST_X(geom::geometry) >= '${bbox[0]}' AND ST_X(geom::geometry) <= '${bbox[2]}' 
+        AND ST_Y(geom::geometry) >= '${bbox[1]}' AND ST_Y(geom::geometry) <= '${bbox[3]}') AND `;
     }
     test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     return test;

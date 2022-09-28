@@ -46,16 +46,26 @@ export default {
   },
   methods: {
     contactDB: function () {
-      getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax).then(response => {
-        if (response === "empty table") {
-          this.savedData = [];
-        } else {
-          this.savedData = response;
+      let coords;
+      getCoordsForLocation(this.lastSearchText).then(response => {
+        if (response !== "not valid location") {
+          coords = response;
+          let zoom = coords.info === "place" ? 10 : 5;
+          this.$refs.mapRef.setViewState(coords, zoom);
         }
-        getCoordsForLocation(this.lastSearchText);
+        getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax, coords).then(response => {
+          if (response === "empty table") {
+            this.savedData = [];
+          } else {
+            this.savedData = response;
+          }
+        }, error => {
+          console.log(error);
+        })
       }, error => {
         console.log(error);
       })
+
     },
     askDataBySearch: function(searchText) {
       this.lastSearchText = searchText;

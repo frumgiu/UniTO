@@ -19,6 +19,12 @@ app.get(`/api/getTable/`, (req, res) => {
     }
 })
 
+app.get(`/api/getTableWithBBox/`, (req, res) => {
+    console.log('api/getTableWithBBox called! ' + date.toUTCString());
+    db.getTableWithSearch(result => {res.json(result.rows);}, req.query.search, req.query.tagsList, req.query.min, req.query.max, req.query.bbox, req.query.infoPlace);
+
+})
+
 app.get(`/`, (req,res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
