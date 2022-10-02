@@ -80,7 +80,11 @@ export default {
     },
     askUserPosition: function(location) {
       getNameForCoord(location).then(response => {
-        this.$refs.searchBarRef.setSearchOnUserPalce(response);
+        if (this.lastSearchText !== response){
+          this.$refs.searchBarRef.setSearchOnUserPlace(response);
+        } else {
+          this.$refs.mapRef.setViewState(location, 10);
+        }
       });
     },
     closeMenu: function() {

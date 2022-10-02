@@ -53,7 +53,7 @@ export default {
     closeCard: function() {
       this.$emit('askCloseCard');
     },
-    setSearchOnUserPalce: function(newSearchKey) {
+    setSearchOnUserPlace: function(newSearchKey) {
       this.searchText = newSearchKey;
     }
   },
