@@ -9,9 +9,9 @@
       </a>
     </div>
     <div class="card-body">
-      <h5 class="card-title">{{ namePicture }}</h5>
+      <h5 class="card-title">{{ this.$store.state.pictureInfo.namePicture }}</h5>
       <hr class="solid">
-      <p class="card-text">Location: {{ countryPicture }}, {{ regionPicture }} <br/>Year: {{ yearPicture }} </p>
+      <p class="card-text">Location: {{ this.$store.state.pictureInfo.countryPicture }}, {{ this.$store.state.pictureInfo.regionPicture }} <br/>Year: {{ this.$store.state.pictureInfo.yearPicture }} </p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
           <button class="card-btn">
@@ -30,23 +30,21 @@
 <script>
 export default {
   name: "CardPicture",
-  props: ["namePicture", "countryPicture", "regionPicture", "yearPicture"],
+  props: [],
   data() {
     return {
+      namePicture: "",
       cryptoNode: require('crypto')
     }
   },
   methods: {
-    openCard: function(namePicture, countryPicture, regionPicture, yearPicture) {
+    openCard: function() {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
       cardPictureId.style.top = "50%";
       cardPictureId.style.left = "50%";
-      this.namePicture = namePicture;
-      this.countryPicture = countryPicture;
-      this.regionPicture = regionPicture;
-      this.yearPicture = yearPicture;
+      this.namePicture = this.$store.state.pictureInfo.namePicture;
     },
     closeCard: function () {
       const cardPictureId = document.getElementById("cardpicture");

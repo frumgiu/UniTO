@@ -3,7 +3,7 @@
     <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
-    <CardPicture ref="cardRef" :name-picture="namePicture" :country-picture="countryPicture" :region-picture="regionPicture" :year-picture="yearPicture" />
+    <CardPicture ref="cardRef" />
     <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
   </div>
 </template>
@@ -28,9 +28,6 @@ export default {
   },
   data() {
     return {
-      /* card info to display */
-      namePicture: "", yearPicture: 0,
-      regionPicture: "", countryPicture: "",
       /* latest filter info */
       lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
       lastSearchText: "", lastCheckedTag: [],
@@ -94,8 +91,8 @@ export default {
     closeCard: function() {
       this.$refs.cardRef.closeCard();
     },
-    openCard: function(namePicture, countryPicture, regionPicture, yearPicture) {
-      this.$refs.cardRef.openCard(namePicture, countryPicture, regionPicture, yearPicture);
+    openCard: function() {
+      this.$refs.cardRef.openCard();
     },
     setLayerMap: function(style) {
       this.layerStyle = style;

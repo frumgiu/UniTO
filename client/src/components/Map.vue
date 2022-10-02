@@ -15,6 +15,7 @@ import {ScreenGridLayer, HexagonLayer, HeatmapLayer} from "@deck.gl/aggregation-
 import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl';
+import store from "@/store";
 
 export default {
   name: "Map",
@@ -92,8 +93,10 @@ export default {
     /* Metodo che apre la card */
     showIcon: function(info) {
       this.setViewState(info.object, this.viewState.zoom);
-      this.$emit('askOpenCard', info.object.filename, info.object.country_formal, info.object.region, info.object.year);
-      },
+      store.dispatch('changePictureInfo',
+          {newName: info.object.filename, newCountry: info.object.country_formal, newRegion: info.object.region, newYear: info.object.year})
+      this.$emit('askOpenCard');
+    },
     /* Metodo che chiude la card quando viene spostata la visuale */
     closeCard: function() {
       console.log("close card because I'm dragging the map")
