@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "SearchBar",
   data() {
@@ -31,7 +33,8 @@ export default {
   },
   methods: {
     askDataBySearch: function() {
-      this.$emit('askDataBySearch', this.searchText)
+      store.dispatch('changeSearchTxt', this.searchText);
+      this.$emit('askDataBySearch')
     },
     openMenuFilter: function() {
       const sideNav = document.getElementById("sidenav");
@@ -59,7 +62,8 @@ export default {
   },
   watch: {
     searchText: function() {
-      this.$emit('askDataBySearch', this.searchText)
+      store.dispatch('changeSearchTxt', this.searchText);
+      this.$emit('askDataBySearch')
     },
     deep: true
   }

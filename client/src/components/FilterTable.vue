@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import store from '@/store';
 
 export default {
   name: "FilterTable",
@@ -36,7 +37,8 @@ export default {
   data() {
     return {
       /* Intervallo di anni selezionato */
-      selectedMinYear: this.defaultMax - 1, selectedMaxYear: this.defaultMax - 1,
+      selectedMinYear: store.state.filterInfo.lastSelectedMin,
+      selectedMaxYear: store.state.filterInfo.lastSelectedMax,
       /* Intervallo di anni disponibile, calcolato in base ai parametri selezionati */
       minYearToChoice: [], maxYearToChoice: [],
       checkedOptions: [],
@@ -44,7 +46,9 @@ export default {
   },
   methods: {
     filterByTag: function () {
-      this.$emit('askDataByFilter', this.checkedOptions, this.selectedMinYear, this.selectedMaxYear);
+      console.log("selected years: " + this.selectedMinYear + " - " + this.selectedMaxYear);
+      store.dispatch('changeFilterInfo', {newMinYear: this.selectedMinYear, newMaxYear: this.selectedMaxYear, newTags: this.checkedOptions})
+      this.$emit('askDataByFilter');
     },
     getNumbersMin: function () {
       this.minYearToChoice = new Array(this.selectedMaxYear - this.defaultMin + 1).fill(this.defaultMin).map((n, i) => n+i);

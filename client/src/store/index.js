@@ -5,10 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store ({
     state: {
-        lastSearchTxt: '',
-        lastSelectedMin: new Date().getFullYear(),
-        lastSelectedMax: new Date().getFullYear(),
-        lastCheckedTag: [],
+        lastSearchTxt: "",
+        filterInfo: {
+            lastSelectedMin: new Date().getFullYear() - 3,
+            lastSelectedMax: new Date().getFullYear(),
+            lastCheckedTag: []
+        },
         pictureInfo: {
             namePicture: "",
             yearPicture: 0,
@@ -20,16 +22,13 @@ export default new Vuex.Store ({
     },
     mutations: {
         changeSearchTxt(state, newValue) {
-            localStorage.setItem('lastSearchTxt', newValue);
+            //localStorage.setItem('lastSearchTxt', newValue);
+            state.lastSearchTxt = newValue;
         },
-        changeMinYear(state, newValue) {
-            localStorage.setItem('lastSelectedMin', newValue);
-        },
-        changeMaxYear(state, newValue) {
-            localStorage.setItem('lastSelectedMax', newValue);
-        },
-        changeCheckedTags(state, newValue) {
-            localStorage.setItem('lastCheckedTag', newValue);
+        changeFilterInfo(state, {newMinYear, newMaxYear, newTags}) {
+            state.filterInfo.lastSelectedMin = newMinYear;
+            state.filterInfo.lastSelectedMax = newMaxYear;
+            state.filterInfo.lastCheckedTag = newTags;
         },
         changePictureInfo(state, {newName, newYear, newRegion, newCountry}) {
             state.pictureInfo.namePicture = newName;
@@ -41,6 +40,12 @@ export default new Vuex.Store ({
     actions: {
         changePictureInfo(context, {newName, newYear, newRegion, newCountry}) {
             context.commit('changePictureInfo', {newName, newYear, newRegion, newCountry});
+        },
+        changeFilterInfo(context, {newMinYear, newMaxYear, newTags}) {
+            context.commit('changeFilterInfo', {newMinYear, newMaxYear, newTags});
+        },
+        changeSearchTxt(context, newValue) {
+            context.commit('changeSearchTxt', newValue);
         }
     }
 })

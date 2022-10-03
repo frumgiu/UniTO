@@ -16,6 +16,7 @@ import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl';
 import store from "@/store";
+//import mySvg from "../resources/polaroids-polaroid-svgrepo-com.svg";
 
 export default {
   name: "Map",
@@ -117,6 +118,12 @@ export default {
               iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
               iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
               getIcon: () => 'marker',
+            /*  getIcon: () => ({
+                url: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(mySvg)}`,
+                width: 128,
+                height: 128,
+                anchorY: 128
+              }),*/
               getPosition: (d) => [d.log, d.lat],
               getSize: () => 4,
               sizeScale: 10,

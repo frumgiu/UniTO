@@ -28,9 +28,6 @@ export default {
   },
   data() {
     return {
-      /* latest filter info */
-      lastSelectedMin: new Date().getFullYear(), lastSelectedMax: new Date().getFullYear(),
-      lastSearchText: "", lastCheckedTag: [],
       /* filter values for regions */
       regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
       /* default data layer */
@@ -40,20 +37,21 @@ export default {
     }
   },
   mounted() {
-    this.askDataByFilter([], this.lastSelectedMin - 1, this.lastSelectedMax - 1); // start with data from previous year
+    this.askDataByFilter();
   },
   methods: {
     contactDB: function () {
       let coords;
       /* Controllo se ho nella search bar una stringa che si riferisce a un luogo */
-      getCoordsForLocation(this.lastSearchText).then(response => {
+      getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
           coords = response;
           let zoom = coords.info === "country"  ? 5 : 10;
           this.$refs.mapRef.setViewState(coords, zoom);
         }
         /* Chiedo che venga interrogato il db */
-        getData(this.lastSearchText, this.lastCheckedTag, this.lastSelectedMin, this.lastSelectedMax, coords).then(response => {
+        const prefix = this.$store.state;
+        getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, coords).then(response => {
           this.savedData = response;
         }, error => {
           console.log(error);
@@ -61,23 +59,18 @@ export default {
       }, error => {
         console.log(error);
       })
-
     },
-    askDataBySearch: function(searchText) {
-      this.lastSearchText = searchText;
+    askDataBySearch: function() {
       this.closeCard();
       this.contactDB();
     },
-    askDataByFilter: function(tagsList, minYear, maxYear) {
-      this.lastCheckedTag = tagsList;
-      this.lastSelectedMin = minYear;
-      this.lastSelectedMax = maxYear;
+    askDataByFilter: function() {
       this.closeCard();
       this.contactDB();
     },
     askUserPosition: function(location) {
       getNameForCoord(location).then(response => {
-        if (this.lastSearchText !== response){
+        if (this.$store.state.lastSearchTxt !== response){
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
           this.$refs.mapRef.setViewState(location, 10);
