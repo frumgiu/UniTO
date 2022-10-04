@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
-      mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
+      mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p?optimize=true",
       viewState: {
         latitude: 44.3072,
         longitude: 8.484106,
@@ -45,7 +45,7 @@ export default {
       accessToken: this.accessToken,
       container: this.$refs.map,
       interactive: false,
-      style: this.mapStyle || "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p",
+      style: this.mapStyle || "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p?optimize=true",
       center: [this.viewState.longitude, this.viewState.latitude],
       zoom: this.viewState.zoom,
       pitch: this.viewState.pitch,
@@ -167,10 +167,11 @@ export default {
                   ],
                   pickable: false,
                   extruded: true,
-                  radius: 2000,
+                  radius: 300,
                   coverage: 1,
-                  elevationRange: [0, 3000],
-                  elevationScale: 4,
+                  elevationRange: [0, this.viewState.zoom * 800],
+                  elevationScale: 20,
+                  //getElevationValue: (d) => (d.reduce((accumulator) => accumulator + Math.random()*100)),
                   getPosition: (d) => [d.log, d.lat]
                 }) ];
           } else {

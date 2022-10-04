@@ -2,9 +2,48 @@
   <div id="app">
     <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
-    <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
-    <CardPicture ref="cardRef" />
-    <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+    <div id="map-display">
+      <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
+      <CardPicture ref="cardRef"/>
+      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+    </div>
+    <div id="gallery-display">
+      <div id="gallery">
+        <hr class="solid" style="margin-top: 4.7rem"/>
+        <div class="image-group-wrapper">
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+          <div class="image-wrapper">
+            <div class="image-gallery">Test della gallery</div>
+            <hr class="solid"/>
+            <div>Didascalie</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -108,5 +147,38 @@ export default {
   hr.solid {
     border-top: 0.09rem solid #967bdc;
     margin: 0.6rem;
+  }
+
+  #gallery-display {
+    z-index: 9;
+    background-color: whitesmoke;
+    width: 55%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0 0.8rem 0.8rem 0;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+  }
+
+  .image-group-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 0.8rem 0.01rem;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+  }
+
+  .image-wrapper{
+    width: 48%;
+    height: fit-content;
+    padding: 0.3rem 0.2rem;
+    border: 0.09rem solid #48a36a;
+    border-radius: 0.8rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+    text-align: center;
   }
 </style>
