@@ -1,5 +1,5 @@
 <template>
-  <div class="image-wrapper">
+  <div id="gallery-wrapper-elements" class="image-wrapper">
     <div class="image-gallery">Test della gallery</div>
     <hr class="solid"/>
     <div>Didascalie</div>
@@ -13,5 +13,5 @@ export default {
 </script>
 
 <style scoped>
-
+  @import url('../resources/stylesheets/gallery/gallery-element.css');
 </style>

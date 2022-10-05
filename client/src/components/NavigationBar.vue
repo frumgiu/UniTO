@@ -1,5 +1,5 @@
 <template>
-  <div class="gallery-map-btn-wrapper hide-btn-sm">
+  <div class="gallery-map-btn-wrapper">
     <button :disabled="!galleryOpen" class="gallery-map-btn gallery-close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close gallery" @click="closeGallery">
       <span class="material-icons"  style="vertical-align: middle">close</span>
     </button>
@@ -62,6 +62,18 @@ export default {
       gallery.classList.add(add);
       gallery.classList.remove(removeone);
       gallery.classList.remove(removetwo);
+      if (add === 'gallery-full') {
+        this.changeGalleryElemStyle ('img-wrapper-full-gallery', 'img-wrapper-split-gallery');
+      } else {
+        this.changeGalleryElemStyle('img-wrapper-split-gallery', 'img-wrapper-full-gallery')
+      }
+    },
+    changeGalleryElemStyle : function (add, remove) {
+      const elements = document.querySelectorAll('#gallery-wrapper-elements');
+      for (const elem of elements) {
+        elem.classList.add(add);
+        elem.classList.remove(remove);
+      }
     },
     changeNavbarStyle(add, remove) {
       const navbar = document.getElementById("nav-bar");

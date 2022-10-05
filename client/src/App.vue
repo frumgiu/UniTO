@@ -125,7 +125,6 @@ export default {
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
   @import url('resources/stylesheets/navbar/responsive-navbar.css');
   @import url('resources/stylesheets/gallery/gallery-container.css');
-  @import url('resources/stylesheets/gallery/gallery-element.css');
 
   #app {
     font-family: "Dosis", sans-serif;
