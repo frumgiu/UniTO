@@ -1,0 +1,37 @@
+.gallery-map-btn-wrapper {
+    /*z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;*/
+
+    display: flex;
+    width: fit-content;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 0.8rem 0.01rem;
+
+    /*margin-left: 20rem;
+    margin-top: 1rem;
+    background-color: white;
+    border-radius: 0.8rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;*/
+}
+
+.gallery-map-btn {
+    width: fit-content;
+    max-width: 100%;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: black;
+}
+
+.gallery-close-btn:hover {
+    color: #e25a25;
+}
+
+.gallery-open-btn:hover{
+    color: #48a36a;
+}
+/* RESPONSIVE */

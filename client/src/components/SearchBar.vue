@@ -1,23 +1,21 @@
 <template>
-  <div class="fixed-top my-navbar">
-    <div class="nav-container">
-      <form class="input-group" @submit.prevent>
-        <div class="search-group">
-          <input id="searchTxt" v-model.lazy="searchText" type="text" class="search-text" placeholder="Insert name or country" autocomplete="off"/>
-          <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Search" @click="askDataBySearch">
-            <span class="material-icons"  style="vertical-align: middle">search</span>
-          </button>
-        </div>
-        <div class="btn-container hide-btn-lg">
-          <button class="search-btn" type="button" data-placement="top" title="Search options" @click="openMenuFilter">
-            <span class="material-icons"  style="vertical-align: middle">filter_list</span>
-          </button>
-          <button class="search-btn" type="button" data-placement="top" title="Map options" @click="openMenuMap">
-          <span class="material-icons"  style="vertical-align: middle">explore</span>
-          </button>
-        </div>
-      </form>
-    </div>
+  <div class="nav-container">
+    <form class="input-group" @submit.prevent>
+      <div class="search-group">
+        <input id="searchTxt" v-model.lazy="searchText" type="text" class="search-text" placeholder="Insert name or country" autocomplete="off"/>
+        <button class="search-btn" type="button" data-toggle="tooltip" data-placement="top" title="Search" @click="askDataBySearch">
+          <span class="material-icons"  style="vertical-align: middle">search</span>
+        </button>
+      </div>
+      <div class="btn-container hide-btn-lg">
+        <button class="search-btn" type="button" data-placement="top" title="Search options" @click="openMenuFilter">
+          <span class="material-icons"  style="vertical-align: middle">filter_list</span>
+        </button>
+        <button class="search-btn" type="button" data-placement="top" title="Map options" @click="openMenuMap">
+        <span class="material-icons"  style="vertical-align: middle">explore</span>
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -71,5 +69,5 @@ export default {
 </script>
 
 <style scoped>
-@import url('../resources/stylesheets/responsive-navbar.css');
+  @import url('../resources/stylesheets/search-bar.css');
 </style>

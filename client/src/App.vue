@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
+    <div class="fixed-top my-navbar">
+      <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
+      <div class="vl"></div>
+      <NavigationBar />
+    </div>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
     <div id="map-display">
       <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
       <CardPicture ref="cardRef"/>
       <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
     </div>
-    <div id="gallery-display">
+
+    <div id="gallery-display" style="display: block">
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
         <div class="image-group-wrapper">
@@ -55,10 +60,12 @@ import FilterTable from "@/components/FilterTable";
 import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
+import NavigationBar from "@/components/NavigationBar";
 
 export default {
   name: 'App',
   components: {
+    NavigationBar,
     Map,
     MapOptionMenu,
     CardPicture,
@@ -128,13 +135,14 @@ export default {
     },
     setLayerMap: function(style) {
       this.layerStyle = style;
-    }
+    },
   }
 }
 </script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
+  @import url('resources/stylesheets/responsive-navbar.css');
 
   #app {
     font-family: "Dosis", sans-serif;
@@ -147,6 +155,11 @@ export default {
   hr.solid {
     border-top: 0.09rem solid #967bdc;
     margin: 0.6rem;
+  }
+
+  .vl {
+    border-top: 0.09rem solid #967bdc;
+    height: 50px;
   }
 
   #gallery-display {
@@ -181,4 +194,5 @@ export default {
     box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
     text-align: center;
   }
+
 </style>
