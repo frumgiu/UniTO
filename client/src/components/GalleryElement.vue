@@ -2,13 +2,14 @@
   <div id="gallery-wrapper-elements" class="image-wrapper">
     <div class="image-gallery">Test della gallery</div>
     <hr class="solid"/>
-    <div>Didascalie</div>
+    <div>{{ singleData.filename }}</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "GalleryElement"
+  name: "GalleryElement",
+  props: ['singleData']
 }
 </script>
 

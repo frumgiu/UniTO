@@ -15,15 +15,8 @@
     <div id="gallery-display" class="gallery-split">
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
-        <div class="image-group-wrapper">
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
-          <GalleryElement/>
+        <div class="image-group-wrapper" v-for="(value, index) in savedData" :key="index">
+          <GalleryElement :single-data="value"/>
         </div>
       </div>
     </div>
