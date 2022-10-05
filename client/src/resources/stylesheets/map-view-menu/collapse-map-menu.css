@@ -81,7 +81,7 @@
 /* RESPONSIVE */
 @media screen and (min-width: 1281px) {
     .nav-options-container {
-        display: block !important;
+        display: block;
         width: 20%;
         max-width: 22%;
     }
@@ -89,7 +89,7 @@
 
 @media screen and (min-width: 1025px) and (max-width: 1280px){
     .nav-options-container {
-        display: block !important;
+        display: block;
         width: 25%;
         max-width: 40%;
     }

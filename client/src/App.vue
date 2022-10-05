@@ -142,6 +142,6 @@ export default {
   .vl {
     border-right: 0.09rem solid #48a36a;
     margin: 0 0.6rem;
-    height: 50px;
+    height: 30px;
   }
 </style>

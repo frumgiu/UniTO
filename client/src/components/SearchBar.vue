@@ -7,7 +7,7 @@
           <span class="material-icons"  style="vertical-align: middle">search</span>
         </button>
       </div>
-      <div class="btn-container hide-btn-lg">
+      <div class="btn-container">
         <button class="search-btn" type="button" data-placement="top" title="Search options" @click="openMenuFilter">
           <span class="material-icons"  style="vertical-align: middle">filter_list</span>
         </button>
