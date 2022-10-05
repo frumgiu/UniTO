@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav-bar" class="fixed-top my-navbar">
+    <div id="nav-bar" class="fixed-top my-navbar navbar-transparent">
       <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
       <div class="vl"></div>
       <NavigationBar />
@@ -12,7 +12,7 @@
       <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
     </div>
 
-    <div id="gallery-display" style="display: block">
+    <div id="gallery-display" class="gallery-split">
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
         <div class="image-group-wrapper">
@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return {
+      windowH: window.innerWidth,
       /* filter values for regions */
       regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
       /* default data layer */
@@ -143,6 +144,7 @@ export default {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
   @import url('resources/stylesheets/responsive-navbar.css');
+  @import url('resources/stylesheets/gallery-container.css');
 
   #app {
     font-family: "Dosis", sans-serif;
@@ -158,20 +160,9 @@ export default {
   }
 
   .vl {
-    border-top: 0.09rem solid #967bdc;
+    border-right: 0.09rem solid #48a36a;
+    margin: 0 0.6rem;
     height: 50px;
-  }
-
-  #gallery-display {
-    z-index: 9;
-    background-color: whitesmoke;
-    width: 55%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 0 0.8rem 0.8rem 0;
-    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
   }
 
   .image-group-wrapper {
@@ -189,7 +180,7 @@ export default {
     width: 48%;
     height: fit-content;
     padding: 0.3rem 0.2rem;
-    border: 0.09rem solid #48a36a;
+    border: 0.09rem solid transparent;
     border-radius: 0.8rem;
     box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
     text-align: center;

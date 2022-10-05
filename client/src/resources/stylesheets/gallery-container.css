@@ -1,0 +1,58 @@
+/* BASE */
+#gallery-display {
+    z-index: 9;
+    background-color: white;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.gallery-close {
+    display: none;
+}
+
+.gallery-split {
+    display: block;
+    width: 55%;
+    border-radius: 0 0.8rem 0.8rem 0;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+}
+
+.gallery-full {
+    display: block;
+    width: 100%;
+}
+
+/*
+*   RESPONSIVE
+*   Mi basta farlo per gli schermi grandi, perche quelli piccoli
+*   possono essere solo gallery-close o gallery-full
+*/
+
+@media screen and (min-width: 1281px) {
+    .gallery-split {
+        display: block;
+        width: 45%;
+        border-radius: 0 0.8rem 0.8rem 0;
+        box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1280px){
+    .gallery-split {
+        display: block;
+        width: 45%;
+        border-radius: 0 0.8rem 0.8rem 0;
+        box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .gallery-split {
+        display: block;
+        width: 50%;
+        border-radius: 0 0.8rem 0.8rem 0;
+        box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+    }
+}

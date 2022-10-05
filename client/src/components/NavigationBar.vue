@@ -15,37 +15,61 @@ export default {
   name: "NavigationBar",
   data() {
     return {
+      windowH: window.innerWidth,
       galleryOpen: true
+    }
+  },
+  mounted() {
+    window.onresize = () => {
+      this.windowH = window.innerWidth;
+      if (this.windowH > 768) {
+        if (this.galleryOpen) {
+          this.changeNavbarStyle('navbar-transparent', 'navbar-white');
+        } else {
+          this.changeNavbarStyle('navbar-white', 'navbar-transparent');
+        }
+      } else {
+        if (this.galleryOpen)
+          this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
+        this.changeNavbarStyle('navbar-white', 'navbar-transparent');
+      }
     }
   },
   methods: {
     closeGallery: function() {
-      const gallery = document.getElementById("gallery-display");
-      const navbar = document.getElementById("nav-bar");
-      gallery.style.display = "none";
-      navbar.style.backgroundColor = "white";
-      navbar.style.boxShadow = "rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem";
+      this.changeGalleryStyle('gallery-close', 'gallery-split', 'gallery-full');
+      this.changeNavbarStyle('navbar-white', 'navbar-transparent');
       document.getElementById('icon-expand').innerHTML = 'arrow_forward';
       this.galleryOpen = false;
     },
     openGallery: function() {
       const gallery = document.getElementById("gallery-display");
-      const navbar = document.getElementById("nav-bar");
-      if (gallery.style.display === 'block' && gallery.style.width === '55%') {
-        gallery.style.width = '100%';
-        document.getElementById('icon-expand').innerHTML = 'arrow_back';
+      if (gallery.classList.contains('gallery-split') || window.innerWidth < 768 ) {
+        this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
+        if (window.innerWidth >= 768) {
+          document.getElementById('icon-expand').innerHTML = 'arrow_back';
+        }
       } else {
-        gallery.style.width = '55%';
-        gallery.style.display = 'block'
+        this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
         document.getElementById('icon-expand').innerHTML = 'arrow_forward';
       }
-      navbar.style.backgroundColor = "transparent";
-      navbar.style.boxShadow = "none";
+      if (window.innerWidth >= 768)
+        this.changeNavbarStyle('navbar-transparent', 'navbar-white');
       this.galleryOpen = true;
+    },
+    changeGalleryStyle: function (add, removeone, removetwo) {
+      const gallery = document.getElementById("gallery-display");
+      gallery.classList.add(add);
+      gallery.classList.remove(removeone);
+      gallery.classList.remove(removetwo);
+    },
+    changeNavbarStyle(add, remove) {
+      const navbar = document.getElementById("nav-bar");
+      navbar.classList.add(add);
+      navbar.classList.remove(remove);
     }
   }
 }
-
 </script>
 
 <style scoped>
