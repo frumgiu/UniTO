@@ -84,7 +84,7 @@ export default {
 </script>
 
 <style scoped>
-  @import url("../resources/stylesheets/collapse-filter-menu.css");
-  @import url("../resources/stylesheets/button-filter.css");
-  @import url("../resources/stylesheets/date-filter.css");
+  @import url("../resources/stylesheets/filter-menu/collapse-filter-menu.css");
+  @import url("../resources/stylesheets/filter-menu/button-filter.css");
+  @import url("../resources/stylesheets/filter-menu/date-filter.css");
 </style>

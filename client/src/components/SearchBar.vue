@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style scoped>
-  @import url('../resources/stylesheets/search-bar.css');
+  @import url('../resources/stylesheets/navbar/search-bar.css');
 </style>

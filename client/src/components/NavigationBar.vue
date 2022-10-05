@@ -73,5 +73,5 @@ export default {
 </script>
 
 <style scoped>
-  @import url('../resources/stylesheets/button-navigation.css');
+  @import url('../resources/stylesheets/navbar/button-navigation.css');
 </style>

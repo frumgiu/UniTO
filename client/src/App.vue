@@ -16,36 +16,14 @@
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
         <div class="image-group-wrapper">
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
-          <div class="image-wrapper">
-            <div class="image-gallery">Test della gallery</div>
-            <hr class="solid"/>
-            <div>Didascalie</div>
-          </div>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
+          <GalleryElement/>
         </div>
       </div>
     </div>
@@ -61,10 +39,12 @@ import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
 import NavigationBar from "@/components/NavigationBar";
+import GalleryElement from "@/components/GalleryElement";
 
 export default {
   name: 'App',
   components: {
+    GalleryElement,
     NavigationBar,
     Map,
     MapOptionMenu,
@@ -143,8 +123,9 @@ export default {
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
-  @import url('resources/stylesheets/responsive-navbar.css');
-  @import url('resources/stylesheets/gallery-container.css');
+  @import url('resources/stylesheets/navbar/responsive-navbar.css');
+  @import url('resources/stylesheets/gallery/gallery-container.css');
+  @import url('resources/stylesheets/gallery/gallery-element.css');
 
   #app {
     font-family: "Dosis", sans-serif;
@@ -164,26 +145,4 @@ export default {
     margin: 0 0.6rem;
     height: 50px;
   }
-
-  .image-group-wrapper {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-flow: row wrap;
-    gap: 0.8rem 0.01rem;
-    width: 100%;
-    height: 100%;
-    cursor: default;
-  }
-
-  .image-wrapper{
-    width: 48%;
-    height: fit-content;
-    padding: 0.3rem 0.2rem;
-    border: 0.09rem solid transparent;
-    border-radius: 0.8rem;
-    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
-    text-align: center;
-  }
-
 </style>

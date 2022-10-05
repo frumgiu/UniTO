@@ -59,5 +59,5 @@ export default {
 </script>
 
 <style scoped>
-@import url('../resources/stylesheets/collapse-map-menu.css');
+@import url('../resources/stylesheets/map-view-menu/collapse-map-menu.css');
 </style>
