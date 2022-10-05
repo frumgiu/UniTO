@@ -40,8 +40,9 @@
     color: #48a36a;
 }
 
-.btn-position:disabled, .btn-position[disabled] {
+.btn-position:disabled, .btn-position:hover:disabled {
     color: gray;
+    cursor: default;
 }
 
 .layer-title {

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="fixed-top my-navbar">
+    <div id="nav-bar" class="fixed-top my-navbar">
       <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
       <div class="vl"></div>
       <NavigationBar />

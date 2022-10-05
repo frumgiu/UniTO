@@ -27,6 +27,11 @@
     color: black;
 }
 
+.gallery-map-btn:disabled, .gallery-map-btn:hover:disabled {
+    cursor: default;
+    color: gray;
+}
+
 .gallery-close-btn:hover {
     color: #e25a25;
 }
@@ -34,4 +39,3 @@
 .gallery-open-btn:hover{
     color: #48a36a;
 }
-/* RESPONSIVE */
