@@ -69,6 +69,9 @@ export default {
         ...viewState
       }
       if (this.jumpTo) {
+        const result = this.map.getBounds().toArray();
+        store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
+        //console.log("result: " + result);
         this.map.jumpTo({
           center: [viewState.longitude, viewState.latitude],
           zoom: viewState.zoom,

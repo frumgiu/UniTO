@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const app = express(), bodyParser = require("body-parser");
 const db = require('./database');
-const {satisfies} = require("nodemon/lib/utils");
 const date = new Date();
 
 let dataAll = [];
@@ -20,12 +19,11 @@ app.get(`/api/getTable/`, (req, res) => {
     if (req.query.search === '') {
         console.log('Tag list: ' + req.query.tagsList + " in " + req.query.min + " - " + req.query.max + "\n")
         db.getTableWithFilters(result => {res.json(result.rows);}, req.query.tagsList, req.query.min, req.query.max);
-        //db.getTableWithFilters(result => {res.json(selectData(req.query.bb));}, req.query.tagsList, req.query.min, req.query.max);
+        //db.getTableWithFilters(result => {dataAll = result.rows; res.json(selectData(req.query.bb));}, req.query.tagsList, req.query.min, req.query.max);
     } else {
         console.log('Search: ' + req.query.search + ' , tag list: ' + req.query.tagsList + " in " + req.query.min + " - " + req.query.max + "\n")
-        db.getTableWithSearch(result => { dataAll = result.rows; res.json(result.rows); },
+        db.getTableWithSearch(result => {res.json(result.rows);}, req.query.search, req.query.tagsList, req.query.min, req.query.max);
         //db.getTableWithSearch(result => { dataAll = result.rows; res.json(selectData(req.query.bb)); },
-            req.query.search, req.query.tagsList, req.query.min, req.query.max);
     }
 })
 
