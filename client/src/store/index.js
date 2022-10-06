@@ -6,6 +6,11 @@ Vue.use(Vuex)
 export default new Vuex.Store ({
     state: {
         lastSearchTxt: "",
+        /* TODO: come array di array, per matchare fitbounds di mapbox */
+        currentBBInfo: [
+            [0, 0],
+            [0, 0]
+        ],
         filterInfo: {
             lastSelectedMin: new Date().getFullYear() - 3,
             lastSelectedMax: new Date().getFullYear(),
@@ -17,8 +22,6 @@ export default new Vuex.Store ({
             regionPicture: "",
             countryPicture: "",
         }
-    },
-    getters: {
     },
     mutations: {
         changeSearchTxt(state, newValue) {
@@ -35,6 +38,12 @@ export default new Vuex.Store ({
             state.pictureInfo.yearPicture = newYear;
             state.pictureInfo.regionPicture = newRegion;
             state.pictureInfo.countryPicture = newCountry;
+        },
+        changeBBInfo(state, {newMinLog, newMaxLog, newMinLat, newMaxLat}) {
+            state.currentBBInfo[0][0] = newMinLog;
+            state.currentBBInfo[0][1] = newMinLat;
+            state.currentBBInfo[1][0] = newMaxLog;
+            state.currentBBInfo[1][1] = newMaxLat;
         }
     },
     actions: {
@@ -46,6 +55,9 @@ export default new Vuex.Store ({
         },
         changeSearchTxt(context, newValue) {
             context.commit('changeSearchTxt', newValue);
+        },
+        changeBBInfo(context, {newMinLog, newMaxLog, newMinLat, newMaxLat}) {
+            context.commit('changeBBInfo', {newMinLog, newMaxLog, newMinLat, newMaxLat})
         }
     }
 })

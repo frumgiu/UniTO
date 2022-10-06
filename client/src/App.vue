@@ -15,9 +15,9 @@
     <div id="gallery-display" class="gallery-split">
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
-        <div class="image-group-wrapper" v-for="(value, index) in savedData" :key="index">
+       <!-- <div class="image-group-wrapper" v-for="(value, index) in savedData" :key="index">
           <GalleryElement :single-data="value"/>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -32,12 +32,11 @@ import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
 import NavigationBar from "@/components/NavigationBar";
-import GalleryElement from "@/components/GalleryElement";
+import store from "@/store";
 
 export default {
   name: 'App',
   components: {
-    GalleryElement,
     NavigationBar,
     Map,
     MapOptionMenu,
@@ -67,7 +66,9 @@ export default {
         if (response !== "not valid location") {
           coords = response;
           let zoom = coords.info === "country"  ? 5 : 10;
-          this.$refs.mapRef.setViewState(coords, zoom);
+          console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
+          store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
+          this.$refs.mapRef.setViewState(coords, zoom, false);
         }
         /* Chiedo che venga interrogato il db */
         const prefix = this.$store.state;
@@ -93,7 +94,7 @@ export default {
         if (this.$store.state.lastSearchTxt !== response){
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
-          this.$refs.mapRef.setViewState(location, 10);
+          this.$refs.mapRef.setViewState(location, 10, false);
         }
       });
     },

@@ -21,7 +21,7 @@ export async function getData(searchText, tag, minYear, maxYear, coords) {
 /*
 * Utilizzo della geolocation API di Mapbox per svolgere forward geocoding
 * Inserito un testo nella search bar viene chiamata la funzione di forward geocoding.
-* Se il risutlato e' di tipo "place" o "country" viene ritornato il bounding box, altrimenti
+* Se il risultato è di tipo "place" o "country" viene ritornato il bounding box, altrimenti
 * viene ritornata la stringa "not valid location"
 */
 export async function getCoordsForLocation(searchText) {

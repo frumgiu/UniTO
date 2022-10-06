@@ -26,6 +26,7 @@ export default {
   props: ['dataGeo', 'layerStyle'],
   data() {
     return {
+      jumpTo: true,
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
       mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p?optimize=true",
       viewState: {
@@ -54,7 +55,7 @@ export default {
 
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.setViewState(startPositon, 8);
+          this.setViewState(startPositon, 8, true);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
@@ -62,21 +63,29 @@ export default {
   },
   methods: {
     updateViewState: function(viewState) {
-      console.log("updating view state...");
+      /* TODO: deve chiedere i nuovi dati della vista */
+      //console.log("updating view state...");
       this.viewState = {
         ...viewState
       }
-      this.map.jumpTo({
-        center: [viewState.longitude, viewState.latitude],
-        zoom: viewState.zoom,
-        bearing: viewState.bearing,
-        pitch: viewState.pitch,
-      });
+      if (this.jumpTo) {
+        this.map.jumpTo({
+          center: [viewState.longitude, viewState.latitude],
+          zoom: viewState.zoom,
+          bearing: viewState.bearing,
+          pitch: viewState.pitch,
+        });
+      } else {
+        console.log("FITBOUNDS CALLED");
+        this.map.fitBounds(store.state.currentBBInfo);
+        this.jumpTo = true;
+      }
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
     /* Metodo usato per spostare la visuale */
-    setViewState: function(obj, zoom) {
+    setViewState: function(obj, zoom, newJumpTo) {
+      this.jumpTo = newJumpTo;
       this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
@@ -93,7 +102,7 @@ export default {
     },
     /* Metodo che apre la card */
     showIcon: function(info) {
-      this.setViewState(info.object, this.viewState.zoom);
+      this.setViewState(info.object, this.viewState.zoom, true);
       store.dispatch('changePictureInfo',
           {newName: info.object.filename, newCountry: info.object.country_formal, newRegion: info.object.region, newYear: info.object.year})
       this.$emit('askOpenCard');
@@ -200,7 +209,7 @@ export default {
   watch: {
     layerStyle: function() {
       const obj = {log: this.viewState.longitude, lat: this.viewState.latitude};
-      this.setViewState(obj, this.viewState.zoom);
+      this.setViewState(obj, this.viewState.zoom, true);
     }
   }
 }

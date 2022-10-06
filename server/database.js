@@ -1,5 +1,4 @@
 const pg = require('pg');
-const {info} = require("fancy-log");
 const config = {
     host: 'localhost',
     user: 'postgres',
@@ -25,8 +24,8 @@ client.connect(err => {
 * Interroga il db filtrando i dati per la parola cercata. Per mantenere la vista consistente bisogna tenere
 * conto dei parametri non modificati della ricerca precedente (tags attivi, minyear e maxyear).
 *
-* Se la parola chiave e' uno stato posso comparare search con i parametri della colonna 'country_formal' (nome intero)
-* Se la parola e' una citta' posso utilizzare il bounding box per selezionare i dati con coordinate comprese al suo intervallo
+* Se la parola chiave è uno stato posso comparare search con i parametri della colonna 'country_formal' (nome intero)
+* Se la parola è una città posso utilizzare il bounding box per selezionare i dati con coordinate comprese al suo intervallo
 * Altrimenti comparo search per 'namefile'
 */
 function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox, infoSearch) {
@@ -47,21 +46,18 @@ function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox
 }
 
 function getTableByName(search, tags, minYear, maxYear) {
-    console.log("search name");
     let test = createTagsQuery(tags, minYear, maxYear);
     return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE (UPPER("filename") LIKE UPPER('%${search}%')) AND ` + test;
 }
 
 function getTableByCountry(search, tags, minYear, maxYear) {
-    console.log("search country");
     let test = createTagsQuery(tags, minYear, maxYear);
     return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE (UPPER("country_formal") LIKE UPPER('${search}')) AND ` + test;
 }
 
 function getTableByCity(search, tags, minYear, maxYear, bbox) {
-    console.log("search city");
     let test = createTagsQuery(tags, minYear, maxYear, bbox);
     return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE ` + test;
