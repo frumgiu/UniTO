@@ -9,7 +9,7 @@
     <div id="map-display">
       <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
       <CardPicture ref="cardRef"/>
-      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu"/>
+      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="askUpdateData"/>
     </div>
 
     <div id="gallery-display" class="gallery-split">
@@ -25,7 +25,7 @@
 
 <script>
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getCoordsForLocation, getNameForCoord} from '@/./controllers/ControllerTableData'
+import {getData, getCoordsForLocation, getNameForCoord, updateData} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import CardPicture from "@/components/CardPicture";
@@ -75,6 +75,7 @@ export default {
         const prefix = this.$store.state;
         getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, coords).then(response => {
           this.savedData = response;
+          this.askUpdateData();
         }, error => {
           console.log(error);
         })
@@ -89,6 +90,10 @@ export default {
     askDataByFilter: function() {
       this.closeCard();
       this.contactDB();
+    },
+    askUpdateData: function() {
+      const bbcurrent = this.$store.state.currentBBInfo;
+      updateData(bbcurrent).then(response => this.savedData = response, error => console.log(error));
     },
     askUserPosition: function(location) {
       getNameForCoord(location).then(response => {

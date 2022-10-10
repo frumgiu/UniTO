@@ -53,6 +53,9 @@ export default {
       bearing: this.viewState.bearing,
     });
 
+    const result = this.map.getBounds().toArray();
+    store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
+
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
           this.setViewState(startPositon, 8, true);
@@ -78,6 +81,7 @@ export default {
           bearing: viewState.bearing,
           pitch: viewState.pitch,
         });
+        this.$emit('askUpdateData');
       } else {
         console.log("FITBOUNDS CALLED");
         this.map.fitBounds(store.state.currentBBInfo);
@@ -112,7 +116,7 @@ export default {
     },
     /* Metodo che chiude la card quando viene spostata la visuale */
     closeCard: function() {
-      console.log("close card because I'm dragging the map")
+      //console.log("close card because I'm dragging the map")
       this.$emit('askCloseCard');
     },
     nothing: function() {}
@@ -183,7 +187,7 @@ export default {
                   coverage: 1,
                   elevationRange: [0, this.viewState.zoom * 800],
                   elevationScale: 20,
-                  //getElevationValue: (d) => (d.reduce((accumulator) => accumulator + Math.random()*100)),
+                  //getElevationValue: ,
                   getPosition: (d) => [d.log, d.lat]
                 }) ];
           } else {

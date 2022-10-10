@@ -18,12 +18,17 @@ app.get(`/api/getTable/`, (req, res) => {
     console.log('api/getTable called! ' + date.toUTCString());
     if (req.query.search === '') {
         console.log('Tag list: ' + req.query.tagsList + " in " + req.query.min + " - " + req.query.max + "\n")
-        db.getTableWithFilters(result => {res.json(result.rows);}, req.query.tagsList, req.query.min, req.query.max);
-        //db.getTableWithFilters(result => {dataAll = result.rows; res.json(selectData(req.query.bb));}, req.query.tagsList, req.query.min, req.query.max);
+        db.getTableWithFilters(result => {
+            console.log("result rows: " + typeof result.rows);
+            res.json(result.rows);
+            }, req.query.tagsList, req.query.min, req.query.max);
     } else {
         console.log('Search: ' + req.query.search + ' , tag list: ' + req.query.tagsList + " in " + req.query.min + " - " + req.query.max + "\n")
-        db.getTableWithSearch(result => {res.json(result.rows);}, req.query.search, req.query.tagsList, req.query.min, req.query.max);
-        //db.getTableWithSearch(result => { dataAll = result.rows; res.json(selectData(req.query.bb)); },
+        db.getTableWithSearch(result => {
+            console.log("result rows: " + result.rows.length);
+            dataAll = result.rows;
+            res.json(result.rows);
+            }, req.query.search, req.query.tagsList, req.query.min, req.query.max);
     }
 })
 
@@ -44,6 +49,8 @@ function selectData(bb) {
             sendData += data;
         }
     }
+    //console.log("EXAMPLE DATA: " + dataAll.length);
+    //console.log("send data length: " + sendData.length);
     return sendData;
 }
 
@@ -52,7 +59,7 @@ function selectData(bb) {
 */
 app.get(`/api/getTableWithBBox/`, (req, res) => {
     console.log('api/getTableWithBBox called! ' + date.toUTCString());
-    db.getTableWithSearch(result => {res.json(result.rows);},
+    db.getTableWithSearch(result => { res.json(result.rows);},
         req.query.search, req.query.tagsList, req.query.min, req.query.max, req.query.bbox, req.query.infoPlace);
 })
 
