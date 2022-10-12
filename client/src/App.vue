@@ -15,9 +15,11 @@
     <div id="gallery-display" class="gallery-split">
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
-       <!-- <div class="image-group-wrapper" v-for="(value, index) in savedData" :key="index">
-          <GalleryElement :single-data="value"/>
-        </div> -->
+        <div class="image-group-wrapper" >
+          <!--  <div v-for="(value, index) in savedData" :key="index">
+         <GalleryElement :single-data="value"/>
+       </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -32,6 +34,7 @@ import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
 import NavigationBar from "@/components/NavigationBar";
+//import GalleryElement from "@/components/GalleryElement";
 import store from "@/store";
 
 export default {
@@ -42,7 +45,8 @@ export default {
     MapOptionMenu,
     CardPicture,
     SearchBar,
-    FilterTable
+    FilterTable,
+    //GalleryElement
   },
   data() {
     return {
@@ -65,11 +69,11 @@ export default {
       getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
           coords = response;
-          let zoom = coords.info === "country"  ? 5 : 10;
+          //let zoom = coords.info === "country"  ? 5 : 10;
           /* TODO: se e' una citta o stato, mancano gli altri casi */
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          this.$refs.mapRef.setViewState(coords, zoom, false);
+          this.$refs.mapRef.setViewState(coords, 6, false);
         }
         /* Chiedo che venga interrogato il db */
         const prefix = this.$store.state;

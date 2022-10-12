@@ -27,7 +27,7 @@ export async function updateData(bbmap) {
 function selectData(bb) {
     let sendData = [];
     for (const data of dataAll) {
-        if ((data.log >= bb[0][0] && data.log <= bb[1][0]) && (data.lat >= bb[0][1] && data.lat <= bb[1][1])) {
+        if ((data.log > bb[0][0] && data.log < bb[1][0]) && (data.lat > bb[0][1] && data.lat < bb[1][1])) {
             sendData.push(data);
         }
     }

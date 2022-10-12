@@ -34,7 +34,7 @@ export default {
         longitude: 8.484106,
         zoom: 5,
         bearing: 0,
-        pitch: 50,
+        pitch: 0,
       },
     };
   },
@@ -66,26 +66,21 @@ export default {
   },
   methods: {
     updateViewState: function(viewState) {
-      /* TODO: deve chiedere i nuovi dati della vista */
-      //console.log("updating view state...");
-      this.viewState = {
-        ...viewState
-      }
       if (this.jumpTo) {
-        const result = this.map.getBounds().toArray();
-        store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
-        //console.log("result: " + result);
         this.map.jumpTo({
           center: [viewState.longitude, viewState.latitude],
           zoom: viewState.zoom,
           bearing: viewState.bearing,
           pitch: viewState.pitch,
         });
+        const result = this.map.getBounds().toArray();
+        store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
         this.$emit('askUpdateData');
       } else {
-        console.log("FITBOUNDS CALLED");
-        this.map.fitBounds(store.state.currentBBInfo);
         this.jumpTo = true;
+      }
+      this.viewState = {
+        ...viewState
       }
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
@@ -93,10 +88,16 @@ export default {
     /* Metodo usato per spostare la visuale */
     setViewState: function(obj, zoom, newJumpTo) {
       this.jumpTo = newJumpTo;
+      if (!this.jumpTo) {
+        console.log("zoom prima: " + this.map.getZoom());
+        console.log("FITBOUNDS CALLED");
+        this.map.fitBounds(store.state.currentBBInfo);
+        console.log("zoom dopo: " + this.map.getZoom());
+      }
       this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
-        zoom: zoom,
+        zoom: newJumpTo === false ? this.map.getZoom() : zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
         transitionDuration: 800
