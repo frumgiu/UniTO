@@ -23,64 +23,28 @@ client.connect(err => {
 /*
 * Interroga il db filtrando i dati per la parola cercata. Per mantenere la vista consistente bisogna tenere
 * conto dei parametri non modificati della ricerca precedente (tags attivi, minyear e maxyear).
-*
-* Se la parola chiave è uno stato posso comparare search con i parametri della colonna 'country_formal' (nome intero)
-* Se la parola è una città posso utilizzare il bounding box per selezionare i dati con coordinate comprese al suo intervallo
-* Altrimenti comparo search per 'namefile'
 */
-function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox, infoSearch) {
-   let query;
-   console.log(infoSearch);
-    if (infoSearch === "country") {
-        query = getTableByCountry(search, tags, minYear, maxYear);
-    } else if (infoSearch === "place" || infoSearch === "region") {
-        query = getTableByCity(search, tags, minYear, maxYear, bbox);
-    } else {
-        query = getTableByName(search, tags, minYear, maxYear);
-    }
-    console.log(query)
-    client.query(query).then(res => {
-        lambdaFunction(res);
-        console.log("Close connection\n")
-    }).catch(err => console.log(err))
-}
-
-function getTableByName(search, tags, minYear, maxYear) {
-    let test = createTagsQuery(tags, minYear, maxYear);
-    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
-                   FROM wlm_data WHERE (UPPER("filename") LIKE UPPER('%${search}%')) AND ` + test;
-}
-
-function getTableByCountry(search, tags, minYear, maxYear) {
-    let test = createTagsQuery(tags, minYear, maxYear);
-    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
-                   FROM wlm_data WHERE (UPPER("country_formal") LIKE UPPER('${search}')) AND ` + test;
-}
-
-function getTableByCity(search, tags, minYear, maxYear, bbox) {
-    let test = createTagsQuery(tags, minYear, maxYear, bbox);
-    return `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
+function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bboxMin, bboxMax) {
+    let test = createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax);
+    let query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE ` + test;
+    client.query(query).then(res => {lambdaFunction(res); console.log("Close connection\n")}).catch(err => console.log(err))
 }
 
 /*
-* Interrogo il db filtrando i dati per i parametri del menu di scelta, senza avere una parola chiave
+* Interrogo il db filtrando i dati per i parametri del menu di scelta, senza avere una parola chiave.
 */
-function getTableWithFilters(lambdaFunction, tags, minYear, maxYear){
-    let test = createTagsQuery(tags, minYear, maxYear);
+function getTableWithFilters(lambdaFunction, tags, minYear, maxYear, bboxMin, bboxMax){
+    let test = createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax);
     const query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
                    FROM wlm_data WHERE` + test;
-    console.log(query)
-    client.query(query).then(res => {
-        lambdaFunction(res);
-        console.log("Close connection\n")
-    }).catch(err => console.log(err))
+    client.query(query).then(res => {lambdaFunction(res); console.log("Close connection\n")}).catch(err => console.log(err))
 }
 
 /*
  Create a part of the query, checking if there are any tags or bbox
 */
-function createTagsQuery(tags, minYear, maxYear, bbox) {
+function createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax) {
     let test = ``;
     if (typeof tags !== 'undefined') {
         test += `(`;
@@ -90,10 +54,10 @@ function createTagsQuery(tags, minYear, maxYear, bbox) {
         test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
         test += `) AND `;
     }
-    if (typeof bbox !== 'undefined') {
-        test += `( ST_X(geom::geometry) >= '${bbox[0]}' AND ST_X(geom::geometry) <= '${bbox[2]}' 
-        AND ST_Y(geom::geometry) >= '${bbox[1]}' AND ST_Y(geom::geometry) <= '${bbox[3]}') AND `;
-    }
+    //if (typeof bbox !== 'undefined') {
+    test += `( ST_X(geom::geometry) >= '${bboxMin[0]}' AND ST_X(geom::geometry) <= '${bboxMax[0]}' 
+        AND ST_Y(geom::geometry) >= '${bboxMin[1]}' AND ST_Y(geom::geometry) <= '${bboxMax[1]}') AND `;
+    //}
     test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     return test;
 }

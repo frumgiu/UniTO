@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <div id="nav-bar" class="fixed-top my-navbar navbar-transparent">
-      <SearchBar ref="searchBarRef" @askDataBySearch="askDataBySearch" @askCloseCard="closeCard"/>
+      <SearchBar ref="searchBarRef" @askDataBySearch="contactDB" @askCloseCard="closeCard"/>
       <div class="vl"></div>
       <NavigationBar />
     </div>
-    <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="askDataByFilter"/>
+    <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="contactDB"/>
     <div id="map-display">
       <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
       <CardPicture ref="cardRef"/>
-      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="askUpdateData"/>
+      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="contactDB"/>
     </div>
 
     <div id="gallery-display" class="gallery-split">
@@ -27,7 +27,7 @@
 
 <script>
 import 'material-icons/iconfont/material-icons.css';
-import {getData, getCoordsForLocation, getNameForCoord, updateData} from '@/./controllers/ControllerTableData'
+import {getData, getCoordsForLocation, getNameForCoord} from '@/./controllers/ControllerTableData'
 import SearchBar from "@/components/SearchBar";
 import FilterTable from "@/components/FilterTable";
 import CardPicture from "@/components/CardPicture";
@@ -60,26 +60,31 @@ export default {
     }
   },
   mounted() {
-    this.askDataByFilter();
+    navigator.geolocation.getCurrentPosition(position => {
+          const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
+          this.$refs.mapRef.setViewState(startPositon, 8, true);
+        },
+        () => {
+          console.log("User did not allow geolocation. Starting from a default location")
+        })
+    this.$refs.mapRef.saveMapBBox();
+    this.contactDB();
   },
   methods: {
     contactDB: function () {
-      let coords;
+      this.closeCard();
       /* Controllo se ho nella search bar una stringa che si riferisce a un luogo */
       getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
-          coords = response;
           //let zoom = coords.info === "country"  ? 5 : 10;
-          /* TODO: se e' una citta o stato, mancano gli altri casi */
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          this.$refs.mapRef.setViewState(coords, 6, false);
+          this.$refs.mapRef.setViewState(response, 6, false);
         }
         /* Chiedo che venga interrogato il db */
         const prefix = this.$store.state;
-        getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, coords).then(response => {
+        getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, prefix.currentBBInfo).then(response => {
           this.savedData = response;
-          this.askUpdateData();
         }, error => {
           console.log(error);
         })
@@ -87,6 +92,7 @@ export default {
         console.log(error);
       })
     },
+    /* todo eliminare */
     askDataBySearch: function() {
       this.closeCard();
       this.contactDB();
@@ -94,10 +100,6 @@ export default {
     askDataByFilter: function() {
       this.closeCard();
       this.contactDB();
-    },
-    askUpdateData: function() {
-      const bbcurrent = this.$store.state.currentBBInfo;
-      updateData(bbcurrent).then(response => this.savedData = response, error => console.log(error));
     },
     askUserPosition: function(location) {
       getNameForCoord(location).then(response => {

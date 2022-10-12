@@ -1,39 +1,19 @@
 const axios = require('axios');
-let dataAll = [];
+
 /*
 * Invia la richiesta al server con i parametri per filtrare
 * i dati e riportarli aggiornati sulla mappa
 */
 export async function getData(searchText, tag, minYear, maxYear, coords) {
     let response;
-    if (coords !== "" && typeof coords !== 'undefined') {
-        response = await axios.get(`/api/getTableWithBBox/`,
-            {params: {search: searchText, tagsList: tag, min: minYear, max: maxYear, bbox: coords.bbox, infoPlace: coords.info}});
-    } else {
-        response = await axios.get(`/api/getTable/`, {params: {search: searchText, tagsList: tag, min: minYear, max: maxYear}});
-    }
+    response = await axios.get(`/api/getTable/`, {params: {search: searchText, tagsList: tag, min: minYear, max: maxYear, bboxMin: coords[0], bboxMax: coords[1]}});
     if (response.data.length === 0) {
         return [];
     }
-    dataAll = response.data;
-    //console.log("data all number: " + dataAll.length);
+    //console.log("data all number: " + response.data.length);
     return response.data;
 }
 
-export async function updateData(bbmap) {
-    return selectData(bbmap);
-}
-
-function selectData(bb) {
-    let sendData = [];
-    for (const data of dataAll) {
-        if ((data.log > bb[0][0] && data.log < bb[1][0]) && (data.lat > bb[0][1] && data.lat < bb[1][1])) {
-            sendData.push(data);
-        }
-    }
-    //console.log("data number: " + sendData.length);
-    return sendData;
-}
 /*
 * Utilizzo della geolocation API di Mapbox per svolgere forward geocoding
 * Inserito un testo nella search bar viene chiamata la funzione di forward geocoding.

@@ -52,17 +52,6 @@ export default {
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
-
-    const result = this.map.getBounds().toArray();
-    store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
-
-    navigator.geolocation.getCurrentPosition(position => {
-          const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.setViewState(startPositon, 8, true);
-        },
-        () => {
-          console.log("User did not allow geolocation. Starting from a default location")
-        })
   },
   methods: {
     updateViewState: function(viewState) {
@@ -73,8 +62,9 @@ export default {
           bearing: viewState.bearing,
           pitch: viewState.pitch,
         });
-        const result = this.map.getBounds().toArray();
-        store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
+        this.saveMapBBox();
+        //const result = this.map.getBounds().toArray();
+        //store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
         this.$emit('askUpdateData');
       } else {
         this.jumpTo = true;
@@ -91,17 +81,12 @@ export default {
       if (!this.jumpTo) {
         console.log("zoom prima: " + this.map.getZoom());
         console.log("FITBOUNDS CALLED");
+        //const view = new WebMercatorViewport({width: window.innerWidth, height: window.innerHeight});
+        //const {lat, log, zoom} = view.fitBounds(store.state.currentBBInfo);
         this.map.fitBounds(store.state.currentBBInfo);
         console.log("zoom dopo: " + this.map.getZoom());
       }
-      this.viewState = {
-        longitude: obj.log,
-        latitude: obj.lat,
-        zoom: newJumpTo === false ? this.map.getZoom() : zoom,
-        bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch,
-        transitionDuration: 800
-      };
+
     },
     closeNavMenuSmallDevice: function() {
       if (window.innerWidth <= 1024) {
@@ -119,6 +104,10 @@ export default {
     closeCard: function() {
       //console.log("close card because I'm dragging the map")
       this.$emit('askCloseCard');
+    },
+    saveMapBBox: function() {
+      const result = this.map.getBounds().toArray();
+      store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
     },
     nothing: function() {}
   },
