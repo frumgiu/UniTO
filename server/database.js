@@ -26,8 +26,8 @@ client.connect(err => {
 */
 function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bboxMin, bboxMax) {
     let test = createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax);
-    let query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
-                   FROM wlm_data WHERE ` + test;
+    let query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", 
+                    ST_Y(geom::geometry) "lat" FROM wlm_data WHERE ` + test;
     client.query(query).then(res => {lambdaFunction(res); console.log("Close connection\n")}).catch(err => console.log(err))
 }
 
@@ -36,8 +36,8 @@ function getTableWithSearch(lambdaFunction, search, tags, minYear, maxYear, bbox
 */
 function getTableWithFilters(lambdaFunction, tags, minYear, maxYear, bboxMin, bboxMax){
     let test = createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax);
-    const query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", ST_Y(geom::geometry) "lat" 
-                   FROM wlm_data WHERE` + test;
+    const query = `SELECT DISTINCT filename, year, country_formal, region, ST_X(geom::geometry) "log", 
+                        ST_Y(geom::geometry) "lat" FROM wlm_data WHERE` + test;
     client.query(query).then(res => {lambdaFunction(res); console.log("Close connection\n")}).catch(err => console.log(err))
 }
 

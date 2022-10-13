@@ -62,7 +62,7 @@ export default {
   mounted() {
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.$refs.mapRef.setViewState(startPositon, 8, true);
+          this.$refs.mapRef.setViewState(startPositon, 8);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
@@ -79,7 +79,8 @@ export default {
           //let zoom = coords.info === "country"  ? 5 : 10;
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          this.$refs.mapRef.setViewState(response, 6, false);
+          //this.$refs.mapRef.setViewState(response, 6);
+          /* TODO fitbounds method */
         }
         /* Chiedo che venga interrogato il db */
         const prefix = this.$store.state;
@@ -106,7 +107,8 @@ export default {
         if (this.$store.state.lastSearchTxt !== response){
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
-          this.$refs.mapRef.setViewState(location, 10, false);
+          /* TODO fitbounds method */
+          this.$refs.mapRef.setViewState(location, 10);
         }
       });
     },

@@ -26,7 +26,6 @@ export default {
   props: ['dataGeo', 'layerStyle'],
   data() {
     return {
-      jumpTo: true,
       accessToken: "pk.eyJ1IjoicG9zaWU5OCIsImEiOiJjbDV5MTVteXAwOHRoM2VwZDFlYzN4YTJuIn0.1rRyi4xUKIBqfnhfA9GfVQ",
       mapStyle: "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p?optimize=true",
       viewState: {
@@ -55,38 +54,38 @@ export default {
   },
   methods: {
     updateViewState: function(viewState) {
-      if (this.jumpTo) {
-        this.map.jumpTo({
-          center: [viewState.longitude, viewState.latitude],
-          zoom: viewState.zoom,
-          bearing: viewState.bearing,
-          pitch: viewState.pitch,
-        });
-        this.saveMapBBox();
-        //const result = this.map.getBounds().toArray();
-        //store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
-        this.$emit('askUpdateData');
-      } else {
-        this.jumpTo = true;
-      }
       this.viewState = {
         ...viewState
       }
+      this.map.jumpTo({
+        center: [viewState.longitude, viewState.latitude],
+        zoom: viewState.zoom,
+        bearing: viewState.bearing,
+        pitch: viewState.pitch,
+      });
+      this.saveMapBBox();
+      this.$emit('askUpdateData');
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
     /* Metodo usato per spostare la visuale */
-    setViewState: function(obj, zoom, newJumpTo) {
-      this.jumpTo = newJumpTo;
-      if (!this.jumpTo) {
-        console.log("zoom prima: " + this.map.getZoom());
-        console.log("FITBOUNDS CALLED");
-        //const view = new WebMercatorViewport({width: window.innerWidth, height: window.innerHeight});
-        //const {lat, log, zoom} = view.fitBounds(store.state.currentBBInfo);
-        this.map.fitBounds(store.state.currentBBInfo);
-        console.log("zoom dopo: " + this.map.getZoom());
-      }
-
+    setViewState: function(obj, zoom) {
+      this.viewState = {
+        longitude: obj.log,
+        latitude: obj.lat,
+        zoom: zoom,
+        bearing: this.viewState.bearing,
+        pitch: this.viewState.pitch,
+        transitionDuration: 800
+      };
+    },
+    fitBoundsMap: function() {
+      console.log("zoom prima: " + this.map.getZoom());
+      console.log("FITBOUNDS CALLED");
+      this.map.fitBounds(store.state.currentBBInfo);
+      const {log, lat} = this.map.getCenter();
+      console.log("zoom dopo: " + this.map.getZoom());
+      this.setViewState({log, lat}, this.map.getZoom());
     },
     closeNavMenuSmallDevice: function() {
       if (window.innerWidth <= 1024) {
@@ -95,7 +94,7 @@ export default {
     },
     /* Metodo che apre la card */
     showIcon: function(info) {
-      this.setViewState(info.object, this.viewState.zoom, true);
+      this.setViewState(info.object, this.viewState.zoom);
       store.dispatch('changePictureInfo',
           {newName: info.object.filename, newCountry: info.object.country_formal, newRegion: info.object.region, newYear: info.object.year})
       this.$emit('askOpenCard');
@@ -206,7 +205,7 @@ export default {
   watch: {
     layerStyle: function() {
       const obj = {log: this.viewState.longitude, lat: this.viewState.latitude};
-      this.setViewState(obj, this.viewState.zoom, true);
+      this.setViewState(obj, this.viewState.zoom);
     }
   }
 }
