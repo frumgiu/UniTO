@@ -55,19 +55,15 @@ export default {
   },
   methods: {
     updateViewState: function(viewState) {
+      this.viewState = {
+        ...viewState
+      }
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
         zoom: viewState.zoom,
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
-      this.viewState = {
-        ...viewState,
-        transitionDuration: 500,
-        onTransitionEnd: () => {
-          this.triggerUpdateData();
-        }
-      }
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
@@ -78,7 +74,11 @@ export default {
         latitude: obj.lat,
         zoom: zoom,
         bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch
+        pitch: this.viewState.pitch,
+        transitionDuration: 500,
+        onTransitionEnd: () => {
+          this.triggerUpdateData();
+        }
       };
     },
     fitBoundsMap: function() {
