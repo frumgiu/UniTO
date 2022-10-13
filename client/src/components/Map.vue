@@ -5,6 +5,7 @@
       @click="nothing"
       @view-state-change="updateViewState"
       @drag="closeCard"
+      @onDragEnd="triggerUpdateData"
       class="deck-class">
     <div id="map" ref="map"/>
   </VueDeckgl>
@@ -33,7 +34,7 @@ export default {
         longitude: 8.484106,
         zoom: 5,
         bearing: 0,
-        pitch: 0,
+        pitch: 0
       },
     };
   },
@@ -54,17 +55,19 @@ export default {
   },
   methods: {
     updateViewState: function(viewState) {
-      this.viewState = {
-        ...viewState
-      }
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
         zoom: viewState.zoom,
         bearing: viewState.bearing,
         pitch: viewState.pitch,
       });
-      this.saveMapBBox();
-      this.$emit('askUpdateData');
+      this.viewState = {
+        ...viewState,
+        transitionDuration: 500,
+        onTransitionEnd: () => {
+          this.triggerUpdateData();
+        }
+      }
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
@@ -75,8 +78,7 @@ export default {
         latitude: obj.lat,
         zoom: zoom,
         bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch,
-        transitionDuration: 800
+        pitch: this.viewState.pitch
       };
     },
     fitBoundsMap: function() {
@@ -107,6 +109,10 @@ export default {
     saveMapBBox: function() {
       const result = this.map.getBounds().toArray();
       store.dispatch('changeBBInfo', {newMinLog: result[0][0], newMaxLog: result[1][0], newMinLat: result[0][1], newMaxLat: result[1][1]});
+    },
+    triggerUpdateData: function () {
+      this.saveMapBBox();
+      this.$emit('askUpdateData');
     },
     nothing: function() {}
   },
