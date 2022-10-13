@@ -32,7 +32,7 @@ export default {
       viewState: {
         latitude: 44.3072,
         longitude: 8.484106,
-        zoom: 5,
+        zoom: 8,
         bearing: 0,
         pitch: 0
       },
@@ -56,13 +56,17 @@ export default {
   methods: {
     updateViewState: function(viewState) {
       this.viewState = {
-        ...viewState
+        ...viewState,
+        transitionDuration: 800,
+        onTransitionEnd: () => {
+          this.triggerUpdateData();
+        }
       }
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
         zoom: viewState.zoom,
         bearing: viewState.bearing,
-        pitch: viewState.pitch,
+        pitch: viewState.pitch
       });
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
@@ -75,7 +79,7 @@ export default {
         zoom: zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
-        transitionDuration: 500,
+        transitionDuration: 800,
         onTransitionEnd: () => {
           this.triggerUpdateData();
         }
@@ -96,7 +100,14 @@ export default {
     },
     /* Metodo che apre la card */
     showIcon: function(info) {
-      this.setViewState(info.object, this.viewState.zoom);
+      this.viewState = {
+        longitude: info.object.log,
+        latitude: info.object.lat,
+        zoom: this.viewState.zoom,
+        bearing: this.viewState.bearing,
+        pitch: this.viewState.pitch,
+        transitionDuration: 500
+      };
       store.dispatch('changePictureInfo',
           {newName: info.object.filename, newCountry: info.object.country_formal, newRegion: info.object.region, newYear: info.object.year})
       this.$emit('askOpenCard');
@@ -113,6 +124,7 @@ export default {
     triggerUpdateData: function () {
       this.saveMapBBox();
       this.$emit('askUpdateData');
+      console.log("Number of data: " + this.dataGeo.length);
     },
     nothing: function() {}
   },

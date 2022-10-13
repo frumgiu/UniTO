@@ -16,13 +16,17 @@
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
         <div class="image-group-wrapper" >
-          <!--  <div v-for="(value, index) in savedData" :key="index">
-         <GalleryElement :single-data="value"/>
-       </div> -->
+          <div v-for="(value, index) in savedData" :key="index">
+            <GalleryElement :single-data="value.filename.toString()"/>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!--  <div v-for="(value, index) in savedData" :key="index">
+<GalleryElement :single-data="value"/>
+</div> -->
 </template>
 
 <script>
@@ -34,7 +38,7 @@ import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
 import NavigationBar from "@/components/NavigationBar";
-//import GalleryElement from "@/components/GalleryElement";
+import GalleryElement from "@/components/GalleryElement";
 import store from "@/store";
 
 export default {
@@ -46,7 +50,7 @@ export default {
     CardPicture,
     SearchBar,
     FilterTable,
-    //GalleryElement
+    GalleryElement
   },
   data() {
     return {
@@ -62,13 +66,13 @@ export default {
   mounted() {
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.$refs.mapRef.setViewState(startPositon, 8);
+          this.$refs.mapRef.setViewState(startPositon, 10);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
         })
-    this.$refs.mapRef.saveMapBBox();
-    this.contactDB();
+    this.$refs.mapRef.triggerUpdateData();
+    //this.contactDB();
   },
   methods: {
     contactDB: function () {
@@ -92,15 +96,6 @@ export default {
       }, error => {
         console.log(error);
       })
-    },
-    /* todo eliminare */
-    askDataBySearch: function() {
-      this.closeCard();
-      this.contactDB();
-    },
-    askDataByFilter: function() {
-      this.closeCard();
-      this.contactDB();
     },
     askUserPosition: function(location) {
       getNameForCoord(location).then(response => {
