@@ -16,9 +16,11 @@
       <div id="gallery">
         <hr class="solid" style="margin-top: 4.7rem"/>
         <div class="image-group-wrapper" >
+
           <div v-for="(value, index) in savedData" :key="index">
-            <GalleryElement :single-data="value.filename.toString()"/>
+            <GalleryElement :singleDataFileName="value.filename"/>
           </div>
+
         </div>
       </div>
     </div>
@@ -54,7 +56,6 @@ export default {
   },
   data() {
     return {
-      windowH: window.innerWidth,
       /* filter values for regions */
       regions: ["Europe", "Asia", "Africa", "Americas", "Oceania"],
       /* default data layer */
@@ -90,6 +91,9 @@ export default {
         const prefix = this.$store.state;
         getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, prefix.currentBBInfo).then(response => {
           this.savedData = response;
+          //console.log(typeof this.savedData);
+          //console.log(typeof this.savedData[0]);
+          //console.log(typeof this.savedData[0].filename);
         }, error => {
           console.log(error);
         })

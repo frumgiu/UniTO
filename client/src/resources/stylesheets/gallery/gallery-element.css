@@ -19,6 +19,12 @@
     background-color: white;
 }
 
+.card-img-top {
+    width: 15vw;
+    height: 30vh;
+    object-fit: cover;
+}
+
 @media screen and (min-width: 1281px) {
     .img-wrapper-full-gallery {
         width: 24%;
@@ -39,7 +45,7 @@
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .img-wrapper-full-gallery {
-        width: 40%;
+        width: 45%;
     }
     .img-wrapper-split-gallery {
         width: 45%;

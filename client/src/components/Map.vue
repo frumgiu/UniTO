@@ -124,7 +124,7 @@ export default {
     triggerUpdateData: function () {
       this.saveMapBBox();
       this.$emit('askUpdateData');
-      console.log("Number of data: " + this.dataGeo.length);
+      //console.log("Number of data: " + this.dataGeo.length);
     },
     nothing: function() {}
   },
