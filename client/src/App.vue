@@ -3,7 +3,7 @@
     <div id="nav-bar" class="fixed-top my-navbar navbar-transparent">
       <SearchBar ref="searchBarRef" @askDataBySearch="contactDB" @askCloseCard="closeCard"/>
       <div class="vl"></div>
-      <NavigationBar />
+      <NavigationBar ref="navigationBarRef" />
     </div>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="contactDB"/>
     <div id="map-display">
@@ -11,24 +11,8 @@
       <CardPicture ref="cardRef"/>
       <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="contactDB"/>
     </div>
-
-    <div id="gallery-display" class="gallery-split">
-      <div id="gallery">
-        <hr class="solid" style="margin-top: 4.7rem"/>
-        <div class="image-group-wrapper" >
-
-          <div v-for="(value, index) in savedData" :key="index">
-            <GalleryElement :singleDataFileName="value.filename"/>
-          </div>
-
-        </div>
-      </div>
-    </div>
+    <Gallery :saved-data="savedData" />
   </div>
-
-  <!--  <div v-for="(value, index) in savedData" :key="index">
-<GalleryElement :single-data="value"/>
-</div> -->
 </template>
 
 <script>
@@ -40,19 +24,19 @@ import CardPicture from "@/components/CardPicture";
 import MapOptionMenu from "@/components/MapOptionMenu";
 import Map from "@/components/Map";
 import NavigationBar from "@/components/NavigationBar";
-import GalleryElement from "@/components/GalleryElement";
 import store from "@/store";
+import Gallery from "@/components/Gallery";
 
 export default {
   name: 'App',
   components: {
+    Gallery,
     NavigationBar,
     Map,
     MapOptionMenu,
     CardPicture,
     SearchBar,
     FilterTable,
-    GalleryElement
   },
   data() {
     return {
@@ -72,8 +56,8 @@ export default {
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
         })
+
     this.$refs.mapRef.triggerUpdateData();
-    //this.contactDB();
   },
   methods: {
     contactDB: function () {
@@ -91,9 +75,6 @@ export default {
         const prefix = this.$store.state;
         getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, prefix.currentBBInfo).then(response => {
           this.savedData = response;
-          //console.log(typeof this.savedData);
-          //console.log(typeof this.savedData[0]);
-          //console.log(typeof this.savedData[0].filename);
         }, error => {
           console.log(error);
         })
@@ -131,7 +112,6 @@ export default {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
   @import url('resources/stylesheets/navbar/responsive-navbar.css');
-  @import url('resources/stylesheets/gallery/gallery-container.css');
 
   #app {
     font-family: "Dosis", sans-serif;

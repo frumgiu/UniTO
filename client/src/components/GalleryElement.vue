@@ -1,6 +1,6 @@
 <template>
   <div id="gallery-wrapper-elements" class="image-wrapper">
-    <img class="card-img-top" v-bind:src="getSmallPictureUrl" loading="lazy" width="200" height="200" alt="Card image cap">
+    <img class="card-img-top" v-bind:src="getSmallPictureUrl" loading="lazy" alt="Card image cap">
     <a v-bind:href="getBigPictureUrl" target="_blank">
       <button class="open-img-btn" data-toggle="tooltip" data-placement="top" title="Open picture">
         <span class="material-icons"  style="vertical-align: middle">launch</span>

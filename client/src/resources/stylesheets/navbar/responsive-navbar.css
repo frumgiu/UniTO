@@ -21,8 +21,8 @@
 }
 
 .navbar-transparent {
-    background-color: transparent;
-    box-shadow: none;
+    background-color: white;
+   box-shadow: rgba(0, 0, 0, 0.2) 0.122rem 0.122rem 0.163rem;
 }
 
 /* RESPONSIVE */

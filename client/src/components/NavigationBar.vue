@@ -19,26 +19,34 @@ export default {
       galleryOpen: true
     }
   },
+  created() {
+    if (this.windowH > 768)
+      this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
+    else if (this.windowH <= 768)
+      this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
+  },
   mounted() {
     window.onresize = () => {
       this.windowH = window.innerWidth;
-      if (this.windowH > 768) {
+     /* if (this.windowH > 768) {
         if (this.galleryOpen) {
           this.changeNavbarStyle('navbar-transparent', 'navbar-white');
         } else {
           this.changeNavbarStyle('navbar-white', 'navbar-transparent');
         }
-      } else {
-        if (this.galleryOpen)
-          this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
-        this.changeNavbarStyle('navbar-white', 'navbar-transparent');
-      }
+      } else { */
+        if (this.windowH > 768 && this.galleryOpen)
+          this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
+        //this.changeNavbarStyle('navbar-white', 'navbar-transparent');
+    //  }
+      if (this.windowH <= 768 && this.galleryOpen)
+        this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
     }
   },
   methods: {
     closeGallery: function() {
       this.changeGalleryStyle('gallery-close', 'gallery-split', 'gallery-full');
-      this.changeNavbarStyle('navbar-white', 'navbar-transparent');
+      //this.changeNavbarStyle('navbar-white', 'navbar-transparent');
       document.getElementById('icon-expand').innerHTML = 'arrow_forward';
       this.galleryOpen = false;
     },
@@ -53,8 +61,8 @@ export default {
         this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
         document.getElementById('icon-expand').innerHTML = 'arrow_forward';
       }
-      if (window.innerWidth >= 768)
-        this.changeNavbarStyle('navbar-transparent', 'navbar-white');
+     // if (window.innerWidth >= 768)
+        //this.changeNavbarStyle('navbar-transparent', 'navbar-white');
       this.galleryOpen = true;
     },
     changeGalleryStyle: function (add, removeone, removetwo) {
@@ -62,18 +70,6 @@ export default {
       gallery.classList.add(add);
       gallery.classList.remove(removeone);
       gallery.classList.remove(removetwo);
-      if (add === 'gallery-full') {
-        this.changeGalleryElemStyle ('img-wrapper-full-gallery', 'img-wrapper-split-gallery');
-      } else {
-        this.changeGalleryElemStyle('img-wrapper-split-gallery', 'img-wrapper-full-gallery')
-      }
-    },
-    changeGalleryElemStyle : function (add, remove) {
-      const elements = document.querySelectorAll('#gallery-wrapper-elements');
-      for (const elem of elements) {
-        elem.classList.add(add);
-        elem.classList.remove(remove);
-      }
     },
     changeNavbarStyle(add, remove) {
       const navbar = document.getElementById("nav-bar");

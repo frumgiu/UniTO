@@ -30,7 +30,6 @@
 <script>
 export default {
   name: "CardPicture",
-  props: [],
   data() {
     return {
       namePicture: "",
