@@ -22,7 +22,7 @@ The advance settings are work in progress and don't trigger any requests.
 ### Project setup
 ```
 cd .\client\
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
@@ -34,7 +34,7 @@ npm run serve
 ### Project setup
 ```
 cd .\server\
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development

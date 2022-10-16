@@ -7,14 +7,25 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "resolutions": {
+    "@luma.gl/core": "8.5.16",
+    "@luma.gl/constants": "8.5.16",
+    "@luma.gl/engine": "8.5.16",
+    "@luma.gl/gltools": "8.5.16",
+    "@luma.gl/shadertools": "8.5.16",
+    "@luma.gl/webgl": "8.5.16"
+  },
   "dependencies": {
     "@deck.gl/aggregation-layers": "8.8.13",
     "@deck.gl/core": "8.8.13",
     "@deck.gl/layers": "8.8.13",
     "@deck.gl/mapbox": "8.8.13",
+    "@vue/compiler-sfc": "^3.2.41",
     "axios": "^0.27.2",
     "bootstrap": "4.6.1",
     "bootstrap-vue": "^2.22.0",
+    "vue": "2.7.13",
+    "jquery": "1.9.1",
     "core-js": "3.6.5",
     "mapbox-gl": "2.9.2",
     "material-icons": "1.11.4",
