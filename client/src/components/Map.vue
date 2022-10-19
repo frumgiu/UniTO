@@ -33,8 +33,9 @@ export default {
         latitude: 44.3072,
         longitude: 8.484106,
         zoom: 8,
+        minZoom: 4.5,
         bearing: 0,
-        pitch: 0
+        pitch: 50
       },
     };
   },
@@ -49,6 +50,7 @@ export default {
       style: this.mapStyle || "mapbox://styles/posie98/cl7jhub3v005j14nfyksvuc9p?optimize=true",
       center: [this.viewState.longitude, this.viewState.latitude],
       zoom: this.viewState.zoom,
+      minZoom: this.viewState.minZoom,
       pitch: this.viewState.pitch,
       bearing: this.viewState.bearing,
     });
@@ -57,7 +59,7 @@ export default {
     updateViewState: function(viewState) {
       this.viewState = {
         ...viewState,
-        transitionDuration: 800,
+        transitionDuration: 700,
         onTransitionEnd: () => {
           this.triggerUpdateData();
         }
@@ -79,7 +81,7 @@ export default {
         zoom: zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
-        transitionDuration: 800,
+        transitionDuration: 700,
         onTransitionEnd: () => {
           this.triggerUpdateData();
         }
