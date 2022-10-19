@@ -19,13 +19,13 @@ export default {
       galleryOpen: true
     }
   },
-  created() {
-    if (this.windowH > 768)
-      this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
-    else if (this.windowH <= 768)
-      this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
-  },
   mounted() {
+    this.windowH = window.innerWidth;
+    if (this.windowH > 768 && this.galleryOpen)
+      this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
+    if (this.windowH <= 768 && this.galleryOpen)
+      this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
+
     window.onresize = () => {
       this.windowH = window.innerWidth;
      /* if (this.windowH > 768) {
@@ -67,9 +67,11 @@ export default {
     },
     changeGalleryStyle: function (add, removeone, removetwo) {
       const gallery = document.getElementById("gallery-display");
+      if (typeof gallery !== undefined) {
+        gallery.classList.remove(removeone);
+        gallery.classList.remove(removetwo);
+      }
       gallery.classList.add(add);
-      gallery.classList.remove(removeone);
-      gallery.classList.remove(removetwo);
     },
     changeNavbarStyle(add, remove) {
       const navbar = document.getElementById("nav-bar");

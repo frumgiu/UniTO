@@ -68,7 +68,8 @@ export default {
           //let zoom = coords.info === "country"  ? 5 : 10;
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          //this.$refs.mapRef.setViewState(response, 6);
+          this.$refs.mapRef.setViewState(response, 6);
+          //this.$refs.mapRef.fitBoundsMap();
           /* TODO fitbounds method */
         }
         /* Chiedo che venga interrogato il db */

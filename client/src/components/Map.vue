@@ -88,12 +88,13 @@ export default {
       };
     },
     fitBoundsMap: function() {
-      console.log("zoom prima: " + this.map.getZoom());
       console.log("FITBOUNDS CALLED");
-      this.map.fitBounds(store.state.currentBBInfo);
-      const {log, lat} = this.map.getCenter();
+      const bb = store.state.currentBBInfo
+      this.map.fitBounds(bb);
+      const {x, y} = this.map.getCenter();
+      const temp = {log: x, lat: y};
       console.log("zoom dopo: " + this.map.getZoom());
-      this.setViewState({log, lat}, this.map.getZoom());
+      this.setViewState(temp, this.map.getZoom());
     },
     closeNavMenuSmallDevice: function() {
       if (window.innerWidth <= 1024) {
