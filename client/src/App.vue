@@ -51,7 +51,7 @@ export default {
   mounted() {
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.$refs.mapRef.setViewState(startPositon, 10);
+          this.$refs.mapRef.setViewState(startPositon, 11.5);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
@@ -68,7 +68,7 @@ export default {
           //let zoom = coords.info === "country"  ? 5 : 10;
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          this.$refs.mapRef.setViewState(response, 6);
+          this.$refs.mapRef.setViewState(response, 8);
           //this.$refs.mapRef.fitBoundsMap();
           /* TODO fitbounds method */
         }
@@ -89,7 +89,8 @@ export default {
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
           /* TODO fitbounds method */
-          this.$refs.mapRef.setViewState(location, 10);
+          //this.$refs.mapRef.setViewState(location, 10);
+          this.$refs.mapRef.fitBoundsMap();
         }
       });
     },
@@ -113,6 +114,7 @@ export default {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap'); /* l'errore e' un bug di webstorm */
   @import url('resources/stylesheets/navbar/responsive-navbar.css');
+  @import url('resources/stylesheets/responsive-vl.css');
 
   #app {
     font-family: "Dosis", sans-serif;
@@ -126,10 +128,26 @@ export default {
     border-top: 0.09rem solid #967bdc;
     margin: 0.6rem;
   }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 0.6rem;
 
-  .vl {
-    border-right: 0.09rem solid #48a36a;
-    margin: 0 0.6rem;
-    height: 30px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 1px grey;
+    border-radius: 0.6rem;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #967bdc;
+    border-radius: 0.6rem;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #7653D1;
   }
 </style>

@@ -11,7 +11,7 @@
 .image-wrapper {
     width: 100%;
     height: fit-content;
-    padding: 0.3rem 0.2rem;
+    padding: 0.3rem 0.4rem;
     border: 0.09rem solid transparent;
     border-radius: 0.8rem;
 
@@ -20,10 +20,23 @@
 }
 
 .card-img-top {
-    width: 16vw;
+    width: 12vw;
     height: 30vh;
    /* width: 320px;
     height: 320px; */
     object-fit: cover;
     box-shadow: rgba(0, 0, 0, 0.4) 0.122rem 0.122rem 0.163rem;
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .image-wrapper {
+        padding: 0.2rem 0.8rem;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .image-wrapper {
+        padding: 0.3rem 0.5rem;
+    }
 }

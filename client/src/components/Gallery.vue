@@ -1,7 +1,7 @@
 <template>
   <div id="gallery-display">
     <div id="gallery">
-      <hr class="solid" style="margin-top: 5rem"/>
+      <div style="margin-top: 5rem;" />
       <div class="image-group-wrapper" >
         <div v-for="(value, index) in savedData" :key="index">
           <GalleryElement :singleDataFileName="value.filename"/>

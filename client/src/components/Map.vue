@@ -93,7 +93,7 @@ export default {
       this.map.fitBounds(bb);
       const {x, y} = this.map.getCenter();
       const temp = {log: x, lat: y};
-      console.log("zoom dopo: " + this.map.getZoom());
+      //console.log("zoom dopo: " + this.map.getZoom());
       this.setViewState(temp, this.map.getZoom());
     },
     closeNavMenuSmallDevice: function() {
