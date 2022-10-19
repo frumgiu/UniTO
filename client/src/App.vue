@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav-bar" class="fixed-top my-navbar navbar-transparent">
-      <SearchBar ref="searchBarRef" @askDataBySearch="contactDB" @askCloseCard="closeCard"/>
+      <SearchBar ref="searchBarRef" @askDataBySearch="contactDBBySearchTxt" @askCloseCard="closeCard"/>
       <div class="vl"></div>
       <NavigationBar ref="navigationBarRef" />
     </div>
@@ -62,23 +62,25 @@ export default {
   methods: {
     contactDB: function () {
       this.closeCard();
-      /* Controllo se ho nella search bar una stringa che si riferisce a un luogo */
+      /* Chiedo che venga interrogato il db */
+      const prefix = this.$store.state;
+      getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, prefix.currentBBInfo).then(response => {
+        this.savedData = response;
+      }, error => {
+        console.log(error);
+      })
+    },
+    contactDBBySearchTxt: function () {
       getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
           //let zoom = coords.info === "country"  ? 5 : 10;
           //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          this.$refs.mapRef.setViewState(response, 8);
-          //this.$refs.mapRef.fitBoundsMap();
+          //this.$refs.mapRef.setViewState(response, 8);
+          this.$refs.mapRef.fitBoundsMap();
           /* TODO fitbounds method */
         }
-        /* Chiedo che venga interrogato il db */
-        const prefix = this.$store.state;
-        getData(prefix.lastSearchTxt, prefix.filterInfo.lastCheckedTag, prefix.filterInfo.lastSelectedMin, prefix.filterInfo.lastSelectedMax, prefix.currentBBInfo).then(response => {
-          this.savedData = response;
-        }, error => {
-          console.log(error);
-        })
+        this.contactDB();
       }, error => {
         console.log(error);
       })
@@ -131,21 +133,17 @@ export default {
   /* width */
   ::-webkit-scrollbar {
     width: 0.6rem;
-
   }
-
   /* Track */
   ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 1px grey;
     border-radius: 0.6rem;
   }
-
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #967bdc;
     border-radius: 0.6rem;
   }
-
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #7653D1;

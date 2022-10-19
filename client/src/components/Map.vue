@@ -1,7 +1,7 @@
 <template>
   <VueDeckgl
       :layers="layers"
-      :viewState="viewState"
+      :viewState="deckglViewState"
       @click="nothing"
       @view-state-change="updateViewState"
       @drag="closeCard"
@@ -37,6 +37,14 @@ export default {
         bearing: 0,
         pitch: 50
       },
+      deckglViewState: {
+        latitude: 44.3072,
+        longitude: 8.484106,
+        zoom: 8,
+        minZoom: 4.5,
+        bearing: 0,
+        pitch: 50
+      }
     };
   },
   created() {
@@ -59,10 +67,10 @@ export default {
     updateViewState: function(viewState) {
       this.viewState = {
         ...viewState,
-        transitionDuration: 700,
-        onTransitionEnd: () => {
-          this.triggerUpdateData();
-        }
+       // transitionDuration: 700,
+       // onTransitionEnd: () => {
+       //   this.triggerUpdateData();
+       // }
       }
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
@@ -70,31 +78,45 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch
       });
+
+      console.log("zoom mappa: " + this.map.getZoom());
+
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
     /* Metodo usato per spostare la visuale */
     setViewState: function(obj, zoom) {
-      this.viewState = {
+      this.deckglViewState = {
         longitude: obj.log,
         latitude: obj.lat,
         zoom: zoom,
-        bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch,
-        transitionDuration: 700,
-        onTransitionEnd: () => {
-          this.triggerUpdateData();
-        }
+        bearing: this.deckglViewState.bearing,
+        pitch: this.deckglViewState.pitch,
+       // transitionDuration: 700,
+      //  onTransitionEnd: () => {
+      //    this.triggerUpdateData();
+       // }
       };
     },
     fitBoundsMap: function() {
       console.log("FITBOUNDS CALLED");
+      console.log("zoom prima: " + this.map.getZoom());
+      console.log("center prima: " + this.map.getCenter());
+      console.log("bound prima: " + this.map.getBounds());
       const bb = store.state.currentBBInfo
+
+      this.map.on('moveend', () => {
+        //console.log('A moveend event occurred.');
+        console.log("zoom dopo: " + this.map.getZoom());
+        console.log("center dopo: " + this.map.getCenter());
+        console.log("bound dopo: " + this.map.getBounds());
+        const x = this.map.getCenter();
+        const temp = {log: x.lng, lat: x.lat};
+        this.map.on('moveend', () => {});
+        this.setViewState(temp, this.map.getZoom());
+      });
       this.map.fitBounds(bb);
-      const {x, y} = this.map.getCenter();
-      const temp = {log: x, lat: y};
-      //console.log("zoom dopo: " + this.map.getZoom());
-      this.setViewState(temp, this.map.getZoom());
+
     },
     closeNavMenuSmallDevice: function() {
       if (window.innerWidth <= 1024) {
@@ -136,7 +158,7 @@ export default {
       if (this.dataGeo.length === 0) {
         return [];
       } else {
-        if (this.viewState.zoom <= 20 && this.viewState.zoom > 11) {
+        if (this.deckglViewState.zoom <= 20 && this.deckglViewState.zoom > 11) {
           return [
             new IconLayer({
               id: 'icon-layer',

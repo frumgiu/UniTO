@@ -6,6 +6,7 @@
     gap: 0.8rem 0.2rem;
     width: 100%;
     cursor: default;
+    transition: width 1s;
 }
 
 .image-wrapper {
@@ -17,6 +18,7 @@
 
     text-align: center;
     background-color: transparent;
+    transition: width 1s;
 }
 
 .card-img-top {
@@ -28,6 +30,9 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0.122rem 0.122rem 0.163rem;
 }
 
+.open-img-btn {
+
+}
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .image-wrapper {
