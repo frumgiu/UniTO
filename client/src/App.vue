@@ -9,7 +9,8 @@
     <div id="map-display">
       <MapOptionMenu ref="mapOptionsRef" @setLayer="setLayerMap" @askUserPosition="askUserPosition"/>
       <CardPicture ref="cardRef"/>
-      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard" @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="contactDB"/>
+      <Map ref="mapRef" :data-geo="savedData" :layer-style="layerStyle" @askOpenCard="openCard"
+           @askCloseCard="closeCard" @askCloseMenus="closeMenu" @askUpdateData="contactDB"/>
     </div>
     <Gallery :saved-data="savedData" />
   </div>

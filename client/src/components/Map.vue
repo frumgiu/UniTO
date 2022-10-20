@@ -36,14 +36,6 @@ export default {
         minZoom: 4.5,
         bearing: 0,
         pitch: 50
-      },
-      deckglViewState: {
-        latitude: 44.3072,
-        longitude: 8.484106,
-        zoom: 8,
-        minZoom: 4.5,
-        bearing: 0,
-        pitch: 50
       }
     };
   },
@@ -88,24 +80,12 @@ export default {
         latitude: obj.lat,
         zoom: zoom,
         bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch,
-        //transitionDuration: 700,
-       // onTransitionEnd: () => {
-        //  this.triggerUpdateData();
-       // }
+        pitch: this.viewState.pitch
       };
     },
     fitBoundsMap: function() {
-      console.log("FITBOUNDS CALLED");
-      console.log("zoom prima: " + this.map.getZoom());
-      console.log("center prima: " + this.map.getCenter());
-      console.log("bound prima: " + this.map.getBounds());
       const bb = store.state.currentBBInfo
-
       this.map.on('moveend', () => {
-        console.log("zoom dopo: " + this.map.getZoom());
-        console.log("center dopo: " + this.map.getCenter());
-        console.log("bound dopo: " + this.map.getBounds());
         const x = this.map.getCenter();
         const temp = {log: x.lng, lat: x.lat};
         this.map.on('moveend', () => {});

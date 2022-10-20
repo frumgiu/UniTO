@@ -2,7 +2,7 @@
   <div id="gallery-wrapper-elements" class="image-wrapper">
     <div>
     </div>
-    <!--<img class="card-img-top" v-bind:src="getSmallPictureUrl" loading="lazy" alt="Card image cap">-->
+    <img class="card-img-top" v-bind:src="getSmallPictureUrl" loading="lazy" alt="Card image cap">
   </div>
 </template>
 
