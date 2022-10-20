@@ -51,7 +51,7 @@ export default {
   mounted() {
     navigator.geolocation.getCurrentPosition(position => {
           const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.$refs.mapRef.setViewState(startPositon, 11.5);
+          this.$refs.mapRef.setViewState(startPositon, 11);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
@@ -73,12 +73,8 @@ export default {
     contactDBBySearchTxt: function () {
       getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
-          //let zoom = coords.info === "country"  ? 5 : 10;
-          //console.log("bbox to fit info: " + response.bbox[0] + ',' + response.bbox[2] + '\n' + response.bbox[1] + ',' + response.bbox[3])
           store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
-          //this.$refs.mapRef.setViewState(response, 8);
           this.$refs.mapRef.fitBoundsMap();
-          /* TODO fitbounds method */
         }
         this.contactDB();
       }, error => {
@@ -90,8 +86,6 @@ export default {
         if (this.$store.state.lastSearchTxt !== response){
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
-          /* TODO fitbounds method */
-          //this.$refs.mapRef.setViewState(location, 10);
           this.$refs.mapRef.fitBoundsMap();
         }
       });

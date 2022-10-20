@@ -1,7 +1,7 @@
 <template>
   <VueDeckgl
       :layers="layers"
-      :viewState="deckglViewState"
+      :viewState="viewState"
       @click="nothing"
       @view-state-change="updateViewState"
       @drag="closeCard"
@@ -67,10 +67,10 @@ export default {
     updateViewState: function(viewState) {
       this.viewState = {
         ...viewState,
-       // transitionDuration: 700,
-       // onTransitionEnd: () => {
-       //   this.triggerUpdateData();
-       // }
+        transitionDuration: 700,
+        onTransitionEnd: () => {
+          this.triggerUpdateData();
+        }
       }
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
@@ -78,23 +78,20 @@ export default {
         bearing: viewState.bearing,
         pitch: viewState.pitch
       });
-
-      console.log("zoom mappa: " + this.map.getZoom());
-
       /* Qunado viene cambiata la vista i menu vengono chiusi sui device piu' piccoli */
       this.closeNavMenuSmallDevice();
     },
     /* Metodo usato per spostare la visuale */
     setViewState: function(obj, zoom) {
-      this.deckglViewState = {
+      this.viewState = {
         longitude: obj.log,
         latitude: obj.lat,
         zoom: zoom,
-        bearing: this.deckglViewState.bearing,
-        pitch: this.deckglViewState.pitch,
-       // transitionDuration: 700,
-      //  onTransitionEnd: () => {
-      //    this.triggerUpdateData();
+        bearing: this.viewState.bearing,
+        pitch: this.viewState.pitch,
+        //transitionDuration: 700,
+       // onTransitionEnd: () => {
+        //  this.triggerUpdateData();
        // }
       };
     },
@@ -106,7 +103,6 @@ export default {
       const bb = store.state.currentBBInfo
 
       this.map.on('moveend', () => {
-        //console.log('A moveend event occurred.');
         console.log("zoom dopo: " + this.map.getZoom());
         console.log("center dopo: " + this.map.getCenter());
         console.log("bound dopo: " + this.map.getBounds());
@@ -158,7 +154,7 @@ export default {
       if (this.dataGeo.length === 0) {
         return [];
       } else {
-        if (this.deckglViewState.zoom <= 20 && this.deckglViewState.zoom > 11) {
+        if (this.viewState.zoom <= 20 && this.viewState.zoom > 11) {
           return [
             new IconLayer({
               id: 'icon-layer',

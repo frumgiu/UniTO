@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store ({
     state: {
         lastSearchTxt: "",
-        /* TODO: come array di array, per matchare fitbounds di mapbox */
+        /* come array di array, per matchare fitbounds di mapbox */
         currentBBInfo: [
             [0, 0],
             [0, 0]
