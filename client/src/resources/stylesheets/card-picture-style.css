@@ -5,7 +5,7 @@
     padding: 0.6rem 0.4rem;
     border: none !important;
     border-radius: 0.8rem !important;
-    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0.122rem 0.122rem 0.163rem;
     cursor: default;
 }
 
@@ -13,6 +13,7 @@
     width: 15vw;
     height: 30vh;
     object-fit: cover;
+    box-shadow: none !important;
     border-radius: 0.8rem !important;
 }
 

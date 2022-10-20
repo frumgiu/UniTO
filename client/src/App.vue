@@ -51,8 +51,8 @@ export default {
   },
   mounted() {
     navigator.geolocation.getCurrentPosition(position => {
-          const startPositon = {log: position.coords.longitude, lat: position.coords.latitude};
-          this.$refs.mapRef.setViewState(startPositon, 11);
+          const startPosition = {log: position.coords.longitude, lat: position.coords.latitude};
+          this.$refs.mapRef.setViewState(startPosition, 11);
         },
         () => {
           console.log("User did not allow geolocation. Starting from a default location")
@@ -127,7 +127,7 @@ export default {
   }
   /* width */
   ::-webkit-scrollbar {
-    width: 0.6rem;
+    width: 0.4rem;
   }
   /* Track */
   ::-webkit-scrollbar-track {
