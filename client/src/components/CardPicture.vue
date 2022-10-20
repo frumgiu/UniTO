@@ -41,8 +41,8 @@ export default {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
-      cardPictureId.style.top = "50%";
-      cardPictureId.style.left = "50%";
+      cardPictureId.style.top = "40%";
+      cardPictureId.style.left = "50.5%";
       this.namePicture = this.$store.state.pictureInfo.namePicture;
     },
     closeCard: function () {
