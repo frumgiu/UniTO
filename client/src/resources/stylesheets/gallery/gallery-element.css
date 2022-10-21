@@ -1,18 +1,8 @@
-.image-group-wrapper {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-flow: row wrap;
-    gap: 0.8rem 0.2rem;
-    width: 100%;
-    cursor: default;
-    transition: width 1s;
-}
-
 .image-wrapper {
+    position: relative;
     width: 100%;
     height: fit-content;
-    padding: 0.3rem 0.4rem;
+
     border: 0.09rem solid transparent;
     border-radius: 0.8rem;
 
@@ -34,14 +24,33 @@
 
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-    .image-wrapper {
-        padding: 0.2rem 0.8rem;
-    }
+.blur-txt-wrapper {
+    position: absolute;
+    top: 84.4%;
+    width: 100%;
+    height: 3rem;
+    border-radius: 0.8rem;
+    background: rgba(0,0,0, 0.6);
+    z-index: 1;
+
+    color: white;
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    .image-wrapper {
-        padding: 0.3rem 0.5rem;
-    }
+.wiki-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    overflow: hidden;
+}
+
+.blur-txt {
+    font-size: 0.94rem;
+}
+
+.wikimedia-btn {
+    border: none;
+    background: none;
+    color: white;
 }

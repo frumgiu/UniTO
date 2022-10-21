@@ -1,8 +1,16 @@
 <template>
   <div id="gallery-wrapper-elements" class="image-wrapper">
-    <div>
-    </div>
     <img class="card-img-top" v-bind:src="getSmallPictureUrl" loading="lazy" alt="Card image cap">
+    <div class="blur-txt-wrapper">
+      <div class="wiki-wrapper">
+        <div class="blur-txt">Visit on Wikimedia</div>
+        <a v-bind:href="wikiPageUrl" target="_blank">
+          <button class="wikimedia-btn">
+            <span class="material-icons" style="font-size: 1.2rem">launch</span>
+          </button>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 

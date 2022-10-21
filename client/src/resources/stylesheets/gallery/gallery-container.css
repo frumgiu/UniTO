@@ -1,4 +1,15 @@
 /* BASE */
+.image-group-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 0.8rem 0.2rem;
+    width: 100%;
+    cursor: default;
+    transition: width 1s;
+}
+
 #gallery-display {
     z-index: 9;
     overflow-y: auto;
