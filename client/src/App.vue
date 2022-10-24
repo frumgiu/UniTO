@@ -74,7 +74,12 @@ export default {
     contactDBBySearchTxt: function () {
       getCoordsForLocation(this.$store.state.lastSearchTxt).then(response => {
         if (response !== "not valid location") {
-          store.dispatch('changeBBInfo', {newMinLog: response.bbox[0], newMaxLog: response.bbox[2], newMinLat: response.bbox[1], newMaxLat: response.bbox[3]});
+          store.dispatch('changeBBInfo', {
+            newMinLog: response.bbox[0],
+            newMaxLog: response.bbox[2],
+            newMinLat: response.bbox[1],
+            newMaxLat: response.bbox[3]
+          });
           this.$refs.mapRef.fitBoundsMap();
         }
         this.contactDB();
@@ -82,28 +87,28 @@ export default {
         console.log(error);
       })
     },
-    askUserPosition: function(location) {
+    askUserPosition: function (location) {
       getNameForCoord(location).then(response => {
-        if (this.$store.state.lastSearchTxt !== response){
+        if (this.$store.state.lastSearchTxt !== response) {
           this.$refs.searchBarRef.setSearchOnUserPlace(response);
         } else {
           this.$refs.mapRef.fitBoundsMap();
         }
       });
     },
-    closeMenu: function() {
+    closeMenu: function () {
       this.$refs.mapOptionsRef.closeMenu();
       this.$refs.filterOptionRef.closeMenu();
     },
-    closeCard: function() {
+    closeCard: function () {
       this.$refs.cardRef.closeCard();
     },
-    openCard: function() {
+    openCard: function () {
       this.$refs.cardRef.openCard();
     },
-    setLayerMap: function(style) {
+    setLayerMap: function (style) {
       this.layerStyle = style;
-    },
+    }
   }
 }
 </script>

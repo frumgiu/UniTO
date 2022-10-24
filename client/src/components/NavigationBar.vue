@@ -4,7 +4,7 @@
       <span class="material-icons"  style="vertical-align: middle">close</span>
     </button>
     <button id="tooltip-expand" class="gallery-map-btn gallery-open-btn" type="button" data-toggle="tooltip" data-placement="top" title="Expand gallery" @click="openGallery">
-      <span id="icon-expand" class="material-icons"  style="vertical-align: middle">arrow_forward</span>
+      <span id="icon-expand" class="material-icons"  style="vertical-align: middle">keyboard_arrow_up</span>
     </button>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
     closeGallery: function() {
       this.changeGalleryStyle('gallery-close', 'gallery-split', 'gallery-full');
       //this.changeNavbarStyle('navbar-white', 'navbar-transparent');
-      document.getElementById('icon-expand').innerHTML = 'arrow_forward';
+      document.getElementById('icon-expand').innerHTML = 'keyboard_arrow_up';
       this.galleryOpen = false;
     },
     openGallery: function() {
@@ -55,11 +55,11 @@ export default {
       if (gallery.classList.contains('gallery-split') || window.innerWidth < 768 ) {
         this.changeGalleryStyle('gallery-full', 'gallery-split', 'gallery-close');
         if (window.innerWidth >= 768) {
-          document.getElementById('icon-expand').innerHTML = 'arrow_back';
+          document.getElementById('icon-expand').innerHTML = 'keyboard_arrow_down';
         }
       } else {
         this.changeGalleryStyle('gallery-split', 'gallery-full', 'gallery-close');
-        document.getElementById('icon-expand').innerHTML = 'arrow_forward';
+        document.getElementById('icon-expand').innerHTML = 'keyboard_arrow_up';
       }
      // if (window.innerWidth >= 768)
         //this.changeNavbarStyle('navbar-transparent', 'navbar-white');

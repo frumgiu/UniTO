@@ -7,42 +7,73 @@
     gap: 0.8rem 0.2rem;
     width: 100%;
     cursor: default;
-    transition: width 1s;
 }
 
 #gallery-display {
     z-index: 9;
     overflow-y: auto;
     background: rgba(255,255,255, 0.8);
-    height: 100%;
+    width: 100%;
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
-    transition: width 0.75s;
+    transition: height 0.9s;
     transition-timing-function: ease-in-out;
 }
 
+.gallery-display-inside {
+    margin-top: 5rem;
+}
+
 .gallery-close {
-   /*display: none;*/
-    width: 0;
-    transition: width 0.75s;
+    height: 0;
+    transition: height 0.9s;
     transition-timing-function: ease-in-out;
 }
 
 .gallery-split {
     display: block;
-    width: 55%;
+    height: 50%;
     /*border-radius: 0 0.8rem 0.8rem 0;*/
-    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
-    transition: width 0.75s;
+    box-shadow: rgba(0, 0, 0, 0.8) 0.122rem 0.122rem 0.163rem;
+    transition: height 0.9s;
     transition-timing-function: ease-in-out;
 }
 
 .gallery-full {
     display: block;
-    width: 100%;
-    transition: width 0.75s;
+    height: 100%;
+    transition: height 0.9s;
     transition-timing-function: ease-in-out;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    margin: 1.2rem 0;
+}
+
+.buttonAction {
+    font-size: 1rem;
+    color: white;
+    border-radius: 0.6rem;
+    border: none;
+    background-color: #48a36a;
+    box-shadow: #7EBE96 0.122rem 0.122rem 0.163rem;
+    margin: 0 0.8rem;
+    padding: 0.3rem 0.8rem;
+}
+
+.buttonAction:hover {
+    background-color: #7EBE96;
+    box-shadow: none;
+}
+
+.page-index {
+    font-size: 0.95rem;
+    cursor: default;
 }
 
 /*
@@ -54,27 +85,27 @@
 @media screen and (min-width: 1281px) {
     .gallery-split {
         display: block;
-        width: 45%;
+        height: 45%;
     }
 }
 
 @media screen and (min-width: 1025px) and (max-width: 1280px){
     .gallery-split {
         display: block;
-        width: 45%;
+        height: 45%;
     }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .gallery-split {
         display: block;
-        width: 50%;
+        height: 50%;
     }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
     .gallery-split {
         display: block;
-        width: 40%;
+        height: 40%;
     }
 }

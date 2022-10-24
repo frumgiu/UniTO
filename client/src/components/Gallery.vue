@@ -1,11 +1,16 @@
 <template>
   <div id="gallery-display">
-    <div id="gallery">
-      <div style="margin-top: 5rem;" />
+    <div id="gallery" class="gallery-display-inside">
+
       <div class="image-group-wrapper" >
-        <div v-for="(value, index) in savedData" :key="index">
+        <div v-for="(value, index) in pageData" :key="index">
           <GalleryElement :singleDataFileName="value.filename"/>
         </div>
+      </div>
+      <div class="pagination">
+        <button class="buttonAction" v-on:click="prev"> Back </button>
+        <span class="page-index">page {{ currentPage }}</span>
+        <button class="buttonAction" v-on:click="next(savedData.length)"> Next </button>
       </div>
     </div>
   </div>
@@ -19,7 +24,36 @@ export default {
   components: {
     GalleryElement
   },
-  props: ['savedData']
+  props: ['savedData'],
+  data () {
+    return {
+      currentPage: 1,
+      ElementPerPage: 15
+    }
+  },
+  methods: {
+    prev: function () {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    next: function (element) {
+      if (this.currentPage <= element/this.ElementPerPage) {
+        this.currentPage++;
+      }
+    }
+  },
+  computed: {
+    indexStarted: function () {
+      return (this.currentPage - 1) * this.ElementPerPage;
+    },
+    indexEnd: function () {
+      return this.indexStarted + this.ElementPerPage;
+    },
+    pageData: function() {
+      return this.savedData.slice(this.indexStarted, this.indexEnd);
+    }
+  }
 }
 </script>
 
