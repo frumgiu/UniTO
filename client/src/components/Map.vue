@@ -194,7 +194,8 @@ export default {
                   getPosition: (d) => [d.log, d.lat]
                 }) ];
           } else {
-           return new HeatmapLayer({
+           return [
+               new HeatmapLayer({
              id: "heat-layer",
              data: this.dataGeo,
              colorRange: [
@@ -210,7 +211,7 @@ export default {
              aggregation: "SUM",
              intensity: 1,
              threshold: 0.4
-           })
+           }) ]
           }
         }
       }
