@@ -19,10 +19,14 @@
 
 .open-img-btn {
     position: absolute;
+    width: fit-content;
+    height: fit-content;
+    padding: 0.3rem 0.25rem;
     top: 18px;
     right: 16px;
     border: none;
-    background: none;
+    border-radius: 0.8rem;
+    background: rgba(0,0,0, 0.3);
     color: white;
 }
 

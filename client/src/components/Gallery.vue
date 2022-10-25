@@ -1,7 +1,6 @@
 <template>
   <div id="gallery-display">
     <div id="gallery" class="gallery-display-inside">
-
       <div class="image-group-wrapper" >
         <div v-for="(value, index) in pageData" :key="index">
           <GalleryElement :singleDataFileName="value.filename"/>

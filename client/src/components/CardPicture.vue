@@ -3,9 +3,7 @@
     <div>
       <img class="card-img-top" v-bind:src="getSmallPictureUrl" alt="Card image cap">
       <a v-bind:href="getBigPictureUrl" target="_blank">
-        <button class="open-img-btn" data-toggle="tooltip" data-placement="top" title="Open picture">
-          <span class="material-icons"  style="vertical-align: middle">launch</span>
-        </button>
+        <button class="open-img-btn fa fa-camera" />
       </a>
     </div>
     <div class="card-body">
@@ -14,10 +12,7 @@
       <p class="card-text">Location: {{ this.$store.state.pictureInfo.countryPicture }}, {{ this.$store.state.pictureInfo.regionPicture }} <br/>Year: {{ this.$store.state.pictureInfo.yearPicture }} </p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a v-bind:href="wikiPageUrl" target="_blank">
-          <button class="card-btn">
-            <span class="material-icons" style="font-size: 1.2rem">launch</span>
-            <span class="card-link-text">Wikimedia</span>
-          </button>
+          <button class="card-btn fa fa-wikipedia-w"/>
         </a>
         <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
           <span class="material-icons"  style="vertical-align: middle">close</span>
