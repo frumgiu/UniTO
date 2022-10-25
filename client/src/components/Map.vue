@@ -17,7 +17,6 @@ import {IconLayer} from "@deck.gl/layers";
 import mapboxgl from "mapbox-gl";
 import VueDeckgl from 'vue-deck.gl';
 import store from "@/store";
-//import mySvg from "../resources/polaroids-polaroid-svgrepo-com.svg";
 
 export default {
   name: "Map",
@@ -80,7 +79,11 @@ export default {
         latitude: obj.lat,
         zoom: zoom,
         bearing: this.viewState.bearing,
-        pitch: this.viewState.pitch
+        pitch: this.viewState.pitch,
+        transitionDuration: 700,
+        onTransitionEnd: () => {
+          this.triggerUpdateData();
+        }
       };
     },
     fitBoundsMap: function() {
@@ -92,7 +95,6 @@ export default {
         this.setViewState(temp, this.map.getZoom());
       });
       this.map.fitBounds(bb);
-
     },
     closeNavMenuSmallDevice: function() {
       if (window.innerWidth <= 1024) {
@@ -115,7 +117,6 @@ export default {
     },
     /* Metodo che chiude la card quando viene spostata la visuale */
     closeCard: function() {
-      //console.log("close card because I'm dragging the map")
       this.$emit('askCloseCard');
     },
     saveMapBBox: function() {
@@ -142,12 +143,6 @@ export default {
               iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
               iconMapping: { marker: {x:0, y:0, width: 128, height: 128, mask: true} },
               getIcon: () => 'marker',
-            /*  getIcon: () => ({
-                url: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(mySvg)}`,
-                width: 128,
-                height: 128,
-                anchorY: 128
-              }),*/
               getPosition: (d) => [d.log, d.lat],
               getSize: () => 4,
               sizeScale: 10,

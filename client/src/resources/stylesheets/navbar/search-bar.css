@@ -51,6 +51,11 @@
     color: #48a36a;
 }
 
+.search-btn:disabled, .search-btn:hover:disabled {
+    color: gray;
+    cursor: default;
+}
+
 .btn-container {
     display: flex;
     justify-content: center;

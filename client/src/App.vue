@@ -3,7 +3,7 @@
     <div id="nav-bar" class="fixed-top my-navbar navbar-transparent">
       <SearchBar ref="searchBarRef" @askDataBySearch="contactDBBySearchTxt" @askCloseCard="closeCard"/>
       <div class="vl"></div>
-      <NavigationBar ref="navigationBarRef" />
+      <NavigationBar ref="navigationBarRef" @askCloseMenus="closeMenu" @askCloseCard="closeCard"/>
     </div>
     <FilterTable ref="filterOptionRef" :options="regions" :defaultMin="2010" :defaultMax="new Date().getFullYear()" @askDataByFilter="contactDB"/>
     <div id="map-display">
@@ -105,6 +105,7 @@ export default {
     },
     openCard: function () {
       this.$refs.cardRef.openCard();
+      this.$refs.navigationBarRef.closeGallery();
     },
     setLayerMap: function (style) {
       this.layerStyle = style;

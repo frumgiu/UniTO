@@ -26,7 +26,8 @@ export default {
   name: "SearchBar",
   data() {
     return {
-      searchText: ""
+      searchText: "",
+      galleryOpen: document.getElementById("gallery-display").classList.contains('gallery-full')
     }
   },
   methods: {

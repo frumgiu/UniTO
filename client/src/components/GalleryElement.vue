@@ -4,10 +4,10 @@
     <div class="blur-txt-wrapper">
       <div class="wiki-wrapper">
         <a v-bind:href="wikiPageUrl" target="_blank">
-          <button class="wikimedia-btn fa fa-wikipedia-w" />
+          <button class="wikimedia-btn fa fa-wikipedia-w" data-toggle="tooltip" data-placement="top" title="Open Wikimedia page"/>
         </a>
         <a v-bind:href="getBigPictureUrl" target="_blank">
-          <button class="wikimedia-btn fa fa-camera" />
+          <button class="wikimedia-btn fa fa-camera" data-toggle="tooltip" data-placement="top" title="Full-screen image"/>
         </a>
       </div>
     </div>
