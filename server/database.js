@@ -54,10 +54,8 @@ function createTagsQuery(tags, minYear, maxYear, bboxMin, bboxMax) {
         test = test.substring(0, test.lastIndexOf(" ")); //I need to remove the last 'OR' operator
         test += `) AND `;
     }
-    //if (typeof bbox !== 'undefined') {
     test += `( ST_X(geom::geometry) >= '${bboxMin[0]}' AND ST_X(geom::geometry) <= '${bboxMax[0]}' 
         AND ST_Y(geom::geometry) >= '${bboxMin[1]}' AND ST_Y(geom::geometry) <= '${bboxMax[1]}') AND `;
-    //}
     test += ` year >= '${minYear}' AND year <= '${maxYear}'`
     return test;
 }

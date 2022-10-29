@@ -42,7 +42,7 @@ export default {
     getUserPosition() {
       console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(position => {
-        const userPosition = {log: position.coords.longitude, lat: position.coords.latitude}
+        const userPosition = {log: position.coords.longitude, lat: position.coords.latitude};
         this.$emit('askUserPosition', userPosition);
       },
       error => {

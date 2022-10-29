@@ -80,10 +80,8 @@ export default {
         zoom: zoom,
         bearing: this.viewState.bearing,
         pitch: this.viewState.pitch,
-        transitionDuration: 700,
-        onTransitionEnd: () => {
-          this.triggerUpdateData();
-        }
+        //transitionDuration: 700,
+
       };
     },
     fitBoundsMap: function() {

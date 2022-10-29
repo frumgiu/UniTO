@@ -89,10 +89,10 @@ export default {
     },
     askUserPosition: function (location) {
       getNameForCoord(location).then(response => {
-        if (this.$store.state.lastSearchTxt !== response) {
-          this.$refs.searchBarRef.setSearchOnUserPlace(response);
+        if (this.$store.state.lastSearchTxt === response) {
+          this.contactDBBySearchTxt();
         } else {
-          this.$refs.mapRef.fitBoundsMap();
+          this.$refs.searchBarRef.setSearchOnUserPlace(response);
         }
       });
     },
