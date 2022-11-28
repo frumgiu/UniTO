@@ -18,7 +18,8 @@ this avoids to load tons of data.
 
 The user can interact with a filter menu' and a data visualization menu' that 
 provide three different type of data layers.
-With the search bar is possible to search and find a city by his native name (example: Torino for Turin).
+With the search bar is possible to search and find a city by his native name 
+(example: write "Torino" if you want to search Turin).
 The camera will move to the searched location and center the bounding box of the city.
 
 ---
