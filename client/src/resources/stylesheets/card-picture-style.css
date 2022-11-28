@@ -35,12 +35,14 @@
 }
 
 .card-title {
+    text-align: center;
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: 0 !important;
 }
 
 .card-text {
+    text-align: center;
     font-size: 0.98rem;
 }
 
@@ -49,24 +51,16 @@
 }
 
 .card-btn {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    overflow: hidden;
-
-    height: 2rem;
+    width: fit-content;
+    max-width: 100%;
+    font-size: 1rem;
     border: none;
-    border-radius: 0.6rem !important;
-    padding: 0.2rem 0.4rem;
-    color: white !important;
-    background-color: #48a36a !important;
-    box-shadow: #7EBE96 0.122rem 0.122rem 0.163rem;
+    color: #48a36a !important;
+    background: none !important;
 }
 
 .card-btn:hover {
-    background-color: #7EBE96 !important;
+    color: #7EBE96 !important;
 }
 
 .close-btn {
@@ -76,11 +70,21 @@
     cursor: pointer;
     background: none;
     border: none;
-    color: black;
+    color: grey;
 }
 
 .close-btn:hover {
     color: #e25a25;
+}
+
+hr.solid-short {
+    border-top: 0.09rem solid #967bdc;
+    margin: 0.02rem 0;
+    width: 6.5rem;
+}
+
+.btn-group-line {
+    margin: 0.5rem 0;
 }
 
 /* RESPONSIVE */

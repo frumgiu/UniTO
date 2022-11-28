@@ -8,16 +8,20 @@
     </div>
     <div class="card-body">
       <h5 class="card-title">{{ this.$store.state.pictureInfo.namePicture }}</h5>
-      <hr class="solid">
-      <p class="card-text">Location: {{ this.$store.state.pictureInfo.countryPicture }}, {{ this.$store.state.pictureInfo.regionPicture }} <br/>Year: {{ this.$store.state.pictureInfo.yearPicture }} </p>
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+
+      <div class="btn-group-line" style="display: flex; justify-content: space-between; align-items: center;">
+        <hr class="solid-short">
         <a v-bind:href="wikiPageUrl" target="_blank">
-          <button class="card-btn fa fa-wikipedia-w"/>
+          <button class="card-btn fa fa-wikipedia-w" data-toggle="tooltip" data-placement="top" title="Open Wikimedia"/>
         </a>
         <button class="close-btn" type="button" data-toggle="tooltip" data-placement="top" title="Close" @click="closeCard">
           <span class="material-icons"  style="vertical-align: middle">close</span>
         </button>
+        <hr class="solid-short">
       </div>
+
+      <p class="card-text">Location: {{ this.$store.state.pictureInfo.countryPicture }}, {{ this.$store.state.pictureInfo.regionPicture }}
+        <br/>Year: {{ this.$store.state.pictureInfo.yearPicture }} </p>
     </div>
   </div>
 </template>
@@ -36,8 +40,8 @@ export default {
       const cardPictureId = document.getElementById("cardpicture");
       cardPictureId.style.display = "flex";
       cardPictureId.style.position = "absolute";
-      cardPictureId.style.top = "40%";
-      cardPictureId.style.left = "50.5%";
+      cardPictureId.style.top = "30%";
+      cardPictureId.style.left = "50%";
       this.namePicture = this.$store.state.pictureInfo.namePicture;
     },
     closeCard: function () {

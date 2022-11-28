@@ -16,10 +16,10 @@
     "@luma.gl/webgl": "8.5.16"
   },
   "dependencies": {
-    "@deck.gl/aggregation-layers": "~8.8.13",
-    "@deck.gl/core": "~8.8.13",
-    "@deck.gl/layers": "~8.8.13",
-    "@deck.gl/mapbox": "~8.8.13",
+    "@deck.gl/aggregation-layers": "8.8.20",
+    "@deck.gl/core": "8.8.20",
+    "@deck.gl/layers": "8.8.20",
+    "@deck.gl/mapbox": "8.8.20",
     "@vue/compiler-sfc": "3.2.41",
     "axios": "0.27.2",
     "bootstrap": "4.6.1",
