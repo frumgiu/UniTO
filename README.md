@@ -23,7 +23,7 @@ The camera will move to the searched location and center the bounding box of the
 
 ---
 
-It can occur a problem with Deck.GL dependencies sometimes (after they realise a new package). 
+It can occur a problem with Deck.GL dependencies sometimes (after they realise a new version). 
 The only temporary working solution is to change Deck.GL version with latest and re-install package.json with yarn.
 
 ---
