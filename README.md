@@ -16,11 +16,10 @@ In the mounted stage the client send a get request to the server and receive
 the data from db. Database selects the data inside the map area visible on screen, 
 this avoids to load tons of data.
 
-The user can interact with a filter menu' and a data visualization menu' that 
-provide three different type of data layers.
-With the search bar is possible to search and find a city by his native name 
-(example: write "Torino" if you want to search Turin).
-The camera will move to the searched location and center the bounding box of the city.
+The user can interact with a filter menu' and a data visualization menu'.
+From the search-bar is possible to search and find a city by his native name 
+(example: write "Torino" if you want to search Turin); the camera will move to 
+the searched location and center the city's bounding box.
 
 ---
 
