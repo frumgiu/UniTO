@@ -13,8 +13,6 @@ start with /api will be redirected to http://localhost:3080.
 In the mounted stage the client send a get request to the server and receive 
 the data from db.
 
-The advance settings are work in progress and don't trigger any requests.
-
 ---
 # Development phase
 
