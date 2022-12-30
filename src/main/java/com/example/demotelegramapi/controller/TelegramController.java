@@ -15,8 +15,8 @@ public class TelegramController {
     private ConfigurationData configurationData;
 
     @GetMapping("/chatsList")
-    public String getChatsListId() {
-        if (telegramService.readChatsListId(50)) {
+    public String getChatsListId(@RequestBody int limitChat) {
+        if (telegramService.readChatsListId(limitChat)) {
             return "Okay";
         } else {
             return "Please, you must join Avvisi UniTo";
@@ -26,11 +26,16 @@ public class TelegramController {
     /*
      * Metodo per leggere i messaggi dal canale Avvisi UniTO.
      * Il limite di messaggi da recuperare viene passato come parametro
-     * dal client
+     * dal client.
      */
     @GetMapping("/history")
-    public String getMessagesHistoryDue() {
-        return telegramService.getChatHistory(2);
+    /* in postman basta mettere "2" nel request body */
+    public String getMessagesHistoryDue(@RequestBody int limitMsg) {
+        if (telegramService.readChatsListId(50)) {
+            return  telegramService.getChatHistory(limitMsg);
+        } else {
+            return "Please, you must join Avvisi UniTo";
+        }
     }
 
     /*

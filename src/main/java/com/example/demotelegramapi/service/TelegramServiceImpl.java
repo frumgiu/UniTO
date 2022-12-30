@@ -43,8 +43,8 @@ public class TelegramServiceImpl implements TelegramService {
                 if (chats.totalCount == 0 || LongStream.of(chats.chatIds).noneMatch(x -> x == configurationData.getChatId())) {
                     result.set(false);
                 }
+                needQuit = true;
             });
-            needQuit = true;
         }
         return result.get();
     }
@@ -92,14 +92,13 @@ public class TelegramServiceImpl implements TelegramService {
             needQuit = true;
         }
     }
-
     @Override
     public void update(TdApi.AuthorizationState authorizationState) {
         if (authorizationState != null) {
             this.authorizationState = authorizationState;
         }
         switch (authorizationState.getConstructor()) {
-            case TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
                 TdApi.SetTdlibParameters request = new TdApi.SetTdlibParameters();
                 request.databaseDirectory = "tdlib";
                 request.useMessageDatabase = true;
@@ -111,53 +110,65 @@ public class TelegramServiceImpl implements TelegramService {
                 request.applicationVersion = "1.0";
                 request.enableStorageOptimizer = true;
                 client.send(request, new AutorizationUpdatehandler(this));
-            }
-            case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR -> {
+                break;
+            case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR: {
                 client.send(new TdApi.SetAuthenticationPhoneNumber(configurationData.getPhonenumber(), null), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR: {
                 String link = ((TdApi.AuthorizationStateWaitOtherDeviceConfirmation) authorizationState).link;
                 System.out.println("Please confirm this login link on another device: " + link);
+                break;
             }
-            case TdApi.AuthorizationStateWaitEmailAddress.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitEmailAddress.CONSTRUCTOR: {
                 String emailAddress = SimpleHelper.promptString("Please enter email address: ");
                 client.send(new TdApi.SetAuthenticationEmailAddress(emailAddress), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateWaitEmailCode.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitEmailCode.CONSTRUCTOR: {
                 String code = SimpleHelper.promptString("Please enter email authentication code: ");
                 client.send(new TdApi.CheckAuthenticationEmailCode(new TdApi.EmailAddressAuthenticationCode(code)), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR: {
                 String code = SimpleHelper.promptString("Please enter authentication code: ");
                 client.send(new TdApi.CheckAuthenticationCode(code), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateWaitRegistration.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitRegistration.CONSTRUCTOR: {
                 String firstName = SimpleHelper.promptString("Please enter your first name: ");
                 String lastName = SimpleHelper.promptString("Please enter your last name: ");
                 client.send(new TdApi.RegisterUser(firstName, lastName), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR: {
                 String password = SimpleHelper.promptString("Please enter password: ");
                 client.send(new TdApi.CheckAuthenticationPassword(password), new AutorizationUpdatehandler(this));
+                break;
             }
-            case TdApi.AuthorizationStateReady.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateReady.CONSTRUCTOR: {
                 authorizationLock.lock();
                 try {
                     gotAuthorization.signal();
                 } finally {
                     authorizationLock.unlock();
                 }
+                break;
             }
-            case TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR: {
                 System.out.println("Logging out");
+                break;
             }
-            case TdApi.AuthorizationStateClosing.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateClosing.CONSTRUCTOR: {
                 System.out.println("Closing");
+                break;
             }
-            case TdApi.AuthorizationStateClosed.CONSTRUCTOR -> {
+            case TdApi.AuthorizationStateClosed.CONSTRUCTOR: {
                 System.out.println("Closed");
+                break;
             }
-            default -> System.err.println("Unsupported authorization state:\n" + authorizationState);
+            default:
+                System.err.println("Unsupported authorization state:\n" + authorizationState);
         }
     }
     private boolean authorized() {
