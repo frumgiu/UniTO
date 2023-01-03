@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+        - id: content-service
+          uri: lb://content-service
+          predicates:
+            - Path=/api/contents/**
+    kubernetes:
+      enabled: false
+  application:
+    name: api-gateway
+server:
+  port: 8080
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
