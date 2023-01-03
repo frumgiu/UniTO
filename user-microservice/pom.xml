@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>org.spikeTassProject</groupId>
+	<groupId>org.taasproject</groupId>
 	<artifactId>user-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>user-microservice</name>
@@ -33,7 +33,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -66,5 +65,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

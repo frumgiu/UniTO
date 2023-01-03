@@ -8,11 +8,13 @@
 		<version>2.7.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.spikeTassProject</groupId>
+
+	<groupId>org.taasproject</groupId>
 	<artifactId>content-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>content-microservice</name>
 	<description>Spike TAASS Project content-microservice</description>
+
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
@@ -30,7 +32,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -42,6 +43,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -62,5 +64,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
