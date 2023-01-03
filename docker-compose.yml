@@ -30,6 +30,21 @@ services:
       POSTGRES_PASSWORD: admin
       restart: unless-stopped
 
+  db-saleads:
+    container_name: db-saleads
+    image: "postgres"
+    ports:
+      - "5435:5432"
+    volumes:
+      - db-saleads-data:/var/lib/postgresql/data
+    networks:
+      - opnet
+    environment:
+      POSTGRES_DB: saleadsDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      restart: unless-stopped
+
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -45,6 +60,7 @@ services:
     depends_on:
       - db-users
       - db-contents
+      - db-saleads
     networks:
       - opnet
 
@@ -56,6 +72,7 @@ services:
     depends_on:
       - db-users
       - db-contents
+      - db-saleads
     networks:
       - opnet
 
@@ -70,6 +87,7 @@ services:
       - service-discovery-server
       - db-users
       - db-contents
+      - db-saleads
     networks:
       - opnet
 
@@ -87,6 +105,7 @@ services:
     depends_on:
       - db-users
       - db-contents
+      - db-saleads
       - service-discovery-server
       - api-gateway
     networks:
@@ -109,9 +128,30 @@ services:
       - api-gateway
     networks:
       - opnet
+
+  saleads-service:
+    container_name: saleads-service
+    image: saleads-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - eureka.client.serviceUrl.defaultZone=http://service-discovery-server:8761/eureka/
+    ports:
+      - "8084:8084"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - db-users
+      - db-saleads
+      - service-discovery-server
+      - api-gateway
+    networks:
+      - opnet
+
 volumes:
   db-users-data:
   db-contents-data:
+  db-saleads-data:
   pgadmin-data:
 networks:
   opnet:

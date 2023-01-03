@@ -13,4 +13,7 @@ docker build -t content-service .
 cd ../user-microservice
 docker build -t user-service .
 
+cd ../sale-announc-microservice
+docker build -t saleads-service .
+
 cd ..

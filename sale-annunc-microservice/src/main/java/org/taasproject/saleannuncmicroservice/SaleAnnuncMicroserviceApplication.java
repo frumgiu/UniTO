@@ -1,4 +1,4 @@
-package org.spikeTassProject.contentmicroservice;
+package org.taasproject.saleannuncmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,9 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ContentMicroserviceApplication {
+public class SaleAnnuncMicroserviceApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ContentMicroserviceApplication.class, args);
+		SpringApplication.run(SaleAnnuncMicroserviceApplication.class, args);
 	}
 
 	@Bean

@@ -13,6 +13,11 @@ spring:
           uri: lb://content-service
           predicates:
             - Path=/api/contents/**
+        - id: saleads-service
+          uri: lb://saleads-service
+          predicates:
+            - Path=/api/saleads/**
+
     kubernetes:
       enabled: false
   application:
