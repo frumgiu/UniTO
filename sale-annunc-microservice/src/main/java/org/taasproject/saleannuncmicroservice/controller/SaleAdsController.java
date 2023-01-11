@@ -25,6 +25,16 @@ public class SaleAdsController {
         return saleAdsRepository.findByActive(true);
     }
 
+    @PostMapping("/changeActiveStatus")
+    public SaleAnnouncement changeStatus(@RequestBody SaleAnnouncement param) {
+        SaleAnnouncement result = param;
+        if (saleAdsRepository.findById(param.getId()).isPresent()) {
+            result = saleAdsRepository.findById(param.getId()).get();
+            result.setActive(!param.isActive());
+        }
+        return result;
+    }
+
     @PostMapping("/createAds")
     public SaleAnnouncement createSaleAds(@RequestBody SaleAnnouncement param) {
         System.out.println("Create new sale annuncements..." + param.toString());
