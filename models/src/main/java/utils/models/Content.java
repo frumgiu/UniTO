@@ -1,4 +1,4 @@
-package org.spikeTassProject.contentmicroservice.model;
+package utils.models;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,7 +1,7 @@
 package org.spikeTassProject.contentmicroservice.repository;
 
-import org.spikeTassProject.contentmicroservice.model.Content;
 import org.springframework.data.jpa.repository.JpaRepository;
+import utils.models.Content;
 import java.util.List;
 
 public interface ContentRepository extends JpaRepository<Content,Long> {

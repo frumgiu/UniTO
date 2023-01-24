@@ -1,9 +1,10 @@
 package org.spikeTassProject.contentmicroservice.controller;
 
-import org.spikeTassProject.contentmicroservice.model.Content;
 import org.spikeTassProject.contentmicroservice.repository.ContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import utils.models.Content;
+
 import java.util.List;
 
 @CrossOrigin
