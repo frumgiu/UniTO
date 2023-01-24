@@ -1,4 +1,4 @@
-package org.taasproject.saleannuncmicroservice;
+package com.example.balonmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,9 +9,10 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class SaleAnnuncMicroserviceApplication {
+public class BalonMicroserviceApplication {
+
 	public static void main(String[] args) {
-		SpringApplication.run(SaleAnnuncMicroserviceApplication.class, args);
+		SpringApplication.run(BalonMicroserviceApplication.class, args);
 	}
 
 	@Bean

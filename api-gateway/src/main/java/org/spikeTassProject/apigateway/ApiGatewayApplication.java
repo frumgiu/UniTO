@@ -16,5 +16,4 @@ public class ApiGatewayApplication {
 
 	@Autowired
 	private DiscoveryClient discoveryClient;
-
 }

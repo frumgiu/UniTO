@@ -129,14 +129,14 @@ services:
     networks:
       - opnet
 
-  saleads-service:
-    container_name: saleads-service
-    image: saleads-service:latest
+  balon-service:
+    container_name: balon-service
+    image: balon-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - eureka.client.serviceUrl.defaultZone=http://service-discovery-server:8761/eureka/
     ports:
-      - "8084:8084"
+      - "8085:8085"
     deploy:
       restart_policy:
         condition: on-failure
@@ -147,6 +147,7 @@ services:
       - api-gateway
     networks:
       - opnet
+
 
 volumes:
   db-users-data:

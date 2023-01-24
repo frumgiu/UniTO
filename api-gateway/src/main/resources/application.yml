@@ -13,8 +13,8 @@ spring:
           uri: lb://content-service
           predicates:
             - Path=/api/contents/**
-        - id: saleads-service
-          uri: lb://saleads-service
+        - id: balon-service
+          uri: lb://balon-service
           predicates:
             - Path=/api/saleads/**
 

@@ -20,5 +20,4 @@ public class UserMicroserviceApplication {
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
-
 }

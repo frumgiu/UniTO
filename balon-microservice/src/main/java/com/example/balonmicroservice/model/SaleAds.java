@@ -1,11 +1,11 @@
-package org.taasproject.saleannuncmicroservice.model;
+package com.example.balonmicroservice.model;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "saleannouncement")
-public class SaleAnnouncement {
+@Table(name = "saleAds")
+public class SaleAds {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,15 +25,16 @@ public class SaleAnnouncement {
     @Column(name = "active")
     private boolean active;
 
-    public SaleAnnouncement(String owneremail, String description, double price) {
+    public SaleAds() {
+    }
+
+    public SaleAds(String owneremail, String description, double price) {
         this.owneremail = owneremail;
         this.description = description;
         this.price = price;
         datetime = new Date();
         active = true;
     }
-
-    public SaleAnnouncement() {}
 
     public Long getId() {
         return id;
@@ -85,8 +86,9 @@ public class SaleAnnouncement {
 
     @Override
     public String toString() {
-        return "SaleAnnouncement{" +
+        return "SaleAds{" +
                 "id=" + id +
+                ", owneremail='" + owneremail + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", datetime=" + datetime +

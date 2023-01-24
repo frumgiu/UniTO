@@ -1,10 +1,10 @@
-package org.taasproject.saleannuncmicroservice;
+package com.example.balonmicroservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SaleAnnuncMicroserviceApplicationTests {
+class BalonMicroserviceApplicationTests {
 
 	@Test
 	void contextLoads() {
