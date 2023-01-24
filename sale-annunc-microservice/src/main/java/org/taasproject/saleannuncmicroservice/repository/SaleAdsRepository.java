@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface SaleAdsRepository extends JpaRepository<SaleAnnouncement, Long> {
     List<SaleAnnouncement> findAll();
     List<SaleAnnouncement> findByActive(boolean active);
-
     Optional<SaleAnnouncement> findById(Long id);
+    void deleteById(Long id);
 }

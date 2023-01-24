@@ -8,4 +8,5 @@ public interface ContentRepository extends JpaRepository<Content,Long> {
     List<Content> findAll();
     List<Content> findByTitle(String title);
     List<Content> findByOwneremail(String owneremail);
+    void deleteById(Long id);
 }
