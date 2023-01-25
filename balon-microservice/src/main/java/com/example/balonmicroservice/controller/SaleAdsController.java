@@ -29,15 +29,13 @@ public class SaleAdsController {
     /* TODO: Non salva modifiche */
     @GetMapping(value = "/changeActiveStatus/{id}")
     public SaleAds changeStatus(@PathVariable("id") Long id) {
-        System.out.println("Dentro cambio stato");
-        SaleAds result = null;
+        SaleAds result;
         if (saleAdsRepository.findById(id).isPresent()) {
-            System.out.println("Ho trovato l'annuncio");
             result = saleAdsRepository.findById(id).get();
             result.setActive(!result.isActive());
+            return saleAdsRepository.save(result);
         }
-        System.out.print("Ho finito");
-        return result;
+        return null;
     }
 
     @PostMapping(value = "/createAds")

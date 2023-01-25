@@ -22,6 +22,9 @@ public class User {
     @Column(name = "bio")
     private String bio;
 
+    @Column(name = "urlPicture")
+    private String urlPicture;
+
     @Column(name = "role")
     private String role;
     public User(String email, String name, String surname, String role) {
@@ -30,6 +33,7 @@ public class User {
         this.surname = surname;
         this.role = role;
         this.bio = "Insert bio";
+        this.urlPicture = null;
     }
 
     public User() {
@@ -84,6 +88,14 @@ public class User {
         this.role = role;
     }
 
+    public String getUrlPicture() {
+        return urlPicture;
+    }
+
+    public void setUrlPicture(String urlPicture) {
+        this.urlPicture = urlPicture;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -92,6 +104,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", bio='" + bio + '\'' +
+                ", urlPicture='" + urlPicture + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

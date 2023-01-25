@@ -30,9 +30,7 @@ public class Content {
         this.dateTime = new Date();
     }
 
-    public Content() {
-
-    }
+    public Content() {}
 
     public Long getId() {
         return id;

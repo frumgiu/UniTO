@@ -5,6 +5,7 @@ import org.spikeTassProject.usermicroservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin
 @RestController
@@ -23,7 +24,7 @@ public class UserController {
     public User getUser(@PathVariable("email") String email) {
         System.out.println("Get specific user " + email);
         User result = userRepository.findUserByEmail(email);
-        System.out.println("User trovato: " + result.toString());
+        System.out.println("User trovato: " + result);
         return result;
     }
 
@@ -45,15 +46,37 @@ public class UserController {
         return userRepository.findUserByNameAndSurname(name, surname);
     }
 
-    /* TODO: Non salva la modifica in db */
+    /* TODO: testare salvi la modifica nel modo corretto */
     @GetMapping(value = "/changeBio/{id}/{newBio}")
     public User changeBioUser(@PathVariable("id") Long id, @PathVariable("newBio") String newBio) {
-        User userFromDB = null;
+        User userFromDB;
+        int numUserBefore = userRepository.findAll().size();
         if (userRepository.findById(id).isPresent()) {
             userFromDB = userRepository.findById(id).get();
             userFromDB.setBio(newBio);
+            userRepository.save(userFromDB);
         }
-        return userFromDB;
+        int numUserAfter = userRepository.findAll().size();
+        if (numUserAfter == numUserBefore) {
+            userFromDB = userRepository.getUserById(id);
+            if (Objects.equals(userFromDB.getBio(), newBio)) {
+                System.out.println("Modifica effettuata e salvata correttamente");
+                return userFromDB;
+            }
+        }
+        System.out.println("Modifica non effettuata o non salvata correttamente");
+        return null;
+    }
+
+    @GetMapping(value = "/changePicture/{id}/{newUrl}")
+    public User changeProfilePicture(@PathVariable("id") Long id, @PathVariable("newUrl") String newUrl) {
+        User userFromDB;
+        if (userRepository.findById(id).isPresent()) {
+            userFromDB = userRepository.findById(id).get();
+            userFromDB.setUrlPicture(newUrl);
+            return userRepository.save(userFromDB);
+        }
+        return null;
     }
 
     @PostMapping(value = "/createUser")
