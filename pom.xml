@@ -10,10 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>models</module>
         <module>api-gateway</module>
         <module>eureka-server</module>
         <module>user-microservice</module>
         <module>content-microservice</module>
         <module>balon-microservice</module>
+        <module>board-microservice</module>
     </modules>
 </project>

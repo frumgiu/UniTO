@@ -17,6 +17,10 @@ spring:
           uri: lb://balon-service
           predicates:
             - Path=/api/saleads/**
+        - id: board-service
+          uri: lb://board-service
+          predicates:
+            - Path=/api/boards/**
 
     kubernetes:
       enabled: false

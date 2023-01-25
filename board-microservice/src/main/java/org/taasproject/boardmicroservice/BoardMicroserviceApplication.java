@@ -1,4 +1,4 @@
-package org.spikeTassProject.contentmicroservice;
+package org.taasproject.boardmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EntityScan(basePackages= {"org.spikeTassProject.contentmicroservice","utils.models"})
-public class ContentMicroserviceApplication {
+@EntityScan(basePackages = {"org.taasproject.boardmicroservice", "utils.models"})
+public class BoardMicroserviceApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ContentMicroserviceApplication.class, args);
+		SpringApplication.run(BoardMicroserviceApplication.class, args);
 	}
 
 	@Bean
