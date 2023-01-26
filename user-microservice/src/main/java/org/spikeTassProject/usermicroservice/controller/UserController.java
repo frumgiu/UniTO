@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -52,7 +51,6 @@ public class UserController {
         return userRepository.findUserByNameAndSurname(name, surname);
     }
 
-    /* TODO: testare salvi la modifica nel modo corretto */
     @GetMapping(value = "/changeBio/{id}/{newBio}")
     public User changeBioUser(@PathVariable("id") Long id, @PathVariable("newBio") String newBio) {
         User userFromDB;

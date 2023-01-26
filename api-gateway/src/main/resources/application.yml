@@ -1,19 +1,18 @@
 spring:
+  mvc:
+    dispatch-options-request: true
   cloud:
     gateway:
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       globalcors:
         corsConfigurations:
           '[/api/**]':
-            allowedOrigins: "http://localhost:8080"
-            allowedHeaders:
-              - Content-Type
+            allowedOrigins: "*"
+            allowedHeaders: "*"
             allowedMethods:
+              - OPTIONS
               - GET
               - POST
               - DELETE
-        # add-to-simple-url-handler-mapping: true
       discovery:
         locator:
           enabled: true
@@ -22,7 +21,6 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
-            - Query=param
         - id: content-service
           uri: lb://content-service
           predicates:
