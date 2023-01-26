@@ -20,6 +20,12 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    /* TODO Solo di test per comunicazione con client */
+    @PostMapping("/getAllTest")
+    public void test(@RequestParam("param") String param) {
+        System.out.println("Get all Users");
+        System.out.println(param);
+    }
     @GetMapping("/getUser/{email}")
     public User getUser(@PathVariable("email") String email) {
         System.out.println("Get specific user " + email);
