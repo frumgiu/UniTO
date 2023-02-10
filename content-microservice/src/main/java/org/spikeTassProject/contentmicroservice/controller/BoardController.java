@@ -1,9 +1,10 @@
-package org.taasproject.boardmicroservice.controller;
+package org.spikeTassProject.contentmicroservice.controller;
 
+import org.spikeTassProject.contentmicroservice.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.taasproject.boardmicroservice.repository.BoardRepository;
 import utils.models.Board;
+
 import java.util.List;
 
 @CrossOrigin
@@ -11,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api/boards")
 public class BoardController {
     @Autowired
-    private BoardRepository  boardRepository;
+    private BoardRepository boardRepository;
 
     @GetMapping("/getAll")
     public List<Board> getAllBoards() {

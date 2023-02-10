@@ -1,6 +1,7 @@
 package utils.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Boards")
@@ -14,6 +15,9 @@ public class Board {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "board")
+    private List<Content> boardContentsList;
 
     public Board(String name, String description) {
         this.name = name;
@@ -44,6 +48,14 @@ public class Board {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Content> getBoardContentsList() {
+        return boardContentsList;
+    }
+
+    public void setBoardContentsList(List<Content> boardContentsList) {
+        this.boardContentsList = boardContentsList;
     }
 
     @Override

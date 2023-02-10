@@ -1,7 +1,8 @@
-package org.taasproject.boardmicroservice.repository;
+package org.spikeTassProject.contentmicroservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import utils.models.Board;
+
 import java.util.List;
 import java.util.Optional;
 

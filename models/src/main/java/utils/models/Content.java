@@ -23,6 +23,10 @@ public class Content {
     @Column(name = "datetime")
     private Date dateTime;
 
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     public Content(String owneremail, String title, String description) {
         this.owneremail = owneremail;
         this.title = title;
@@ -70,6 +74,14 @@ public class Content {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override
