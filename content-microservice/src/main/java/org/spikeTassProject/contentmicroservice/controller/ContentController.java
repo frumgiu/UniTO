@@ -25,9 +25,9 @@ public class ContentController {
         return contentRepository.findByOwneremail(email);
     }
 
-    /* TODO: Come passare titolo composto da più parole? es. mi annoio */
-    @GetMapping(value = "/getFromName/{title}")
-    public List<Content> getContentsByName(@PathVariable("title") String title) {
+    /* TODO: testare funzionamento con postman */
+    @GetMapping(value = "/getFromName")
+    public List<Content> getContentsByName(@RequestParam("title") String title) {
         System.out.println("Get all contents with a specific title");
         return contentRepository.findByTitle(title);
     }

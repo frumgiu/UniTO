@@ -26,7 +26,7 @@ public class SaleAdsController {
         return saleAdsRepository.findByActive(true);
     }
 
-    /* TODO: Non salva modifiche */
+    /* TODO: Testare funzionamento con postman */
     @GetMapping(value = "/changeActiveStatus/{id}")
     public SaleAds changeStatus(@PathVariable("id") Long id) {
         SaleAds result;

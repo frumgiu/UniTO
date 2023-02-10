@@ -51,33 +51,16 @@ public class UserController {
         return userRepository.findUserByNameAndSurname(name, surname);
     }
 
-    @GetMapping(value = "/changeBio/{id}/{newBio}")
-    public User changeBioUser(@PathVariable("id") Long id, @PathVariable("newBio") String newBio) {
+    /* TODO: Testare funzionamento con postman */
+    @GetMapping(value = "/updateUser/{id}")
+    public User updateUserInfo(@RequestBody User param) {
         User userFromDB;
-        int numUserBefore = userRepository.findAll().size();
-        if (userRepository.findById(id).isPresent()) {
-            userFromDB = userRepository.findById(id).get();
-            userFromDB.setBio(newBio);
-            userRepository.save(userFromDB);
-        }
-        int numUserAfter = userRepository.findAll().size();
-        if (numUserAfter == numUserBefore) {
-            userFromDB = userRepository.getUserById(id);
-            if (Objects.equals(userFromDB.getBio(), newBio)) {
-                System.out.println("Modifica effettuata e salvata correttamente");
-                return userFromDB;
-            }
-        }
-        System.out.println("Modifica non effettuata o non salvata correttamente");
-        return null;
-    }
-
-    @GetMapping(value = "/changePicture/{id}/{newUrl}")
-    public User changeProfilePicture(@PathVariable("id") Long id, @PathVariable("newUrl") String newUrl) {
-        User userFromDB;
-        if (userRepository.findById(id).isPresent()) {
-            userFromDB = userRepository.findById(id).get();
-            userFromDB.setUrlPicture(newUrl);
+        if (userRepository.findById(param.getId()).isPresent()) {
+            userFromDB = userRepository.findById(param.getId()).get();
+            userFromDB.setName(param.getName());
+            userFromDB.setSurname(param.getSurname());
+            userFromDB.setBio(param.getBio());
+            userFromDB.setUrlPicture(param.getUrlPicture());
             return userRepository.save(userFromDB);
         }
         return null;
