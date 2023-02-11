@@ -1,11 +1,13 @@
 package com.example.demotelegramapi.service;
 
+import com.example.demotelegramapi.model.TelegramContent;
 import org.drinkless.tdlib.TdApi;
+import java.util.List;
 
 public interface TelegramService {
     boolean readChatsListId(int limit);
 
-    String getChatHistory(int limit);
+    List<TelegramContent> getChatHistory(int limit);
 
     void joinChatUnito();
 

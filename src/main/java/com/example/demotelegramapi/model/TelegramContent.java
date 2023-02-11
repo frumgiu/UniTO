@@ -5,12 +5,10 @@ import java.util.Date;
 public class TelegramContent {
     private String message;
     private Date sentDate;
-
     private int dateOrder;
 
-    public TelegramContent(String message, Date sentDate, int dateOrder) {
+    public TelegramContent(String message, int dateOrder) {
         this.message = message;
-        this.sentDate = sentDate;
         this.dateOrder = dateOrder;
     }
 
@@ -38,5 +36,14 @@ public class TelegramContent {
 
     public void setDateOrder(int dateOrder) {
         this.dateOrder = dateOrder;
+    }
+
+    @Override
+    public String toString() {
+        return "TelegramContent{" +
+                "message='" + message + '\'' +
+                ", sentDate=" + sentDate +
+                ", dateOrder=" + dateOrder +
+                '}';
     }
 }
