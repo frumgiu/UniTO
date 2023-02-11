@@ -77,7 +77,7 @@ public class TelegramServiceImpl implements TelegramService {
                 TdApi.Messages messages = (TdApi.Messages) object;
                 if (messages.totalCount == 0) {
                     needQuit = true;
-                    assignTelegramContentList(messageList);
+                    assignTelegramContentList(messageList, lastRecentMsg);
                     //result.set("Read " + messageList.size() + " messages");
                 } else {
                     Arrays.asList(messages.messages).forEach(a -> {
@@ -104,10 +104,13 @@ public class TelegramServiceImpl implements TelegramService {
         return telegramContentList;
     }
 
-    private void assignTelegramContentList(List<TdApi.Message> messageListTemp) {
+    private void assignTelegramContentList(List<TdApi.Message> messageListTemp, long lastRecentMsg) {
         for (TdApi.Message msg : messageListTemp) {
-            TelegramContent temp = new TelegramContent(msg.id, msg.content.toString(), msg.date);
-            telegramContentList.add(temp);
+            if (msg.id > lastRecentMsg)
+            {
+                TelegramContent temp = new TelegramContent(msg.id, msg.content.toString(), msg.date);
+                telegramContentList.add(temp);
+            }
         }
         System.out.println("Ho aggiunto i messaggi alla lista telegram: " + telegramContentList.size());
     }

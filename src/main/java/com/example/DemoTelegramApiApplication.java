@@ -34,17 +34,15 @@ public class DemoTelegramApiApplication {
             try {
                 System.out.println("*********** FACCIO LA RICHIESTA ***********");
                 System.out.println("Lista telegam dimensione prima: " + telegramContentList.size());
-                long lastID = telegramContentList.size() <= 0 ? 0 : telegramContentList.get(telegramContentList.size()-1).getMsgId();
+                long lastID = telegramContentList.size() == 0 ? 0 : telegramContentList.get(telegramContentList.size()-1).getMsgId();
                 telegramContentList.addAll(telegramService.getChatHistory(10, lastID));
                 System.out.println("Lista telegam dimensione dopo: " + telegramContentList.size());
                 //System.out.println(telegramContentList.get(1).toString());
-                Thread.sleep(10000);
-                needQuit = true;
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 needQuit = true;
                 e.getStackTrace();
             }
-
         }
     }
 }
