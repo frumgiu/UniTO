@@ -62,7 +62,7 @@ public class TelegramServiceImpl implements TelegramService {
         return result.get();
     }
     @Override
-    public List<TelegramContent> getChatHistory(int limit) {
+    public List<TelegramContent> getChatHistory(int limit, long lastRecentMsg) {
         needQuit = false;
         List<TdApi.Message> messageList = new ArrayList<>();
         //AtomicReference<String> result = new AtomicReference<>("Nothing to read");
@@ -106,7 +106,7 @@ public class TelegramServiceImpl implements TelegramService {
 
     private void assignTelegramContentList(List<TdApi.Message> messageListTemp) {
         for (TdApi.Message msg : messageListTemp) {
-            TelegramContent temp = new TelegramContent(msg.content.toString(), msg.date);
+            TelegramContent temp = new TelegramContent(msg.id, msg.content.toString(), msg.date);
             telegramContentList.add(temp);
         }
         System.out.println("Ho aggiunto i messaggi alla lista telegram: " + telegramContentList.size());

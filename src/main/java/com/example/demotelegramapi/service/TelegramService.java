@@ -7,7 +7,7 @@ import java.util.List;
 public interface TelegramService {
     boolean readChatsListId(int limit);
 
-    List<TelegramContent> getChatHistory(int limit);
+    List<TelegramContent> getChatHistory(int limit, long lastRecentMs);
 
     void joinChatUnito();
 

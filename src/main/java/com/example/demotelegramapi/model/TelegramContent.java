@@ -3,16 +3,26 @@ package com.example.demotelegramapi.model;
 import java.util.Date;
 
 public class TelegramContent {
+    private long msgId;
     private String message;
     private Date sentDate;
     private int dateOrder;
 
-    public TelegramContent(String message, int dateOrder) {
+    public TelegramContent(long msgId, String message, int dateOrder) {
+        this.msgId = msgId;
         this.message = message;
         this.dateOrder = dateOrder;
     }
 
     public TelegramContent() {}
+
+    public long getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(long msgId) {
+        this.msgId = msgId;
+    }
 
     public String getMessage() {
         return message;
@@ -41,7 +51,8 @@ public class TelegramContent {
     @Override
     public String toString() {
         return "TelegramContent{" +
-                "message='" + message + '\'' +
+                "msgId=" + msgId +
+                ", message='" + message + '\'' +
                 ", sentDate=" + sentDate +
                 ", dateOrder=" + dateOrder +
                 '}';
