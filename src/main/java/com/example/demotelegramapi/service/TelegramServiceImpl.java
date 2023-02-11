@@ -11,7 +11,6 @@ import java.io.IOError;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -27,7 +26,6 @@ public class TelegramServiceImpl implements TelegramService {
     private final Condition gotAuthorization = authorizationLock.newCondition();
     private final AtomicBoolean replyReceived = new AtomicBoolean();
     private final AtomicBoolean chatListReceived = new AtomicBoolean();
-    private List<TelegramContent> telegramContentList = new ArrayList<>();
     @Autowired
     private ConfigurationData configurationData;
 
@@ -65,6 +63,7 @@ public class TelegramServiceImpl implements TelegramService {
     public List<TelegramContent> getChatHistory(int limit, long lastRecentMsg) {
         needQuit = false;
         List<TdApi.Message> messageList = new ArrayList<>();
+        AtomicReference<List<TelegramContent>> telegramContentList = new AtomicReference<>();
         //AtomicReference<String> result = new AtomicReference<>("Nothing to read");
         while (!needQuit) {
             while (!authorized()) {
@@ -77,7 +76,7 @@ public class TelegramServiceImpl implements TelegramService {
                 TdApi.Messages messages = (TdApi.Messages) object;
                 if (messages.totalCount == 0) {
                     needQuit = true;
-                    assignTelegramContentList(messageList, lastRecentMsg);
+                    telegramContentList.set(assignTelegramContentList(messageList, lastRecentMsg));
                     //result.set("Read " + messageList.size() + " messages");
                 } else {
                     Arrays.asList(messages.messages).forEach(a -> {
@@ -101,18 +100,20 @@ public class TelegramServiceImpl implements TelegramService {
             }
         }
         //return result.get();
-        return telegramContentList;
+        return telegramContentList.get();
     }
 
-    private void assignTelegramContentList(List<TdApi.Message> messageListTemp, long lastRecentMsg) {
+    private List<TelegramContent> assignTelegramContentList(List<TdApi.Message> messageListTemp, long lastRecentMsg) {
+        List<TelegramContent> tempList = new ArrayList<>();
         for (TdApi.Message msg : messageListTemp) {
             if (msg.id > lastRecentMsg)
             {
                 TelegramContent temp = new TelegramContent(msg.id, msg.content.toString(), msg.date);
-                telegramContentList.add(temp);
+                tempList.add(temp);
             }
         }
-        System.out.println("Ho aggiunto i messaggi alla lista telegram: " + telegramContentList.size());
+        System.out.println("Ho aggiunto i messaggi alla lista telegram: " + tempList.size());
+        return tempList;
     }
 
     /* Ordina i messaggi dal più vecchio al più nuovo, dove il primo è sempre il messaggio
