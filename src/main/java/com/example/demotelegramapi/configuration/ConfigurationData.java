@@ -38,6 +38,8 @@ public class ConfigurationData {
         this.apiHash = apiHash;
     }
 
+    /* -1001394472781  Avvisi Unito */
+    /* -1001864701659  Avvisi Unito Test ciccia */
     public long getChatId() {
         return chatId;
     }
@@ -46,6 +48,7 @@ public class ConfigurationData {
         this.chatId = chatId;
     }
 
+    /* unitoavvisi */
     public String getChatUsername() {
         return chatUsername;
     }

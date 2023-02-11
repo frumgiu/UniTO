@@ -3,12 +3,15 @@ package com.example.demotelegramapi.service;
 import com.example.demotelegramapi.configuration.ConfigurationData;
 import com.example.demotelegramapi.helpers.SimpleHelper;
 import com.example.demotelegramapi.handlers.*;
+import com.example.demotelegramapi.model.TelegramContent;
 import org.drinkless.tdlib.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOError;
 import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -22,7 +25,9 @@ public class TelegramServiceImpl implements TelegramService {
     private volatile boolean needQuit = false;
     private final Lock authorizationLock = new ReentrantLock();
     private final Condition gotAuthorization = authorizationLock.newCondition();
-    private final AtomicBoolean historyReceived = new AtomicBoolean();
+    private final AtomicBoolean replyReceived = new AtomicBoolean();
+    private final AtomicBoolean chatListReceived = new AtomicBoolean();
+    private List<TelegramContent> telegramContentList = new ArrayList<>();
     @Autowired
     private ConfigurationData configurationData;
 
@@ -32,65 +37,99 @@ public class TelegramServiceImpl implements TelegramService {
 
     @Override
     public boolean readChatsListId(int limit) {
-        createClient();
         AtomicBoolean result = new AtomicBoolean(true);
-        while (!needQuit) {
-            while (!authorized()) {
-                waitAuthorization();
-            }
-            client.send(new TdApi.GetChats(new TdApi.ChatListMain(), limit), object -> {
-                TdApi.Chats chats = (TdApi.Chats) object;
-                if (chats.totalCount == 0 || LongStream.of(chats.chatIds).noneMatch(x -> x == configurationData.getChatId())) {
-                    result.set(false);
-                }
-                needQuit = true;
-            });
+        while (!authorized()) {
+            waitAuthorization();
         }
+        chatListReceived.set(false);
+        client.send(new TdApi.GetChats(new TdApi.ChatListMain(), limit), object -> {
+            TdApi.Chats chats = (TdApi.Chats) object;
+            if (chats.totalCount == 0 || LongStream.of(chats.chatIds).noneMatch(x -> x == configurationData.getChatId())) {
+                result.set(false);
+            }
+            chatListReceived.set(true);
+            });
+            while (!chatListReceived.get() && !Thread.currentThread().isInterrupted()) {
+                synchronized (chatListReceived) {
+                    try {
+                        chatListReceived.wait(1000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+       // }
         return result.get();
     }
     @Override
     public String getChatHistory(int limit) {
-        createClient();
+        needQuit = false;
+        List<TdApi.Message> messageList = new ArrayList<>();
         AtomicReference<String> result = new AtomicReference<>("Nothing to read");
         while (!needQuit) {
             while (!authorized()) {
                 waitAuthorization();
             }
-            historyReceived.set(false);
-            //TODO recursive function ?
-            client.send(new TdApi.GetChatHistory(configurationData.getChatId(), 0, 0, limit, true), object -> {
+            replyReceived.set(false);
+            long fromId = messageList.isEmpty() ? 0 : getOldestMsgId(messageList);
+            System.out.println("Mando richiesta da messaggio Id " + fromId);
+            client.send(new TdApi.GetChatHistory(configurationData.getChatId(), fromId, 0, limit, true), object -> {
                 TdApi.Messages messages = (TdApi.Messages) object;
-                result.set("Read " + messages.totalCount + " messages");
-                historyReceived.set(true);
-                needQuit = true;
-                synchronized (historyReceived){
-                    historyReceived.notify();
+                if (messages.totalCount == 0) {
+                    needQuit = true;
+                    result.set("Read " + messageList.size() + " messages");
+                } else {
+                    Arrays.asList(messages.messages).forEach(a -> {
+                        if (messageList.stream().noneMatch(b -> b.id == a.id))
+                            messageList.add(a);
+                    });
+                }
+                replyReceived.set(true);
+                synchronized (replyReceived){
+                    replyReceived.notify();
                 }
             });
-            while (!historyReceived.get() && !Thread.currentThread().isInterrupted()) {
-                synchronized (historyReceived) {
+            while (!replyReceived.get() && !Thread.currentThread().isInterrupted()) {
+                synchronized (replyReceived) {
                     try {
-                        historyReceived.wait(1000);
+                        replyReceived.wait(1000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
                 }
             }
         }
+        //assignTelegramContentList(messageList, lastMsgREad.get());
         return result.get();
     }
+
+    private void assignTelegramContentList(List<TdApi.Message> messageListTemp, long lastMsgRead) {
+        for (int i = 0; messageListTemp.get(i).id > lastMsgRead; i++) {
+            //TelegramContent temp = new TelegramContent(messageListTemp.get(i).content.text);
+            System.out.println("ciao");
+        }
+    }
+
+    /* Ordina i messaggi dal più vecchio al più nuovo, dove il primo è sempre il messaggio
+    * di creazione del canale (DA IGNORARE LATO CLIENT) */
+    private long getOldestMsgId(List<TdApi.Message> messageList) {
+        messageList.sort(Comparator.comparingInt(a -> a.date));
+        return messageList.get(0).id;
+    }
+
     @Override
     public void joinChatUnito() {
-        createClient();
+        needQuit = false;
         while (!needQuit) {
             while (!authorized()) {
                 waitAuthorization();
             }
             System.out.println(configurationData.getChatUsername());
-            client.send(new TdApi.SearchPublicChat(configurationData.getChatUsername()), object -> System.out.println("Find it."));
+            client.send(new TdApi.SearchPublicChat(configurationData.getChatUsername()), object -> System.out.println(object.toString()));
             client.send(new TdApi.JoinChat(configurationData.getChatId()), object -> System.out.println(object.toString()));
             needQuit = true;
         }
+        System.out.println("Mi sono iscritto al canale");
     }
     @Override
     public void update(TdApi.AuthorizationState authorizationState) {
@@ -191,9 +230,8 @@ public class TelegramServiceImpl implements TelegramService {
             }
         } finally { authorizationLock.unlock(); }
     }
-    private void createClient() {
+    public void createClient() {
         if(client != null) {
-            needQuit = false;
             return;
         }
         Client.setLogMessageHandler(1, new LogMessageHandler());
