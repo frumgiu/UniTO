@@ -16,6 +16,6 @@
         <module>user-microservice</module>
         <module>content-microservice</module>
         <module>balon-microservice</module>
-        <module>board-microservice</module>
+<!--        <module>board-microservice</module>-->
     </modules>
 </project>

@@ -17,14 +17,14 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: content-service
+          uri: lb://content-service
+          predicates:
+            - Path=/api/contents/**, /api/boards/**
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/api/contents/**
         - id: balon-service
           uri: lb://balon-service
           predicates:
@@ -33,7 +33,6 @@ spring:
           uri: lb://board-service
           predicates:
             - Path=/api/boards/**
-
     kubernetes:
       enabled: false
   application:

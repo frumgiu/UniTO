@@ -1,5 +1,7 @@
 package utils.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,7 +25,18 @@ public class Content {
     @Column(name = "datetime")
     private Date dateTime;
 
-    @ManyToOne
+    /**
+     * Questa Java Annotation @JsonIgnore serve per il seguente motivo:
+     * Nel momento in cui viene richiesto un Content, sappiamo che al suo
+     * interno avremo un parametro di tipo Board. Quest'ultimo avrà a sua
+     * volta una lista di Content (dove ogni Content avrà a sua volta una
+     * Board).
+     * Questo causa una ricorsione infinita, e causa problemi.
+     * Per questo motivo si utilizza @JsonIgnore che ignora il parametro
+     * nella conversione in Json
+     */
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id")
     private Board board;
 

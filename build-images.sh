@@ -16,7 +16,7 @@ docker build -t user-service .
 cd ../balon-microservice
 docker build -t balon-service .
 
-cd ../board-microservice
-docker build -t board-service .
+#cd ../board-microservice
+#docker build -t board-service .
 
 cd ..

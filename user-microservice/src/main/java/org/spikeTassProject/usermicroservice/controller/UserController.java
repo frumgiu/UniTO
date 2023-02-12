@@ -52,7 +52,7 @@ public class UserController {
     }
 
     /* TODO: Testare funzionamento con postman */
-    @GetMapping(value = "/updateUser/{id}")
+    @PostMapping(value = "/updateUser")
     public User updateUserInfo(@RequestBody User param) {
         User userFromDB;
         if (userRepository.findById(param.getId()).isPresent()) {
@@ -71,5 +71,17 @@ public class UserController {
         System.out.println("Create a new User... " + param.toString());
         return userRepository.save(
                 new User(param.getEmail(),param.getName(), param.getSurname(), param.getRole()));
+    }
+
+    @PostMapping(value = "/populateDBUsers")
+    public boolean populateDBUsers() {
+        System.out.println("Metodo di servizio/sviluppo per popolare il DB con alcuni utenti");
+        User u1 = new User("fabio.ferrero111@edu.unito.it", "Fabio", "Ferrero", "urs");
+        User u2 = new User("giulia.frumento@edu.unito.it", "Giulia", "Frumento", "urs");
+        User u3 = new User("samuele.monasterolo@edu.unito.it", "Samuele", "Monasterolo", "urs");
+        userRepository.save(u1);
+        userRepository.save(u2);
+        userRepository.save(u3);
+        return true;
     }
 }
