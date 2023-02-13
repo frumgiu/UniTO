@@ -1,54 +1,65 @@
 package org.spikeTassProject.contentmicroservice.controller;
 
 import org.spikeTassProject.contentmicroservice.repository.BoardRepository;
-import org.spikeTassProject.contentmicroservice.repository.ContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import utils.models.Board;
+import utils.models.DTO.BoardDTO;
+import utils.models.mappers.BoardDTOMapper;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/boards")
 public class BoardController {
+
     @Autowired
     private BoardRepository boardRepository;
 
-    @Autowired
-    private ContentRepository contentRepository;
 
+    /**
+     * @return a List of BoardDTO containing all the Boards
+     */
     @GetMapping("/getAll")
-    public List<Board> getAllBoards() {
-        System.out.println("Cerco tutte le bacheche dipartimentali");
-        return boardRepository.findAll();
+    public List<BoardDTO> getAllBoards() {
+        System.out.println("Searching all the Unito (Departmental) Boards...");
+        return BoardDTOMapper.mapAllToDTO(boardRepository.findAll());
+        //return boardRepository.findAll();
     }
 
+
+    /**
+     * @param id --> the ID of the Board
+     * @return the Board (with all its data) with ID = id
+     */
     @GetMapping("/getBoardById/{id}")
     public Board getBoard(@PathVariable("id") Long id) {
-        System.out.println("Cerco la bacheca dipartimentala con id: " + id);
+        System.out.println("Searching the Unito (Departmental) Board with id = " + id);
         Board boardFromDB = null;
         if (boardRepository.findById(id).isPresent()) {
-            System.out.println("Esiste una bacheca con questo id");
             boardFromDB = boardRepository.findById(id).get();
         }
         return boardFromDB;
     }
 
-    @GetMapping("/getBoardsByName/{name}")
-    public List<Board> getBoards(@PathVariable("name") String name) {
-        System.out.println("Cerco le bacheche dipartimentali con il nome: " + name);
-        return boardRepository.findByName(name);
-    }
 
+    /**
+     * @param param --> the new Board
+     * @return the created object of type Board.
+     */
     @PostMapping("/createBoard")
     public Board createBoard(@RequestBody Board param) {
-        System.out.println("Creo le bacheca dipartimentale");
+        System.out.println("Creating a new Unito (Departmental) Boards...");
         return boardRepository.save(
                 new Board(param.getName(), param.getDescription()));
     }
 
 
+    /**
+     *
+     * JUST FOR TEST
+     * (DB population)
+     */
     @PostMapping(value = "/populateDBBoards")
     public boolean populateDBUsers() {
         System.out.println("Metodo di servizio/sviluppo per popolare il DB con alcune bacheche");

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/saleads")
 public class SaleAdsController {
@@ -40,7 +39,7 @@ public class SaleAdsController {
 
     @PostMapping(value = "/createAds")
     public SaleAds createSaleAds(@RequestBody SaleAds param) {
-        System.out.println("Create new sale annuncements..." + param.toString());
+        System.out.println("Create new sale announcements..." + param.toString());
         return saleAdsRepository.save(
                 new SaleAds(param.getOwneremail(), param.getDescription(), param.getPrice()));
     }

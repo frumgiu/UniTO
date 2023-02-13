@@ -14,40 +14,54 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/contents")
 public class ContentController {
+
     @Autowired
     private ContentRepository contentRepository;
 
     @Autowired
     private BoardRepository boardRepository;
 
+
+    /**
+     * @return the whole List of Contents
+     */
     @GetMapping(value = "/getAll")
     public List<Content> getAllContents() {
         System.out.println("Get all contents");
         return contentRepository.findAll();
     }
 
-    @GetMapping(value = "/getAllByBoard")
-    public List<Content> getAllContentsByBoard(@RequestParam("board_id") Long board_id) {
-        System.out.println("Get all contents from a specific Board");
+
+    /**
+     * @param board_id --> ID of the Board
+     * @return the List of Board contents with id = ID
+     */
+    @GetMapping(value = "/getAllByBoard/{board_id}")
+    public List<Content> getAllContentsByBoard(@PathVariable("board_id") Long board_id) {
+        System.out.println("Get all contents from a specific Board with id = " +board_id);
         if (!boardRepository.findById(board_id).isPresent())
             return null;
         Board board = boardRepository.findById(board_id).get();
         return board.getBoardContentsList();
     }
 
+
+    /**
+     * @param email --> EMAIL of the User
+     * @return the List of Contents owned by the user with email = EMAIL
+     */
     @GetMapping(value = "/getAllFromUser/{email}")
     public List<Content> getAllContents(@PathVariable("email") String email) {
-        System.out.println("Get all contents from a specific user");
+        System.out.println("Get all contents from a specific user with email =" + email);
         return contentRepository.findByOwneremail(email);
     }
 
-    /* TODO: testare funzionamento con postman */
-    @GetMapping(value = "/getFromName")
-    public List<Content> getContentsByName(@RequestParam("title") String title) {
-        System.out.println("Get all contents with a specific title");
-        return contentRepository.findByTitle(title);
-    }
 
+    /**
+     * @param param the new Content
+     * @param id --> the ID of the Board where the new Content will be inserted
+     * @return the new Content created
+     */
     @PostMapping(value = "/createContent")
     public Content postContent(@RequestBody Content param, @RequestParam("board_id") Long id) {
 
@@ -60,14 +74,23 @@ public class ContentController {
         return contentRepository.save(content);
     }
 
+
+    /**
+     * @param id --> ID of the Content
+     * @return TRUE if the content is Deleted, FALSE otherwise
+     */
     @DeleteMapping(value = "/deleteContent/{id}")
-    public String deleteContent(@PathVariable("id") Long id) {
-        System.out.println("Elimino contenuto: " + id);
+    public boolean deleteContent(@PathVariable("id") Long id) {
+        System.out.println("Deleting content with id = : " + id);
         contentRepository.deleteById(id);
-        return "done";
+        return contentRepository.findById(id).isPresent();
     }
 
 
+    /**
+     * JUST FOR TEST
+     * (DB population)
+     */
     @PostMapping(value = "/populateDBContents")
     public boolean populateDBUsers() {
         System.out.println("Metodo di servizio/sviluppo per popolare il DB con alcuni contentuti dentro le bacheche");
