@@ -1,7 +1,8 @@
 package org.spikeTassProject.usermicroservice.repository;
 
-import org.spikeTassProject.usermicroservice.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.spikeTassProject.usermicroservice.model.User;
+
 import java.util.List;
 import java.util.Optional;
 

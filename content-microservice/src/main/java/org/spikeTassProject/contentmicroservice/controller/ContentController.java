@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/contents")
 public class ContentController {
 
+
     @Autowired
     private ContentRepository contentRepository;
 
@@ -83,7 +84,7 @@ public class ContentController {
     public boolean deleteContent(@PathVariable("id") Long id) {
         System.out.println("Deleting content with id = : " + id);
         contentRepository.deleteById(id);
-        return contentRepository.findById(id).isPresent();
+        return !contentRepository.findById(id).isPresent();
     }
 
 

@@ -1,30 +1,35 @@
 package org.spikeTassProject.usermicroservice.controller;
 
-import org.spikeTassProject.usermicroservice.model.User;
 import org.spikeTassProject.usermicroservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.spikeTassProject.usermicroservice.model.User;
+
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+
     @Autowired
     private UserRepository userRepository;
 
+
+    /**
+     * @return all the Users
+     */
     @GetMapping("/getAll")
     public List<User> getAllUsers() {
         System.out.println("Get all Users");
         return userRepository.findAll();
     }
 
-    /* TODO Solo di test per comunicazione con client */
-    @PostMapping("/getAllTest")
-    public void test(@RequestParam("param") String param) {
-        System.out.println("Get all Users");
-        System.out.println(param);
-    }
+
+    /**
+     * @param email --> EMAIL of the User
+     * @return the User with email = EMAIL
+     */
     @GetMapping("/getUser/{email}")
     public User getUser(@PathVariable("email") String email) {
         System.out.println("Get specific user " + email);

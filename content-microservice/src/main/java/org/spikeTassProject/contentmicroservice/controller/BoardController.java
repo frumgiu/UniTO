@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/boards")
 public class BoardController {
 
+
     @Autowired
     private BoardRepository boardRepository;
 
