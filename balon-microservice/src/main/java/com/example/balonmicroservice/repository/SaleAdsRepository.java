@@ -11,7 +11,8 @@ public interface SaleAdsRepository extends JpaRepository<SaleAds, Long> {
 
     List<SaleAds> findByActive(boolean active);
 
-    List<SaleAds> findByOwnerEmail(String ownerEmail);
+    List<SaleAds> findByOwneremail(String ownerEmail);
+
 
     Optional<SaleAds> findById(Long id);
 

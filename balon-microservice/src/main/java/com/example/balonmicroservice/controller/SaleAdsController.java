@@ -1,6 +1,8 @@
 package com.example.balonmicroservice.controller;
 
+import com.example.balonmicroservice.model.Category;
 import com.example.balonmicroservice.model.SaleAds;
+import com.example.balonmicroservice.repository.CategoryRepository;
 import com.example.balonmicroservice.repository.SaleAdsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,9 @@ public class SaleAdsController {
     @Autowired
     SaleAdsRepository saleAdsRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
 
     /**
      * @return all the Sale Announcement
@@ -24,6 +29,18 @@ public class SaleAdsController {
         System.out.println("Get all sale announcements");
         return saleAdsRepository.findAll();
     }
+
+
+    /**
+     *
+     * @return all the Catogories
+     */
+    @GetMapping(value = "/getAllCategories")
+    public List<Category> getAllCategories() {
+        System.out.println("Get all categories");
+        return categoryRepository.findAll();
+    }
+
 
 
     /**
@@ -43,20 +60,22 @@ public class SaleAdsController {
     @GetMapping(value = "getAllOfUser/{email}")
     public List<SaleAds> getAllAdsOfUser(@PathVariable("email") String email) {
         System.out.println("Get all SaleAds of a User");
-        return saleAdsRepository.findByOwnerEmail(email);
+        return saleAdsRepository.findByOwneremail(email);
     }
+
 
 
     /**
      * @param id --> ID of the Sale Announcement
-     * @return the Sale Announcement with id = ID with status changed to !status
+     * @param active --> ACTIVE value to set to the Sale Announcement
+     * @return the Sale Announcement with id = ID with status changed to ACTIVE
      */
     @PostMapping(value = "/changeActiveStatus/{id}")
-    public SaleAds changeStatus(@PathVariable("id") Long id) {
+    public SaleAds changeStatus(@PathVariable("id") Long id, @RequestParam("active") boolean active) {
         SaleAds result;
         if (saleAdsRepository.findById(id).isPresent()) {
             result = saleAdsRepository.findById(id).get();
-            result.setActive(!result.isActive());
+            result.setActive(active);
             return saleAdsRepository.save(result);
         }
         return null;
@@ -68,10 +87,34 @@ public class SaleAdsController {
      * @return a new Sale Announcement created and saved
      */
     @PostMapping(value = "/createAds")
-    public SaleAds createSaleAds(@RequestBody SaleAds param) {
+    public SaleAds createSaleAds(@RequestBody SaleAds param, @RequestParam("category") String nCategory) {
         System.out.println("Create new sale announcements..." + param.toString());
-        return saleAdsRepository.save(
-                new SaleAds(param.getOwneremail(), param.getDescription(), param.getPrice()));
+        if(categoryRepository.findByName(nCategory).isPresent()) {
+            Category category = categoryRepository.findByName(nCategory).get();
+            SaleAds saleAds = new SaleAds(
+                    param.getOwneremail(),
+                    param.getTitle(),
+                    param.getDescription(),
+                    param.getPrice());
+            saleAds.setCategory(category);
+            return saleAdsRepository.save(saleAds);
+        }
+        return null;
+    }
+
+
+    /**
+     * @param category --> new Category to create
+     * @return the new Category created
+     */
+    @PostMapping(value = "/createCategory")
+    public Category createCategory(@RequestBody Category category) {
+        System.out.println("Creating new category... " + category.toString());
+        if(categoryRepository.findByName(category.getName()).isPresent())
+            return null;
+        return categoryRepository.save(new Category(
+           category.getName(), category.getDescription()
+        ));
     }
 
 
