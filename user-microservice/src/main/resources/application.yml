@@ -19,6 +19,14 @@ spring:
   cloud:
     kubernetes:
       enabled: false
+  
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 41349424583-le95vivil3e7v5u6iqketi1k6q8stho1.apps.googleusercontent.com
+            client-secret: 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
 
 server:
   port: 8083
