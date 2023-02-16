@@ -41,6 +41,7 @@ public class UserController {
         return result;
     }
 
+
     /* Nella barra di ricerca metto solo una stringa di una parola
     * Non so distinguere se sia un nome o un cognome quindi cerco
     * per entrambe le cose  */

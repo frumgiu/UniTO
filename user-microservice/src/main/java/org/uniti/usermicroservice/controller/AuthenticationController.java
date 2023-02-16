@@ -24,7 +24,7 @@ public class AuthenticationController {
 
 
 
-    @GetMapping("/")
+    @PostMapping("/")
     public User googleAuthentication(@RequestBody User authenticationUser) {
         System.out.println("Google Authentication");
         if(!validateGoogleUnitoUserProfile(authenticationUser))
@@ -58,7 +58,7 @@ public class AuthenticationController {
         System.out.println("Creating user...");
         User user = new User(
                 authenticationUser.getEmail(),
-                authenticationUser.getSurname(),
+                authenticationUser.getName(),
                 authenticationUser.getSurname(),
                 authenticationUser.getRole()
         );
