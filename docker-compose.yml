@@ -11,4 +11,4 @@ services:
       restart_policy:
         condition: on-failure
 
-#docker-compose build && docker-compose up
+#docker-compose build && docker-compose up (-d)

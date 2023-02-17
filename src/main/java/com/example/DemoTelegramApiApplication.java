@@ -16,6 +16,9 @@ public class DemoTelegramApiApplication {
     private TelegramService telegramService;
 
     public static void main(String[] args) {
+        //System.out.println(System.getProperty("java.library.path"));
+        //System.setProperty("java.library.path", "/usr/local/lib/");
+        //System.out.println(System.getProperty("java.library.path"));
         SpringApplication.run(DemoTelegramApiApplication.class, args);
     }
 
