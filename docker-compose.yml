@@ -3,6 +3,8 @@ services:
   demotelegramapi:
     container_name: telegram-service
     image: demotelegramapi:latest
+    tty: true
+    stdin_open: true
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
@@ -11,4 +13,4 @@ services:
       restart_policy:
         condition: on-failure
 
-#docker-compose build && docker-compose up (-d)
+#docker-compose build && docker-compose up (-d) || docker-compose run demotelegramapi
