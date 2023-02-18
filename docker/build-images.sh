@@ -1,3 +1,5 @@
+cd ..
+
 #./mvnw clean install
 ./mvnw -DskipTests=true clean package
 
@@ -18,5 +20,3 @@ docker build -t balon-service .
 
 #cd ../board-microservice
 #docker build -t board-service .
-
-cd ..

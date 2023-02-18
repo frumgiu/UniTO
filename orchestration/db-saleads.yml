@@ -1,0 +1,67 @@
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Deployment      --------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: db-saleads
+    name: db-saleads
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: db-saleads
+    template:
+        metadata:
+            labels:
+                app: db-saleads
+        spec:
+            containers:
+            - name: db-saleads
+              image: postgres
+              ports:
+                  - containerPort: 5432
+              env:
+                  - name: POSTGRES_PASSWORD
+                    value: "admin"
+                  - name: POSTGRES_USER
+                    value: "admin"
+                  - name: POSTGRES_DB
+                    value: "saleadsDB"
+              volumeMounts:
+                  - mountPath: /var/lib/postgresql/data
+                    name: db-saleads-data
+            volumes:
+                - name: db-saleads-data
+                  persistentVolumeClaim:
+                    claimName: db-saleads-data
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Persistence      -------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-saleads-data
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 100Mi
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Service      -----------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-saleads
+spec:
+    selector:
+        app: db-saleads
+    ports:
+        - protocol: TCP
+          port: 5432
+          targetPort: 5432

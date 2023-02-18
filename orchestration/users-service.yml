@@ -1,0 +1,54 @@
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Deployment      --------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: users-service
+    name: users-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: users-service
+    template:
+        metadata:
+            labels:
+                app: users-service
+        spec:
+            containers:
+            - name: users-service
+              image: fabioferrero/fabio:users-service
+              
+              ports:
+                  - containerPort: 8083
+              env:
+                  - name: POSTGRES_PASSWORD
+                    value: "admin"
+                  - name: POSTGRES_USER
+                    value: "admin"
+                  - name: POSTGRES_DB
+                    value: "usersDB"
+                  - name: POSTGRES_URL
+                    value: "db-users:5432"
+                  - name: SPRING_APPLICATION_JSON
+                    value: '{"eureka": {"instance": {"prefer-ip-address": false, "hostname": "users-service"}, "client": {"service-url": {"defaultZone": "http://service-discovery-server:8761/eureka"}}}}'
+            restartPolicy: Always
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Service      -----------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+  labels:
+      app: users-service
+spec:
+    type: LoadBalancer
+    ports:
+        - port: 8083
+          targetPort: 8083
+    selector:
+        app: users-service

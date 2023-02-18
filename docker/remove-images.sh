@@ -1,4 +1,4 @@
-docker compose down
+docker compose -p uniti-backend down
 docker image rm service-discovery-server
 docker image rm api-gateway
 docker image rm content-service

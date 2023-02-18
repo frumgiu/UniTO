@@ -1,0 +1,55 @@
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Deployment      --------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: balon-service
+    name: balon-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: balon-service
+    template:
+        metadata:
+            labels:
+                app: balon-service
+        spec:
+            containers:
+            - name: balon-service
+              image: fabioferrero/fabio:balon-service
+              ports:
+                  - containerPort: 8085
+              env:
+                  - name: POSTGRES_PASSWORD
+                    value: "admin"
+                  - name: POSTGRES_USER
+                    value: "admin"
+                  - name: POSTGRES_DB
+                    value: "saleadsDB"
+                  - name: POSTGRES_URL
+                    value: "db-saleads:5432"
+                  - name: SPRING_APPLICATION_JSON
+                    value: '{"eureka": {"instance": {"prefer-ip-address": false, "hostname": "balon-service"}, "client": {"service-url": {"defaultZone": "http://service-discovery-server:8761/eureka"}}}}'
+            restartPolicy: Always
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Service      -----------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: balon-service
+  labels:
+      app: balon-service
+spec:
+    type: LoadBalancer
+    ports:
+        - port: 8085
+          targetPort: 8085
+    selector:
+        app: balon-service
+    
+    

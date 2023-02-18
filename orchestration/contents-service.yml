@@ -1,0 +1,56 @@
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Deployment      --------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: contents-service
+    name: contents-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: contents-service
+    template:
+        metadata:
+            labels:
+                app: contents-service
+        spec:
+            containers:
+            - name: contents-service
+              image: fabioferrero/fabio:contents-service
+              
+              ports:
+                  - containerPort: 8082
+              env:
+                  - name: POSTGRES_PASSWORD
+                    value: "admin"
+                  - name: POSTGRES_USER
+                    value: "admin"
+                  - name: POSTGRES_DB
+                    value: "contentsDB"
+                  - name: POSTGRES_URL
+                    value: "db-contents:5432"
+                  - name: SPRING_APPLICATION_JSON
+                    value: '{"eureka": {"instance": {"prefer-ip-address": false, "hostname": "contents-service"}, "client": {"service-url": {"defaultZone": "http://service-discovery-server:8761/eureka"}}}}'
+            restartPolicy: Always
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Service      -----------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: contents-service
+  labels:
+      app: contents-service
+spec:
+    type: LoadBalancer
+    ports:
+        - port: 8082
+          targetPort: 8082
+    selector:
+        app: contents-service
+    
+    
