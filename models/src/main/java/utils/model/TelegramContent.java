@@ -1,4 +1,4 @@
-package com.example.demotelegramapi.model;
+package utils.model;
 
 import java.util.Date;
 

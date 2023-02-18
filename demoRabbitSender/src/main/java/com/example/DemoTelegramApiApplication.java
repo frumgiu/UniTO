@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.demotelegramapi.model.TelegramContent;
 import com.example.demotelegramapi.service.RabbitMqSender;
 import com.example.demotelegramapi.service.TelegramService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import utils.model.TelegramContent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class DemoTelegramApiApplication {
                 telegramContentList.addAll(telegramService.getChatHistory(10, lastID));
                 System.out.println("Lista telegam dimensione dopo: " + telegramContentList.size());
                 //System.out.println(telegramContentList.get(1).toString());
-                rabbitMqSender.send();
+                rabbitMqSender.send(telegramContentList);
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
                 needQuit = true;

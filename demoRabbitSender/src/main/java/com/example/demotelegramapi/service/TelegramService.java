@@ -1,6 +1,6 @@
 package com.example.demotelegramapi.service;
 
-import com.example.demotelegramapi.model.TelegramContent;
+import utils.model.TelegramContent;
 import org.drinkless.tdlib.TdApi;
 import java.util.List;
 

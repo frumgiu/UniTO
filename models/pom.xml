@@ -5,19 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.6</version>
+        <version>3.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demoTelegramAPI</artifactId>
+    <groupId>utils</groupId>
+    <artifactId>models</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>demoTelegramAPI</name>
-    <description>demoTelegramAPI</description>
-
-    <modules>
-        <module>models</module>
-        <module>demoRabbitSender</module>
-        <module>demoRAbbitListener</module>
-    </modules>
+    <name>models</name>
+    <description>models</description>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 </project>
