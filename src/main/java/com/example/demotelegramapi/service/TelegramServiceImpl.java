@@ -64,7 +64,6 @@ public class TelegramServiceImpl implements TelegramService {
         needQuit = false;
         List<TdApi.Message> messageList = new ArrayList<>();
         AtomicReference<List<TelegramContent>> telegramContentList = new AtomicReference<>();
-        //AtomicReference<String> result = new AtomicReference<>("Nothing to read");
         while (!needQuit) {
             while (!authorized()) {
                 waitAuthorization();
@@ -77,7 +76,6 @@ public class TelegramServiceImpl implements TelegramService {
                 if (messages.totalCount == 0) {
                     needQuit = true;
                     telegramContentList.set(assignTelegramContentList(messageList, lastRecentMsg));
-                    //result.set("Read " + messageList.size() + " messages");
                 } else {
                     Arrays.asList(messages.messages).forEach(a -> {
                         if (messageList.stream().noneMatch(b -> b.id == a.id))
@@ -99,12 +97,12 @@ public class TelegramServiceImpl implements TelegramService {
                 }
             }
         }
-        //return result.get();
         return telegramContentList.get();
     }
 
     private List<TelegramContent> assignTelegramContentList(List<TdApi.Message> messageListTemp, long lastRecentMsg) {
         List<TelegramContent> tempList = new ArrayList<>();
+        System.out.println("Ultimo messaggio più recente (id):" + lastRecentMsg);
         for (TdApi.Message msg : messageListTemp) {
             if (msg.id > lastRecentMsg)
             {
