@@ -10,17 +10,6 @@ Il progetto è strutturato nel seguente modo:
     è interrogare una canale Telegram informativo di UniTo e riportarne le notizie nella Home generale.
 * Eureka e API gateway FINIRE
 
-
-
-## Per Fabio
-Cose che mancano
-* Controlla la questione OneToMany --> l'ho inserita in Board, ma come si gestisce in Balon e HomeBoard che sono singleton?
-* Creare lista annunci Telegram in HomeBoard
-* Leggere i TODO che ho lasciato in giro
-* Controllare se ho dimenticato qualcosa in questa lista
-
-Ciaone, divertiti 
-
 ## <ins>Per eseguire con _**Docker**_ </ins>:
 * Partendo dalla directory principale del progetto, navigare nella directory <code>/docker</code> eseguendo il
   comando <code>cd docker/</code>

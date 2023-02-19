@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>utils</groupId>
-	<artifactId>models</artifactId>
+	<artifactId>entities</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>models</name>
 	<description>Progetto con classi in comune tra più microservizi</description>

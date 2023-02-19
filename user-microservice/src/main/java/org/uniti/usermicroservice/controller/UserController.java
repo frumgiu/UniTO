@@ -1,13 +1,10 @@
 package org.uniti.usermicroservice.controller;
 
-
 import org.uniti.usermicroservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.uniti.usermicroservice.model.User;
-
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,7 +12,6 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
 
     /**
      * @return all the Users
@@ -25,7 +21,6 @@ public class UserController {
         System.out.println("Get all Users");
         return userRepository.findAll();
     }
-
 
     /**
      * @param email --> EMAIL of the User
@@ -40,7 +35,6 @@ public class UserController {
         System.out.println("User trovato: " + result);
         return result;
     }
-
 
     /* Nella barra di ricerca metto solo una stringa di una parola
     * Non so distinguere se sia un nome o un cognome quindi cerco
@@ -60,7 +54,6 @@ public class UserController {
         return userRepository.findUserByNameAndSurname(name, surname);
     }
 
-    /* TODO: Testare funzionamento con postman */
     @PostMapping(value = "/updateUser")
     public User updateUserInfo(@RequestBody User param) {
         User userFromDB;
