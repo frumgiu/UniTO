@@ -109,6 +109,14 @@ services:
     networks:
       - opnet
 
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672" #JMS Port
+      - "15672:15672" #Management Port - default user:pass = guest:guest
+    networks:
+      - network_rabbit
+
   user-service:
     container_name: user-service
     image: user-service:latest
@@ -146,8 +154,12 @@ services:
 #      - db-boards
       - service-discovery-server
       - api-gateway
+      - rabbitmq
+    links:
+      - rabbitmq
     networks:
       - opnet
+      - network_rabbit
 
   balon-service:
     container_name: balon-service
@@ -188,6 +200,25 @@ services:
 #    networks:
 #      - opnet
 
+  telegram-service:
+    container_name: telegram-service
+    image: telegram-service:latest
+    tty: true
+    stdin_open: true
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8086:8086"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    networks:
+      - network_rabbit
 
 volumes:
   db-users-data:
@@ -198,3 +229,4 @@ volumes:
 networks:
   opnet:
     driver: bridge
+  network_rabbit:

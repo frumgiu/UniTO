@@ -18,5 +18,8 @@ docker build -t user-service .
 cd ../balon-microservice
 docker build -t balon-service .
 
+cd ../telegram-microservice
+docker build -t telegram-service .
+
 #cd ../board-microservice
 #docker build -t board-service .
