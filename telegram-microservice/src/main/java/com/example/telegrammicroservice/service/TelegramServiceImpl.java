@@ -3,8 +3,7 @@ package com.example.telegrammicroservice.service;
 import com.example.telegrammicroservice.configuration.ConfigurationData;
 import com.example.telegrammicroservice.helpers.SimpleHelper;
 import com.example.telegrammicroservice.handlers.*;
-import org.drinkless.tdlib.Client;
-import org.drinkless.tdlib.TdApi;
+import org.drinkless.tdlib.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.common.TelegramContent;
@@ -14,11 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.*;
 import java.util.stream.LongStream;
 
 @Service

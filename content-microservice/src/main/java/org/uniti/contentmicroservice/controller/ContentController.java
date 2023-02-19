@@ -4,9 +4,10 @@ import org.uniti.contentmicroservice.repository.BoardRepository;
 import org.uniti.contentmicroservice.repository.ContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.uniti.contentmicroservice.service.TelegramListService;
+import utils.common.TelegramContent;
 import utils.models.Board;
 import utils.models.Content;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +16,14 @@ import java.util.List;
 @RequestMapping("/api/contents")
 public class ContentController {
 
-
     @Autowired
     private ContentRepository contentRepository;
 
     @Autowired
     private BoardRepository boardRepository;
 
+    @Autowired
+    private TelegramListService telegramListService;
 
     /**
      * @return the whole List of Contents
@@ -32,6 +34,15 @@ public class ContentController {
         return contentRepository.findAll();
     }
 
+    /**
+     * TODO: testare funzioni
+     * @return the List of TelegramContent
+     */
+    @GetMapping(value = "/getTelegramContent")
+    public List<TelegramContent> getTelegramContents() {
+        System.out.println("Get the current list of Telegram contents");
+        return telegramListService.getTelegramContentList();
+    }
 
     /**
      * @param board_id --> ID of the Board
@@ -46,7 +57,6 @@ public class ContentController {
         return board.getBoardContentsList();
     }
 
-
     /**
      * @param email --> EMAIL of the User
      * @return the List of Contents owned by the user with email = EMAIL
@@ -56,7 +66,6 @@ public class ContentController {
         System.out.println("Get all contents from a specific user with email =" + email);
         return contentRepository.findByOwneremail(email);
     }
-
 
     /**
      * @param param the new Content
@@ -75,7 +84,6 @@ public class ContentController {
         return contentRepository.save(content);
     }
 
-
     /**
      * @param id --> ID of the Content
      * @return TRUE if the content is Deleted, FALSE otherwise
@@ -86,7 +94,6 @@ public class ContentController {
         contentRepository.deleteById(id);
         return !contentRepository.findById(id).isPresent();
     }
-
 
     /**
      * JUST FOR TEST
@@ -100,7 +107,6 @@ public class ContentController {
         Board board_informatica = boardRepository.findById((long) 2).get();
         Board board_matematica = boardRepository.findById((long) 3).get();
         ArrayList<Board> boards = new ArrayList<>(Arrays.asList(board_generale,board_informatica,board_matematica));
-
 
         String[] users = {"fabio.ferrero111@edu.unito.it","giulia.frumento@edu.unito.it","samuele.monasterolo@edu.unito.it"};
 
