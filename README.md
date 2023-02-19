@@ -15,9 +15,7 @@ Il progetto è strutturato nel seguente modo:
 ## Per Fabio
 Cose che mancano
 * Controlla la questione OneToMany --> l'ho inserita in Board, ma come si gestisce in Balon e HomeBoard che sono singleton?
-* Creare modello per annunci Telegram
 * Creare lista annunci Telegram in HomeBoard
-* Far comuncare con RabbitMQ Telegram-service e content-service
 * Leggere i TODO che ho lasciato in giro
 * Controllare se ho dimenticato qualcosa in questa lista
 
