@@ -18,6 +18,7 @@ public class AutorizationUpdatehandler implements Client.ResultHandler {
         // print("Unsupported update:" + newLine + object);
         if (object.getConstructor() == TdApi.UpdateAuthorizationState.CONSTRUCTOR) {
             System.out.println("UPDATE autorizzazione");
+            System.out.println(object);
             service.update(((TdApi.UpdateAuthorizationState) object).authorizationState);
         }
     }

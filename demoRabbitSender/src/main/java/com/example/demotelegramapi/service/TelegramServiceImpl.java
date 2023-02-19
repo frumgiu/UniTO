@@ -154,10 +154,13 @@ public class TelegramServiceImpl implements TelegramService {
                 request.deviceModel = "Desktop";
                 request.applicationVersion = "1.0";
                 request.enableStorageOptimizer = true;
+                System.out.println("Mando richiesta per autorizzarmi");
                 client.send(request, new AutorizationUpdatehandler(this));
                 break;
             case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR: {
+                System.out.println("Mando richiesta per ricevere il numero");
                 client.send(new TdApi.SetAuthenticationPhoneNumber(configurationData.getPhonenumber(), null), new AutorizationUpdatehandler(this));
+                System.out.println("Posso autenticare il numero");
                 break;
             }
             case TdApi.AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR: {
@@ -176,6 +179,7 @@ public class TelegramServiceImpl implements TelegramService {
                 break;
             }
             case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR: {
+                System.out.println("Chiedo codice per telefono");
                 String code = SimpleHelper.promptString("Please enter authentication code: ");
                 client.send(new TdApi.CheckAuthenticationCode(code), new AutorizationUpdatehandler(this));
                 break;
