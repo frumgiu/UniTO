@@ -25,4 +25,4 @@ kubectl delete service rabbitmq
 
 kubectl delete service telegram-service
 
-kubectl delete pvc --all
+#kubectl delete pvc --all
