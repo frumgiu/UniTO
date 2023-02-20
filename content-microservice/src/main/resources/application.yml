@@ -30,7 +30,8 @@ spring:
     host: rabbitmq
     username: guest
     password: guest
-    port: 15672
+#    port: 15672
+    port: 5672
     exchange: user.exchange
     queue: user.queue
     routingkey: user.routingkey

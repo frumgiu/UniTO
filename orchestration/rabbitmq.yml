@@ -5,24 +5,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     labels:
-        app: service-discovery-server
-    name: service-discovery-server
+        app: rabbitmq
+    name: rabbitmq
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: service-discovery-server
+            app: rabbitmq
     template:
         metadata:
             labels:
-                app: service-discovery-server
+                app: rabbitmq
         spec:
             containers:
-            - name: service-discovery-server
-              image: fabioferrero/unititaass:service-discovery-server
-
-              ports:
-                - containerPort: 8761
+                - name: rabbitmq
+                  image: rabbitmq:management
+                
+                  ports:
+                      - containerPort: 5672
+#                      - containerPort: 15672
 ---
 #-------------------------------------------------------------------------------------------------------------
 #------------------------------------       Service      -----------------------------------------------------
@@ -30,17 +31,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: service-discovery-server
+    name: rabbitmq
     labels:
-        app: service-discovery-server
+        app: rabbitmq
 spec:
-    type: LoadBalancer
     ports:
-        - port: 8761
-          targetPort: 8761
+#        - name: port1
+        - port: 5672
+          targetPort: 5672
+#        - name: port2
+#          port: 15672
+#          targetPort: 15672
     selector:
-        app: service-discovery-server
-    
-          
-          
-    
+        app: rabbitmq

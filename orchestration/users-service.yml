@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
             - name: users-service
-              image: fabioferrero/fabio:users-service
+              image: fabioferrero/unititaass:users-service
               
               ports:
                   - containerPort: 8083

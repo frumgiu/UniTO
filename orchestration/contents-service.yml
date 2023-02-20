@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
             - name: contents-service
-              image: fabioferrero/fabio:contents-service
+              image: fabioferrero/unititaass:contents-service
               
               ports:
                   - containerPort: 8082

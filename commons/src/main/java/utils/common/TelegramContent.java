@@ -1,6 +1,8 @@
 package utils.common;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TelegramContent {
     private long msgId;
@@ -9,9 +11,16 @@ public class TelegramContent {
     private int dateOrder;
 
     public TelegramContent(long msgId, String message, int dateOrder) {
+        Pattern pattern = Pattern.compile("\"([^\"]+)\"");
         this.msgId = msgId;
-        this.message = message;
         this.dateOrder = dateOrder;
+        Matcher matcher = pattern.matcher(message);
+        if (matcher.find()) {
+            this.message = matcher.group(1);
+        }
+        else {
+            this.message = message;
+        }
     }
 
     public TelegramContent() {}

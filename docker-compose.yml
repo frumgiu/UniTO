@@ -110,6 +110,7 @@ services:
       - opnet
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:management
     ports:
       - "5672:5672" #JMS Port
