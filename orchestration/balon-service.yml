@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
             - name: balon-service
-              image: fabioferrero/unititaass:balon-service
+              image: fabioferrero/unitiprog:balon-service
               ports:
                   - containerPort: 8085
               env:

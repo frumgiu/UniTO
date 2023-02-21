@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
             - name: api-gateway
-              image: fabioferrero/unititaass:api-gateway
+              image: fabioferrero/unitiprog:api-gateway
               
               ports:
                 - containerPort: 8080

@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
             - name: service-discovery-server
-              image: fabioferrero/unititaass:service-discovery-server
+              image: fabioferrero/unitiprog:service-discovery-server
 
               ports:
                 - containerPort: 8761

@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
                 - name: telegram-service
-                  image: fabioferrero/unititaass:telegram-service
+                  image: fabioferrero/unitiprog:telegram-service
                 
                   ports:
                       - containerPort: 8086
