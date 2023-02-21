@@ -14,4 +14,4 @@ docker-compose up -d user-service
 docker-compose up -d content-service
 docker-compose up -d balon-service
 
-#docker-compose run --name telegram-service telegram-service
+docker-compose run --name telegram-service telegram-service
