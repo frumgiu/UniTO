@@ -9,7 +9,7 @@ Il progetto è strutturato nel seguente modo:
 * Il microservizio telegram-microservice comunica tramite RabbitMQ con content-microservice. Il compito di questo servizio
     è interrogare una canale Telegram informativo di UniTo e riportarne le notizie nella Home generale.
 * Eureka e API gateway FINIRE
-
+---
 ## <ins>Per eseguire con _**Docker**_ </ins>:
 * Partendo dalla directory principale del progetto, navigare nella directory <code>/docker</code> eseguendo il
   comando <code>cd docker/</code>
@@ -30,9 +30,9 @@ Il progetto è strutturato nel seguente modo:
   * <code>sh remove-images.sh</code> <br>
     per interrompere l'esecuzione dei containers e rimuovere le immagini da Docker. 
     Nel caso in cui non si volessero rimuovere le immagini, anziché il comando precedente
-    è possibile eseguire <code>docker compose -p uniti-backend down</code>
+    è possibile eseguire <code>docker compose down</code>
 
-
+---
 
 ## <ins>Per eseguire con _**Kubernetes**_ </ins>:
 * Partendo dalla directory principale del progetto, navigare nella directory <code>/orchestration</code> eseguendo il 
@@ -73,3 +73,23 @@ Il progetto è strutturato nel seguente modo:
   dell'applicazione (verranno rimossi i Deployments / Services / PersistenceVolume creati).
   * <code>image-hub.sh</code>: lanciare questo script se si vogliono caricare le immagini
   su **Docker Hub** dopo averle modificate.
+---
+## <ins>ATTENZIONE</ins>:
+Sia l'esecuzione con **Docker** che con **Kubernetes** implicano l'avvio del
+microservizio **_telegram-service_**.
+Per utilizzare questo servizio è necessario avere le credenziali
+Telegram TDApi, ovvero API_KEY e API_HASH (https://core.telegram.org/api/obtaining_api_id).
+Una volta ottenute, bisogna modificare i valori di questi campi (più il numero
+di telefono)
+in <code>src/main/java/resources/application.properties</code> nel microservizio 
+sopra citato.
+* Se usate **Docker** una volta partita l'applicazione vi verrà richiesto 
+il codice pin che vi verrà inviato sul vostro account telegram. Potete inserirlo
+da terminale.
+<br><br>
+* Se usate **Kubernetes**, dovete fare la stessa cosa appena descritta per 
+Docker. Dovete però accedere a stdin del servizio del pod per inserire il codice.
+Potete farlo digitando da terminale
+<code>kubectl attach <pod-name> -c telegram-service -i -t</code> <br>
+Per sapere il nome del container, semplicemente 
+<code>kubectl get pods</code>

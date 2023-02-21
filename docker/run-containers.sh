@@ -14,37 +14,4 @@ docker-compose up -d user-service
 docker-compose up -d content-service
 docker-compose up -d balon-service
 
-docker-compose run --name telegram-service telegram-service
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##docker-compose up -d
-##docker-compose -p uniti-backend up -d
-#docker-compose up -d rabbitmq
-#docker-compose up -d db-users
-#docker-compose up -d db-contents
-#docker-compose up -d db-saleads
-#docker-compose up -d pgadmin
-#docker-compose up -d service-discovery-server
-#docker-compose up -d api-gateway
-#docker-compose up -d user-service
-#docker-compose up -d content-service
-#docker-compose up -d balon-service
-#docker-compose run telegram-service
-#
-##docker-compose -p uniti-backend up -d
-#
-##docker-compose run demotelegramapi
-##docker-compose run -d db-users
+#docker-compose run --name telegram-service telegram-service
