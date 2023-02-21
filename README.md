@@ -4,11 +4,18 @@ A.A. 2022/2023.
 
 L'applicazione sviluppata è un social network per gli studenti universitari di Torino. <br>
 Il progetto è strutturato nel seguente modo: 
-* Sono presenti 3 microservizi indipendenti tra di loro: balon-microservice, content-microservice e user-microservice. 
+* Sono presenti **3** microservizi indipendenti tra di loro: **balon-microservice**, **content-microservice** e 
+**user-microservice**. 
     Ognuno di loro è dockerizzato come contenitore "name-service" e utilizza un proprio database.
-* Il microservizio telegram-microservice comunica tramite RabbitMQ con content-microservice. Il compito di questo servizio
+* Il microservizio **telegram-microservice** comunica tramite RabbitMQ con content-microservice. Il compito di questo servizio
     è interrogare una canale Telegram informativo di UniTo e riportarne le notizie nella Home generale.
-* Eureka e API gateway FINIRE
+* Il microservizio **api-gateway** viene utilizzato così che le chiamate
+ai microservizi vengano effettuate su una sola porta, ovvero la 8080. Questo permette
+al consumatore (ad esempio il client) di non dover conoscere tutte le porte 
+di ogni servizio per effettuare la chiamata, ma solamente la porta relativa al gateway.
+* Il microservizio **eureka-server**, utilizzato come Service Discovery e Load Balancer (se sono presenti 
+multiple istanze di un servizio, il server eureka si occuperà di decidere quale 
+istanza dovrà eseguire la richiesta).
 ---
 ## <ins>Per eseguire con _**Docker**_ </ins>:
 * Partendo dalla directory principale del progetto, navigare nella directory <code>/docker</code> eseguendo il
