@@ -1,0 +1,8 @@
+<S> ::= <NP> <VP>
+<NP> ::= <N> | <DET> <N>
+<VP> ::= <V> | <V> <NP> | <V> <NP> <PP> | <V> <PP>
+<PP> ::= <P> <NP>
+<N> ::= "tlhIngan" | "Duj" | "batlh"
+<V> ::= "tlhutlh" | "Qapla'" | "jIyaj" | "pe'vIl"
+<P> ::= "Daq" | "DaH"
+<DET> ::= "chuq" | "ghIq"

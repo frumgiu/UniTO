@@ -1,0 +1,15 @@
+S
+book include prefer I she me Huston book flight meal money through does prefer morning a
+S NP VP X1 X2 TWA PP Preposition Aux Det Nominal Verb
+S NPVP X1VP book include prefer VerbNP X2PP VerbPP VPPP
+X1 AuxNP
+NP I she me TWA Huston DetNominal
+Nominal book flight meal money morning NominalNoun NominalPP
+VP book include prefer VerbNP X2PP VerbNP VPPP
+X2 VerbNP
+PP PrepositionNP
+Verb book include prefer
+Aux does
+Det a the
+Preposition through
+Noun morning flight meal
