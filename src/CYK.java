@@ -3,12 +3,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CYK {
-
     /**
      * SCRIVERE
-     * @param line
-     * @param grammar
-     * @return
+     * @param line frase di input da analizzare
+     * @param grammar grammatica di riferimento, usata per analizzare line
+     * @return la tabella dell'analisi della line
      */
     static HashMap<Integer, HashMap<Integer, ArrayList<String>>> CykAlgorithm (ArrayList<String> line, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
         HashMap<Integer, HashMap<Integer, ArrayList<String>>> table = new HashMap<>();                  // Table for the result
