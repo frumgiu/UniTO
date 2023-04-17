@@ -1,3 +1,6 @@
+import utils.Casella;
+
+import static utils.PrintTools.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -24,9 +27,6 @@ public class uhuraSystem {
         } else {
             runAlgorithm("klingonTest.txt", "inputKlingon.txt");
         }
-
-        //runAlgorithm2();
-
         System.out.println("-------------------------------------------------------------------------------------------------------------------");
         System.out.println("Thanks for using ours demo! Good bye and... long life and prosperity.");
     }
@@ -41,68 +41,10 @@ public class uhuraSystem {
                     resultTable = CYKTest.CykAlgorithm(inputLine, grammar);                                                                         // USO ALGORITMO
                     System.out.println("INPUT LINE: " + inputLine.toString().replace(",", ""));
                     System.out.println("The Context Free Grammar is G = (" + terminals + ", " + nonTerminals + ", P, " + startSymbol + " )\n");
-                    PrintTools.printResultMatrixCasella(inputLine.size(), startSymbol, inputLine, resultTable);
+                    printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
+                    //utils.PrintTools.printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
                     //printTree(resultTable);
                 }
-            }
-        }
-    }
-
-    private static void runAlgorithm2() {
-        HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> resultTable = new HashMap<>();
-        Casella c1 = new Casella("Casa");
-        Casella c2 = new Casella("Cane");
-        Casella c3 = new Casella("Giardino");
-        Casella c4 = new Casella("Tisana");
-        Casella c5 = new Casella("Gatto", c1, c2);
-        Casella c6 = new Casella("Missipissi", c3, c4);
-        Casella c7 = new Casella("Oronzo", c5, c6);
-        Casella c8 = new Casella("Giulia");
-
-        resultTable.put(0, new HashMap<>());
-        resultTable.put(1, new HashMap<>());
-        resultTable.put(2, new HashMap<>());
-        resultTable.put(3, new HashMap<>());
-        resultTable.get(0).put(0, new ArrayList<>());
-        resultTable.get(1).put(0, new ArrayList<>());
-        resultTable.get(2).put(0, new ArrayList<>());
-        resultTable.get(3).put(0, new ArrayList<>());
-        resultTable.get(0).put(1, new ArrayList<>());
-        resultTable.get(1).put(1, new ArrayList<>());
-        resultTable.get(0).put(2, new ArrayList<>());
-
-        resultTable.get(0).get(0).add(c1);
-        resultTable.get(1).get(0).add(c2);
-        resultTable.get(2).get(0).add(c3);
-        resultTable.get(3).get(0).add(c4);
-        resultTable.get(0).get(1).add(c5);
-        resultTable.get(1).get(1).add(c6);
-        resultTable.get(0).get(2).add(c7);
-        resultTable.get(0).get(2).add(c8);
-
-        printTree(resultTable);
-    }
-
-    public static void printTree(HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> result) {
-        ArrayList<Casella> leaves = result.get(0).get(2); // prendi le foglie dell'albero
-        for (Casella leaf : leaves) {
-            if (leaf.getElement().equals(startSymbol)) {
-                printNode(leaf, 0); // stampa la foglia
-            }
-        }
-    }
-
-    private static void printNode(Casella node, int depth) {
-        if (node != null) {
-            for (int i = 0; i < depth; i++) {
-                System.out.print("\t"); // stampa una tabulazione per ogni livello di profondità
-            }
-            System.out.println(node.getElement()); // stampa l'elemento del nodo corrente
-            ArrayList<Casella> parents = new ArrayList<>(); // prendi i genitori del nodo corrente
-            parents.add(node.getParentOne());
-            parents.add(node.getParentTwo());
-            for (Casella parent : parents) {
-                printNode(parent, depth + 1); // stampa i genitori del nodo corrente
             }
         }
     }

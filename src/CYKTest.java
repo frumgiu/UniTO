@@ -1,3 +1,5 @@
+import utils.Casella;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,18 +26,15 @@ public class CYKTest {
                 for (int k = i; k <= j; k++) {
                     for (Map.Entry<String, ArrayList<ArrayList<String>>> entry: grammar.entrySet()) {
                         String keyRule = entry.getKey();
-                        Casella temp = new Casella(keyRule);
                         ArrayList<ArrayList<String>> listRulesForEntry = entry.getValue();
                         for (ArrayList<String> rule : listRulesForEntry) {
                             // Controllo se table[i, k] e table[k, j] hanno dei valori e se tra quelli ci sono dei simboli della regola che sto considerando
                             if (rule.size() == 2
                                     && table.get(i) != null
                                     && table.get(i).get(k) != null
-                                    //&& table.get(i).get(k).contains(rule.get(0))
                                     && haveParents(table.get(i).get(k), rule.get(0))
                                     && table.get(k+1) != null
                                     && table.get(k+1).get(j) != null
-                                    //&& table.get(k+1).get(j).contains(rule.get(1))
                                     && haveParents(table.get(k+1).get(j), rule.get(1))) {
                                 table.computeIfAbsent(i, t -> new HashMap<>());
                                 table.get(i).computeIfAbsent(j, t -> new ArrayList<>());
