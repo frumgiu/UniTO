@@ -1,43 +1,46 @@
-public class Casella<T, E> {
-    // Stringa che contiene la parola
-    T element;
-    // Riferimento ai parent che generano la parola
-    E parentOne;
-    E parentTwo;
+public class Casella {
+    private String element;
+    private Casella parentOne;
+    private Casella parentTwo;
 
-    public Casella(T element) {
+    public Casella(String element) {
         this.element = element;
         parentOne = null;
         parentTwo = null;
     }
 
-    public Casella(T element, E parentOne, E parentTwo) {
+    public Casella(String element, Casella parentOne, Casella parentTwo) {
         this.element = element;
         this.parentOne = parentOne;
         this.parentTwo = parentTwo;
     }
 
-    public T getElement() {
+    public String getElement() {
         return element;
     }
 
-    public void setElement(T element) {
+    public void setElement(String element) {
         this.element = element;
     }
 
-    public E getParentOne() {
+    public Casella getParentOne() {
         return parentOne;
     }
 
-    public void setParentOne(E parentOne) {
+    public void setParentOne(Casella parentOne) {
         this.parentOne = parentOne;
     }
 
-    public E getParentTwo() {
+    public Casella getParentTwo() {
         return parentTwo;
     }
 
-    public void setParentTwo(E parentTwo) {
+    public void setParentTwo(Casella parentTwo) {
         this.parentTwo = parentTwo;
+    }
+
+    @Override
+    public String toString() {
+        return element;
     }
 }
