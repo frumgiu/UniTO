@@ -42,8 +42,7 @@ public class uhuraSystem {
                     System.out.println("INPUT LINE: " + inputLine.toString().replace(",", ""));
                     System.out.println("The Context Free Grammar is G = (" + terminals + ", " + nonTerminals + ", P, " + startSymbol + " )\n");
                     printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
-                    //utils.PrintTools.printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
-                    //printTree(resultTable);
+                    printTree(startSymbol, resultTable);
                 }
             }
         }

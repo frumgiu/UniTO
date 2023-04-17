@@ -47,14 +47,19 @@ public class PrintTools {
     }
 
     public static void printTree(String startSymbol, HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> result) {
-        int n = result.get(0).size();
-        /* TODO: indice giusto qui */
-        ArrayList<Casella> leaves = result.get(0).get(2);   // prendi le foglie dell'albero
+        int n = -1;
+        for (int key : result.keySet()) {
+            if (key > n) {
+                n = key;
+            }
+        }
+        ArrayList<Casella> leaves = result.get(0).get(n);   // prendi le foglie dell'albero
         for (Casella leaf : leaves) {
             if (leaf.getElement().equals(startSymbol)) {
                 printNode(leaf, 0);                   // stampa la foglia
             }
         }
+        System.out.print("\n\n");
     }
 
     private static void printNode(Casella node, int depth) {
