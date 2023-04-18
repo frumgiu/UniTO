@@ -36,6 +36,6 @@ def max_wup_similarity(word1, word2):
 
 
 w1 = 'girl'
-w2 = 'cat'
+w2 = 'man'
 print('Date le parole: ', w1, ' e ', w2)
 print("Max similarity: ", max_wup_similarity(w1, w2))
