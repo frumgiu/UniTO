@@ -19,7 +19,7 @@ def lowest_common_subsumer(synset1, synset2):
     a1 = get_all_hypernyms(synset1)
     a2 = get_all_hypernyms(synset2)
     common_hypernyms = a1 & a2
-    if len(common_hypernyms) != 0:  # Per risolvere il problema dei verbi momentaneamente
+    if len(common_hypernyms) != 0:         # Per risolvere il problema dei verbi momentaneamente
         temp_lcs = min(common_hypernyms, key=lambda x: x.shortest_path_distance(synset1) + x.shortest_path_distance(synset2))
         lcs = temp_lcs
     return lcs
