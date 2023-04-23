@@ -25,10 +25,10 @@ def lowest_common_subsumer(synset1, synset2):
     return lcs
 
 
-def bfs_wordnet(synset_iniziale, synset_common):
-    if synset_iniziale.name() == synset_common.name():
-        return {synset_iniziale: 0}
-    queue = deque([(synset_iniziale, 0)])
+def bfs_wordnet(synset_starter, synset_common):
+    if synset_starter.name() == synset_common.name():
+        return {synset_starter: 0}
+    queue = deque([(synset_starter, 0)])
     path = {}
     while queue:
         s, depth = queue.popleft()

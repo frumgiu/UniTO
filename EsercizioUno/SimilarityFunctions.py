@@ -1,8 +1,8 @@
 import math
 from nltk.corpus import wordnet as wn
-from Shortestpath import shortest_len as sl
-from Shortestpath import DEPTH_MAX as DEPTH_MAX
-from Shortestpath import lowest_common_subsumer as lcs_fun
+from Utils import shortest_len as sl
+from Utils import DEPTH_MAX as DEPTH_MAX
+from Utils import lowest_common_subsumer as lcs_fun
 
 
 def similarity_function(name_function, list_words_one, list_words_two):
