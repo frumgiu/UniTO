@@ -59,6 +59,7 @@ def my_corpus_lesk(word, sentence):
             best_sense = sense
     return best_sense
 
+
 def lesk_wrapper(sentences):
     result = []
     words = []
