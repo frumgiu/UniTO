@@ -1,7 +1,6 @@
 import string
-from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords
-
+from nltk.corpus import wordnet as wn
 
 STOPWORDS = set(stopwords.words('english'))
 PUNCTUATION = string.punctuation
@@ -32,14 +31,27 @@ def compute_overlap(signature, context):
 def my_lesk(word, sentence):
     best_sense = None
     max_overlap = 0
-    context = preparation(sentence)
+    # context = preparation(sentence)
     for sense in wn.synsets(word):
         signature = create_signature(sense)
-        overlap = compute_overlap(signature, context)
-       # for h in sense.hypernyms():
-       #     signature_h = create_signature(h)
-       #     overlap += compute_overlap(signature_h, context)
+        overlap = compute_overlap(signature, sentence)
+        for h in sense.hyponyms():
+            signature_h = create_signature(h)
+            overlap += compute_overlap(signature_h, sentence)
         if overlap > max_overlap:
             max_overlap = overlap
             best_sense = sense
     return best_sense
+
+
+def lesk_wrapper(sentences):
+    result = []
+    words = []
+    for sentence in sentences:
+        sentence = preparation(sentence)
+        for word in sentence:
+            temp = sentence.copy()
+            temp.remove(word)
+            result.append(my_lesk(word, temp))
+            words.append(word)
+    return [words, result]
