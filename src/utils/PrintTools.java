@@ -18,10 +18,7 @@ public class PrintTools {
         for (int j = 0; j < n; j++) {
             System.out.printf("%" + numSpaceLine + "s %-" + numSpaceLine + "s", line.get(j), " | ");
             for (int i = j; i < n; i++) {
-                if(table.get(j).get(i) == null)
-                    System.out.print(" --- ");
-                else
-                    System.out.printf("%" + numSpace + "s", table.get(j).get(i));
+                System.out.printf("%" + numSpace + "s", table.get(j).get(i));
             }
             System.out.print("\n");
         }
