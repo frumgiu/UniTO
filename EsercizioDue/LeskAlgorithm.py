@@ -1,6 +1,7 @@
 import string
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet as wn
+from UtilsDue import get_random_word
 
 STOPWORDS = set(stopwords.words('english'))
 PUNCTUATION = string.punctuation
@@ -41,7 +42,7 @@ def my_lesk(word, sentence):
     return best_sense, max_overlap
 
 
-def run_test(w, wne, se):
+def lesk_compose_word(w, wne, se):
     a1, b1 = my_lesk(w, se)
     a2, b2 = my_lesk(w.replace('-', ''), se)
     a3, b3 = my_lesk(w.replace('-', ' '), se)
@@ -65,3 +66,24 @@ def run_test(w, wne, se):
         return a8
     else:
         return None
+
+
+def run_exercise(num_test, sentences, sentences_tag):
+    final_tot = 0
+    final_correct = 0
+    for j in range(0, num_test - 1):
+        tot = 0
+        correct = 0
+        for i in range(len(sentences)):
+            tot += 1
+            final_tot += 1
+            word, next_word = get_random_word(sentences_tag[i])
+            if '-' in word.word:
+                r = lesk_compose_word(word.word, next_word.word, sentences[i])
+            else:
+                r, o = my_lesk(word.word, sentences[i])
+            if r is not None and r.name() == word.tag:
+                correct += 1
+                final_correct += 1
+
+    return round(final_correct/final_tot, 2)
