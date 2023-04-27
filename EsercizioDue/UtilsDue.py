@@ -13,34 +13,22 @@ class Element:
         return f"{self.word} {self.tag}"
 
 
-def test(num_sentences=50):
-    selected_ids = random.sample(list(range(0, len(semcor.fileids()) - 1)), num_sentences)
-    selected_sentences = []
-    tag_words = []
-    tag_synset = []
-    for sentence_id in selected_ids:
-        sentence = " ".join(semcor.sents()[sentence_id])
-        tags = semcor.tagged_sents(tag="sem")[sentence_id]
-        for i in range(len(tags)):
-            if isinstance(tags[i], Tree) and isinstance(tags[i][0], str) and isinstance(tags[i].label(), Lemma):
-                tag_words.append(tags[i][0])
-                tag_synset.append(tags[i].label().synset())
-        selected_sentences.append(sentence)
-    return selected_sentences, [tag_words, tag_synset]
-
-
 def get_random_sentences(num_sentences=50):
     selected_sentences = []
     selected_tag_sentences = []
-    max_num = len(semcor.sents()) - 1
+    max_num = len(semcor.fileids()) - 1
     while len(selected_sentences) < num_sentences:
-        selected_id = random.randint(0, max_num)
-        sentence = " ".join(semcor.sents()[selected_id])
+        name_file_id = 'brownv'
+        while 'brownv' in name_file_id:                                         # Escludo i file che annotano solo verbi
+            num_file_id = random.randint(0, max_num)
+            name_file_id = semcor.fileids()[num_file_id]
+        num_sents_file = len(semcor.sents(name_file_id)) - 1
         tag_sentence = []
-        tags = semcor.tagged_sents(tag="sem")[selected_id]
-        for i in range(len(tags) - 1):
-            if isinstance(tags[i], Tree) and isinstance(tags[i][0], str) and isinstance(tags[i].label(), Lemma) \
-                    and tags[i].label().synset().pos() == 'n':
+        s_id = random.randint(0, num_sents_file)
+        sentence = " ".join(semcor.sents(name_file_id)[s_id])
+        tags = semcor.tagged_sents(name_file_id, tag="sem")[s_id]
+        for i in range(len(tags)):
+            if isinstance(tags[i], Tree) and isinstance(tags[i][0], str) and isinstance(tags[i].label(), Lemma) and tags[i].label().synset().pos() == 'n':
                 tag_sentence.append(Element(tags[i][0], tags[i].label().synset().name()))
         if len(tag_sentence) > 0:
             selected_sentences.append(sentence)

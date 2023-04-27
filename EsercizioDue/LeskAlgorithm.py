@@ -3,7 +3,7 @@ from nltk.corpus import stopwords
 from nltk.corpus import wordnet as wn
 
 STOPWORDS = set(stopwords.words('english'))
-PUNCTUATION = string.punctuation.replace('-', '')
+PUNCTUATION = string.punctuation
 
 
 def preparation(sentence):
@@ -31,8 +31,6 @@ def compute_overlap(signature, context):
 def my_lesk(word, sentence):
     best_sense = None
     max_overlap = 0
-    for p in PUNCTUATION:
-        word = word.replace(p, ' ')
     context = preparation(sentence)
     for sense in wn.synsets(word):
         signature = create_signature(sense)

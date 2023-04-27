@@ -1,9 +1,7 @@
 from nltk.wsd import lesk
 from nltk.tokenize import word_tokenize
-# from LeskAlgorithm import my_lesk
+from LeskAlgorithm import my_lesk
+from UtilsDue import get_random_sentences
 
-
-def get_semantic(seq, key_word):
-    # temp = word_tokenize(seq)
-    temp = lesk(temp, key_word)
-    return temp
+sentences, sentences_tag = get_random_sentences()
+print(sentences)
