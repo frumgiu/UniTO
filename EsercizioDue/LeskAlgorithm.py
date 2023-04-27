@@ -38,7 +38,7 @@ def my_lesk(word, sentence):
         if overlap > max_overlap:
             max_overlap = overlap
             best_sense = sense
-    return best_sense
+    return best_sense, max_overlap
 
 
 def lesk_wrapper(sentences):
@@ -51,3 +51,26 @@ def lesk_wrapper(sentences):
             result.append(my_lesk(word, temp))
             words.append(word)
     return [words, result]
+
+
+def run_test(w, wne, se):
+    a1, b1 = my_lesk(w, se)
+    a2, b2 = my_lesk(w.replace('-', ''), se)
+    a3, b3 = my_lesk(w.replace('-', ' '), se)
+    a4, b4 = my_lesk(w + wne, se)
+    a5, b5 = my_lesk(w + ' ' + wne, se)
+    a8, b8 = my_lesk(w + '_' + wne, se)
+    if a1 is not None and b1 >= b2 and b1 >= b3 and b1 >= b4 and b1 >= b5 and b1 >= b8:
+        return a1
+    elif a2 is not None and b2 >= b1 and b2 >= b3 and b2 >= b4 and b2 >= b5 and b2 >= b8:
+        return a2
+    elif a3 is not None and b3 >= b1 and b3 >= b2 and b3 >= b4 and b3 >= b5 and b3 >= b8:
+        return a3
+    elif a4 is not None and b4 >= b1 and b4 >= b2 and b4 >= b3 and b4 >= b5 and b4 >= b8:
+        return a4
+    elif a5 is not None and b5 >= b1 and b5 >= b2 and b5 >= b3 and b5 >= b4 and b5 >= b8:
+        return a5
+    elif a8 is not None and b8 >= b1 and b8 >= b2 and b8 >= b3 and b8 >= b4 and b8 >= b5:
+        return a8
+    else:
+        return None
