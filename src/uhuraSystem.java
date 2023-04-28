@@ -25,7 +25,7 @@ public class uhuraSystem {
         if (choice == 1) {
             runAlgorithm("englishRules.txt", "inputEnglish.txt");
         } else {
-            runAlgorithm("klingonTest.txt", "inputKlingon.txt");
+            runAlgorithm("klingon.txt", "inputKlingon.txt");
         }
         System.out.println("-------------------------------------------------------------------------------------------------------------------");
         System.out.println("Thanks for using ours demo! Good bye and... long life and prosperity.");
