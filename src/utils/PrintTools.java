@@ -13,7 +13,7 @@ public class PrintTools {
             System.out.println("The line IS NOT an element of the Context Free Grammar defined");
 
         System.out.println("Table created from the CYK algorithm");
-        int numSpace = findLongString(table);
+        int numSpace = 50;
         int numSpaceLine = findLongestWord(line);
         for (int j = 0; j < n; j++) {
             System.out.printf("%" + numSpaceLine + "s %-" + numSpaceLine + "s", line.get(j), " | ");
@@ -36,20 +36,9 @@ public class PrintTools {
         return 10;
     }
 
-    private static int findLongString(HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> table) {
-        int total = 5;
-        String s = table.values().stream()                      // stream dei valori della prima mappa
-                .flatMap(m -> m.values().stream())              // stream dei valori della seconda mappa
-                .flatMap(Collection::stream)                    // stream degli elementi della lista
-                .map(Casella::getElement).max(Comparator.comparing(String::length)).orElse(null);
-        if (s != null)
-            total = s.length();
-        return 45;
-    }
-
     public static void printTree(int n, String startSymbol, HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> result) {
         ArrayList<Casella> leaves = result.get(0).get(n);   // prendi le foglie dell'albero
-        System.out.println("Albero/i parsificazione:\n");
+        System.out.println("Albero/i parsificazione:");
         for (Casella leaf : leaves) {
             if (leaf.getElement().equals(startSymbol)) {
                 printNode(leaf, 0);                   // stampa la foglia

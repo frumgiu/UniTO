@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class CYKTest {
+public class CYK {
     static HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> CykAlgorithm (ArrayList<String> line, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
         HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> table = new HashMap<>();                 // Table for result
         int numWords = line.size();

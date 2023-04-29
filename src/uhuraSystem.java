@@ -37,7 +37,7 @@ public class uhuraSystem {
         if (readGrammarFile(grammarFile, grammar)) {
             if (readInputFile(inputFile, inputLines)) {
                 for (ArrayList<String> inputLine : inputLines) {
-                    resultTable = CYKTest.CykAlgorithm(inputLine, grammar);                                                                         // USO ALGORITMO
+                    resultTable = CYK.CykAlgorithm(inputLine, grammar);                                                                         // USO ALGORITMO
                     System.out.println("INPUT LINE: " + inputLine.toString().replace(",", ""));
                     System.out.println("The Context Free Grammar is G = (" + terminals + ", " + nonTerminals + ", P, " + startSymbol + " )\n");
                     printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
