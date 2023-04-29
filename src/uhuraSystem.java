@@ -30,6 +30,13 @@ public class uhuraSystem {
         System.out.println("Thanks for using ours demo! Good bye and... long life and prosperity.");
     }
 
+    /**
+     * In questo metodo vengono letti i file riguardanti la grammatica e le frasi input, salvati i dati nelle opportune strutture
+     * e poi eseguito l'algoritmo CYK.
+     * Il risultato viene poi stampato a schermo come matrice. Inoltre vengono stampati gli alberi di parsificazione di ogni frasi
+     * @param grammarFile File che contiene la lista delle regole in CNF della grammatica
+     * @param inputFile File che contiene le frasi da analizzare tramite algoritmo CYK
+     */
     private static void runAlgorithm(String grammarFile, String inputFile) {
         HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> resultTable;
         HashMap<String, ArrayList<ArrayList<String>>> grammar = new HashMap<>();
@@ -47,23 +54,32 @@ public class uhuraSystem {
         }
     }
 
-    public static boolean readGrammarFile(String filename, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
+    /**
+     * Dato un file lo legge e inserisce opportunamente il contenuto nella struttura dati.
+     * Per ogni regola letta il primo simbolo sarà la chiave della hashmap, mentre i successivi simboli saranno scomposti
+     * e inseriti in una lista.
+     * Le prime tre righe del file contengono informazioni sulla grammatica.
+     * @param filename Nome del file che contiene la grammatica
+     * @param grammar Struttura dove salvare la grammatica
+     * @return
+     */
+    private static boolean readGrammarFile(String filename, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
         try {
             Scanner scanner = new Scanner(new File(filename));
-            startSymbol = scanner.nextLine();
+            startSymbol = scanner.nextLine();                                   // La prima riga è il simbolo iniziale della grammatica
             terminals.addAll(Arrays.asList(splitLine(scanner.nextLine())));     // La seconda riga sono i simboli terminali
             nonTerminals.addAll(Arrays.asList(splitLine(scanner.nextLine())));  // La terza riga sono i simboli non terminali
 
             String lastLeftRule = null;
             while (scanner.hasNextLine()) {
-                ArrayList<String> tempLineSplited = new ArrayList<>(Arrays.asList(splitLine(scanner.nextLine())));
-                String currentLeftRule = tempLineSplited.get(0);
+                ArrayList<String> tempLineSplited = new ArrayList<>(Arrays.asList(splitLine(scanner.nextLine())));  // Leggo la riga spezzandola per lo spazio vuoto
+                String currentLeftRule = tempLineSplited.get(0);                                                    // Levo il primo simbolo, è la chiave della hashmap
                 tempLineSplited.remove(0);
                 ArrayList<ArrayList<String>> temp;
-                if (Objects.equals(lastLeftRule, currentLeftRule)) {
-                    temp = grammar.get(lastLeftRule);
+                if (Objects.equals(lastLeftRule, currentLeftRule)) {                                                // Se il primo simbolo della nuova riga è = all'ulitmo primo simbolo
+                    temp = grammar.get(lastLeftRule);                                                               // Devo aggiungere la nuova regola in una chiave già esistente
                 } else {
-                    lastLeftRule = currentLeftRule;
+                    lastLeftRule = currentLeftRule;                                                                 // Altrimenti devo creare una nuova lista di regole per una nuova chiave
                     temp = new ArrayList<>();
                 }
                 temp.add(tempLineSplited);
@@ -77,7 +93,7 @@ public class uhuraSystem {
         }
     }
 
-    public static boolean readInputFile(String filename, ArrayList<ArrayList<String>> result) {
+    private static boolean readInputFile(String filename, ArrayList<ArrayList<String>> result) {
         try {
             Scanner scanner = new Scanner(new File(filename));
             while (scanner.hasNextLine()) {
