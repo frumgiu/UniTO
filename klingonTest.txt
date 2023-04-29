@@ -1,6 +1,6 @@
 S
 tlhIngan Hol Dajatlh'a’ puq vIlegh jIH pa'Daq jIHtaH tlhIngan maH
-S NP VP Noun Nominal Verb P Symbol
+S NP VP Noun Nominal Verb P
 S VP NP
 S NP Verb
 VP NP Verb

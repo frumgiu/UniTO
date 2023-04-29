@@ -1,5 +1,4 @@
 import utils.Casella;
-
 import static utils.PrintTools.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,7 +41,7 @@ public class uhuraSystem {
                     System.out.println("INPUT LINE: " + inputLine.toString().replace(",", ""));
                     System.out.println("The Context Free Grammar is G = (" + terminals + ", " + nonTerminals + ", P, " + startSymbol + " )\n");
                     printResultMatrix(inputLine.size(), startSymbol, inputLine, resultTable);
-                    printTree(startSymbol, resultTable);
+                    printTree(inputLine.size(), startSymbol, resultTable);
                 }
             }
         }
