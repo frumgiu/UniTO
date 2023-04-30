@@ -55,13 +55,13 @@ public class uhuraSystem {
     }
 
     /**
-     * Dato un file lo legge e inserisce opportunamente il contenuto nella struttura dati.
+     * Dato un file di testo lo legge e inserisce opportunamente il contenuto nella struttura dati.
      * Per ogni regola letta il primo simbolo sarà la chiave della hashmap, mentre i successivi simboli saranno scomposti
      * e inseriti in una lista.
      * Le prime tre righe del file contengono informazioni sulla grammatica.
      * @param filename Nome del file che contiene la grammatica
      * @param grammar Struttura dove salvare la grammatica
-     * @return
+     * @return true se il file è stato letto con successo, false altrimenti
      */
     private static boolean readGrammarFile(String filename, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
         try {
@@ -93,6 +93,13 @@ public class uhuraSystem {
         }
     }
 
+    /**
+     * Dato un file di testo lo legge e estrare le frasi per inserirle nella struttura dati.
+     * Per ogni frase la scompone in singola parola e ne crea una lista.
+     * @param filename Nome del file che contiene le frasi input
+     * @param result Struttura dove salvare tutte le frasi scomposte
+     * @return true se il file è stato letto, false altrimenti
+     */
     private static boolean readInputFile(String filename, ArrayList<ArrayList<String>> result) {
         try {
             Scanner scanner = new Scanner(new File(filename));

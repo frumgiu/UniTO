@@ -9,7 +9,7 @@ public class CYK {
     static HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> CykAlgorithm (ArrayList<String> line, HashMap<String, ArrayList<ArrayList<String>>> grammar) {
         HashMap<Integer, HashMap<Integer, ArrayList<Casella>>> table = new HashMap<>();                 // Table for result
         int numWords = line.size();
-        for (int j = 1; j <= numWords; j++) {                                                            // Controllo tutte le regole per riempire la colonna base
+        for (int j = 1; j <= numWords; j++) {                                                            // Controllo tutte le regole per riempire la diagonale
             for (Map.Entry<String, ArrayList<ArrayList<String>>> entry: grammar.entrySet()) {
                 Casella temp = new Casella(entry.getKey());
                 ArrayList<ArrayList<String>> listRulesForEntry = entry.getValue();
