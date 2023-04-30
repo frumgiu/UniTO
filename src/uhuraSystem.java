@@ -27,7 +27,7 @@ public class uhuraSystem {
             runAlgorithm("klingonTest.txt", "inputKlingon.txt");
         }
         System.out.println("-------------------------------------------------------------------------------------------------------------------");
-        System.out.println("Thanks for using ours demo! Good bye and... long life and prosperity.");
+        System.out.println("Thanks for using ours demo! Good bye and... live long and prosper.");
     }
 
     /**
