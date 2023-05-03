@@ -1,14 +1,14 @@
 S
 book include prefer I she me Houston flight meal money through does prefer morning a
-S NP VP X1 X2 TWA PP Preposition Aux Det Nominal Verb Pronoun ProperNoun
+S NP VP X1 X2 TWA PP Prep Aux Det Nominal V Pronoun PN N
 S NP VP
 S X1 VP
 S book
 S include
 S prefer
-S Verb NP
+S V NP
 S X2 PP
-S Verb PP
+S V PP
 S VP PP
 X1 Aux NP
 NP I
@@ -22,37 +22,37 @@ Nominal flight
 Nominal meal
 Nominal money
 Nominal morning
-Nominal Nominal Noun
+Nominal Nominal N
 Nominal Nominal PP
 VP book
 VP include
 VP prefer
-VP Verb NP
+VP V NP
 VP X2 PP
-VP Verb PP
+VP V PP
 VP VP PP
-X2 Verb NP
-PP Preposition NP
-Verb book
-Verb include
-Verb prefer
+X2 V NP
+PP Prep NP
+V book
+V include
+V prefer
 Aux does
 Det a
 Det the
 Det this
 Det that
-Preposition through
-Preposition from
-Preposition to
-Preposition on
-Preposition near
-Noun morning
-Noun flight
-Noun meal
-Noun money
-Noun book
-ProperNoun Houston
-ProperNoun NWA
+Prep through
+Prep from
+Prep to
+Prep on
+Prep near
+N morning
+N flight
+N meal
+N money
+N book
+PN Houston
+PN NWA
 Pronoun I
 Pronoun she
 Pronoun he

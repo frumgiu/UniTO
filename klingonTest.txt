@@ -1,37 +1,37 @@
 S
 tlhIngan Hol Dajatlh'a’ puq vIlegh jIH pa'Daq jIHtaH tlhIngan maH
-S NP VP Noun Nominal Verb P
+S NP VP N Nominal V P
 S VP NP
-S NP Verb
-VP NP Verb
+S NP V
+VP NP V
 VP vIlegh
 VP jIHtaH
 VP Dajatlh'a'
 VP maH
 NP Nominal P
-NP Nominal Noun
+NP Nominal N
 NP puq
 NP pa'Daq
 NP tlhIngan
 NP Hol
 NP jIH
 NP maH
-Nominal Nominal Noun
+Nominal Nominal N
 Nominal puq
 Nominal jIH
 Nominal maH
 Nominal pa'Daq
 Nominal tlhIngan
 Nominal Hol
-Noun puq
-Noun jIH
-Noun maH
-Noun pa'Daq
-Noun tlhIngan
-Noun Hol
+N puq
+N jIH
+N maH
+N pa'Daq
+N tlhIngan
+N Hol
 P jIH
 P maH
-Verb vIlegh
-Verb jIHtaH
-Verb Dajatlh'a'
-Verb maH
+V vIlegh
+V jIHtaH
+V Dajatlh'a'
+V maH
