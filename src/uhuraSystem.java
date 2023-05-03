@@ -22,9 +22,9 @@ public class uhuraSystem {
         scanner.close();
         System.out.println("Starting the demo...\n");
         if (choice == 1) {
-            runAlgorithm("englishRules.txt", "inputEnglish.txt");
+            runAlgorithm("../englishRules.txt", "../inputEnglish.txt");
         } else {
-            runAlgorithm("klingonTest.txt", "inputKlingon.txt");
+            runAlgorithm("../klingonTest.txt", "../inputKlingon.txt");
         }
         System.out.println("-------------------------------------------------------------------------------------------------------------------");
         System.out.println("Thanks for using ours demo! Good bye and... live long and prosper.");

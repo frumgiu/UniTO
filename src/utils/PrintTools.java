@@ -13,7 +13,7 @@ public class PrintTools {
             System.out.println("The line IS NOT an element of the Context Free Grammar defined\n");
 
         System.out.println("Table created from the CYK algorithm:\n");
-        int numSpace = 50;
+        int numSpace = 36;
         int numSpaceLine = findLongestWord(line);
         for (int j = 0; j < n; j++) {
             System.out.printf("%" + numSpaceLine + "s %-" + numSpaceLine + "s", line.get(j), " | ");
