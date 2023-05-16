@@ -2,7 +2,6 @@ import string
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet as wn
 
-
 STOPWORDS = set(stopwords.words('english'))
 PUNCTUATION = string.punctuation
 
@@ -17,35 +16,44 @@ def preparation(sentence):
 
 
 def create_signature_sense(sense):
-    result = sense.definition()
-    for e in sense.examples():
-        result += ' '
-        result += e
-    return preparation(result)
+    return preparation(sense.definition() + ' ' + ' '.join(sense.examples()))
 
 
 def create_context_frame(frame):
-    result = frame.definition
-    for e in frame.FE.keys():
-        result += ' '
-        result += frame.FE[e].definition
-    return preparation(result)
+    return preparation(frame.definition + ' ' + ' '.join([frame.FE[e].definition for e in frame.FE.keys()]))
 
 
-def score(sense, frame):
-    context_sense = create_signature_sense(sense)
-    context_frame = create_context_frame(frame)
-    result = [value for value in context_sense if value in context_frame]
-    return len(result) + 1
+def score(context_sense, context_frame):
+    return len([value for value in context_sense if value in context_frame]) + 1
 
 
-def mapping_framename(frame):
+def common(context_frame, frame_name):
     best_sense = None
     max_score = 0
-    primo_termine = frame.name.split("_")[0] if "_" in frame.name else frame.name
-    for s in wn.synsets(primo_termine):
-        temp_score = score(s, frame)
+    for s in wn.synsets(frame_name):
+        context_sense = create_signature_sense(s)
+        temp_score = score(context_sense, context_frame)
         if temp_score > max_score:
             max_score = temp_score
             best_sense = s
     return best_sense, max_score
+
+
+def mapping_framename(frame_name, context_frame):
+    best_sense, max_score = common(frame_name, context_frame)
+    print('\n____ Frame disambiguato ____')
+    print(best_sense, ' ', max_score)
+
+
+def mapping_fe(frame, context_frame):
+    print('\n____ FE disambiguati ____')
+    for e in frame.FE.keys():
+        best_sense, max_score = common(e, context_frame)
+        print(e, ' ', best_sense, ' ', max_score)
+
+
+def mapping(frame):
+    context_frame = create_context_frame(frame)
+    frame_name = frame.name.split("_")[0] if "_" in frame.name else frame.name
+    mapping_framename(frame_name, context_frame)
+    mapping_fe(frame, context_frame)
