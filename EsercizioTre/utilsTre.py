@@ -38,7 +38,7 @@ def print_lus(list_id):
 
 def print_fe(list_id):
     for f in list_id:
-        key = f.FE.keys()
+        f.FE.keys()
         print('\n____ FEs frame', f.name, ' ____')
         FEs = f.FE.keys()
         for fe in FEs:
