@@ -42,5 +42,4 @@ def print_fe(list_id):
         print('\n____ FEs frame', f.name, ' ____')
         FEs = f.FE.keys()
         for fe in FEs:
-            fed = f.FE[fe]
             print('\tFE: {}'.format(fe))
