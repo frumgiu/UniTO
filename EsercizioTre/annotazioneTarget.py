@@ -67,7 +67,7 @@ bail_target = {
     'Judge': 'judge.n.01',
     'Status': 'status.n.01',
     'Time': 'time.n.02',
-    'Place': 'opographic_point.n.01',
+    'Place': 'topographic_point.n.01',
     'Manner': 'manner.n.01',
     'Means': 'means.n.01',
     'Purpose': 'determination.n.02',

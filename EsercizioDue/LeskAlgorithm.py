@@ -7,6 +7,7 @@ STOPWORDS = set(stopwords.words('english'))
 PUNCTUATION = string.punctuation
 
 
+# Fase di pre-processing
 def preparation(sentence):
     sentence = sentence.lower()
     for p in PUNCTUATION:
@@ -16,6 +17,8 @@ def preparation(sentence):
     return sentence
 
 
+# Per creare un contesto del senso prendo
+# le parole nel gloss e negli esempi
 def create_signature(sense):
     result = sense.definition()
     for e in sense.examples():
@@ -24,6 +27,7 @@ def create_signature(sense):
     return preparation(result)
 
 
+# Conto le gli overlap tra due stringhe
 def compute_overlap(signature, context):
     shared = [value for value in signature if value in context]
     return len(shared)
@@ -42,6 +46,7 @@ def my_lesk(word, sentence):
     return best_sense, max_overlap
 
 
+# Mi serve per le parole composte che non so come trovarle in wordnet
 def lesk_compose_word(w, wne, se):
     a1, b1 = my_lesk(w, se)
     a2, b2 = my_lesk(w.replace('-', ''), se)
@@ -75,11 +80,13 @@ def run_exercise(num_test, sentences, sentences_tag):
         for i in range(len(sentences)):
             final_tot += 1
             word, next_word = get_random_word(sentences_tag[i])
+            # Per i nomi composti con '-'
             if '-' in word.word:
                 next_word_temp = next_word if next_word == '' else next_word.word
                 r = lesk_compose_word(word.word, next_word_temp, sentences[i])
             else:
                 r, o = my_lesk(word.word, sentences[i])
+            # Conto quante parole ha disambiguato in modo corretto
             if r is not None and r.name() == word.tag:
                 final_correct += 1
     return round(final_correct/final_tot, 2)

@@ -7,6 +7,6 @@ def pearson_coeff(x, y):
 
 
 def spearman_coeff(x, y):
-    x_ranks = np.argsort(np.argsort(x))
-    y_ranks = np.argsort(np.argsort(y))
+    x_ranks = np.argsort(np.argsort(x))                 # Calcolo il rango di x
+    y_ranks = np.argsort(np.argsort(y))                 # Calcolo il rango di y
     return round((pearson_coeff(x_ranks, y_ranks)), 4)

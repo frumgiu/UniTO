@@ -5,6 +5,7 @@ from Utils import DEPTH_MAX as DEPTH_MAX
 from Utils import lowest_common_subsumer as lcs_fun
 
 
+# Mi serve per il main per non esportare tutte e tre le funzioni
 def similarity_function(name_function, list_words_one, list_words_two):
     index = len(list_words_one)
     result = []
