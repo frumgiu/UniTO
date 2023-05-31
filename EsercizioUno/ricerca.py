@@ -24,11 +24,12 @@ def get_ordered_hyponyms(term, definitions):
     hyponyms = []
 
     for synset in synsets:
-        print(synset, synset.max_depth())
-        for hyponym in synset.hyponyms():
-            word_list = create_context(hyponym)
-            similarity = len(set(word_list) & set(definitions))
-            hyponyms.append((hyponym, similarity))
+        # print(synset, synset.max_depth())
+        if synset.max_depth() > 6:              # Che valore usare
+            for hyponym in synset.hyponyms():
+                word_list = create_context(hyponym)
+                similarity = len(set(word_list) & set(definitions))
+                hyponyms.append((hyponym, similarity))
 
     hyponyms.sort(key=lambda x: x[1], reverse=True)
     ordered_hyponyms = [hyponym[0] for hyponym in hyponyms]
