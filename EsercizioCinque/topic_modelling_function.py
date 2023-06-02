@@ -1,4 +1,5 @@
 import re
+import csv
 import tarfile
 import smart_open
 from nltk.tokenize import RegexpTokenizer
@@ -16,6 +17,15 @@ def extract_documents(url='https://cs.nyu.edu/~roweis/data/nips12raw_str602.tgz'
                 if member.isfile() and re.search(r'nipstxt/nips\d+/\d+\.txt', member.name):
                     member_bytes = tar.extractfile(member).read()
                     yield member_bytes.decode('utf-8', errors='replace')
+
+
+def extract_documents_csv(file_path="spacenews-december-2022.csv", col_name='content'):
+    rows = []
+    with open(file_path, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            rows.append(row[col_name])
+    return rows
 
 
 def pre_processing(docs):
