@@ -64,37 +64,25 @@ def lexical_score(token_seq, word_list, k):
     return ls_blocks_score
 
 
-def getDepthCutoff(lexScores):
-    mean = np.mean(lexScores)
-    stdev = np.std(lexScores)
-    return mean - stdev
-
-
-def getDepthSideScore(lexScores, currentGap, left):
+def getDepthLeftRight(lexScores, i, left):
     depthScore = 0
-    i = currentGap
-    # continue traversing side while possible to find new peak
-    while lexScores[i] - lexScores[currentGap] >= depthScore:
-        # update depth score based on new peak
-        depthScore = lexScores[i] - lexScores[currentGap]
-        # go either left or right depending on specification
-        i = i - 1 if left else i + 1
-        # do not go beyond bounds of gap!
-        if (i < 0 and left) or (i == len(lexScores) and not left):
+    lr = i
+    while lexScores[lr] - lexScores[i] >= depthScore:
+        depthScore = lexScores[lr] - lexScores[i]
+        lr = lr - 1 if left else lr + 1
+        if (lr < 0 and left) or (lr == len(lexScores) and not left):
             break
     return depthScore
 
 
 def getGapBoundaries(lexScores):
     boundaries = []
-    cutoff = getDepthCutoff(lexScores)
+    cutoff = np.mean(lexScores) - np.std(lexScores)
 
     for i, score in enumerate(lexScores):
-        # find maximum depth to left and right
-        depthLeftScore = getDepthSideScore(lexScores, i, True)
-        depthRightScore = getDepthSideScore(lexScores, i, False)
+        depthLeftScore = getDepthLeftRight(lexScores, i, True)
+        depthRightScore = getDepthLeftRight(lexScores, i, False)
 
-        # add gap to boundaries if depth score beyond threshold
         depthScore = depthLeftScore + depthRightScore
         if depthScore >= cutoff:
             boundaries.append(i)
@@ -108,7 +96,6 @@ def getBoundaries(lexScores, pLocs, w):
 
     # do not allow duplicates of boundaries
     parBoundaries = set()
-
     # convert raw token boundary index to closest index where paragraph occurs
     for i in range(1, len(tokBoundaries)):
         parBoundaries.add(min(pLocs, key=lambda b: abs(b - tokBoundaries[i])))
