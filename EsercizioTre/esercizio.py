@@ -19,7 +19,7 @@ def extract_sentences_with_verb(verb, num_sentences):
         if any(tag in verb_pos_tags for (_, tag) in pos_tags):
             for word, pos in pos_tags:
                 if (word.lower() == verb[0] or word.lower() == verb[1] or word.lower() == verb[2] or word.lower() ==
-                    verb[3]) and pos in verb_pos_tags:
+                    verb[3] or word.lower() == verb[4]) and pos in verb_pos_tags:
                     verb_sentences.append(' '.join(sentence))
 
         if len(verb_sentences) >= num_sentences:
@@ -58,8 +58,9 @@ def extract_subject_object_pairs(verb, sentences):
 
                 if subj and obj:
                     subject_object_pairs.append((find_supersense(subj, s), find_supersense(obj, s), s))
+                    sentences.remove(s)
 
-    return [c for c in subject_object_pairs if c[0] is not None and c[1] is not None]
+    return [c for c in subject_object_pairs if c[0] is not None and c[1] is not None], sentences
 
 
 def create_semantic_clusters(pairs):
