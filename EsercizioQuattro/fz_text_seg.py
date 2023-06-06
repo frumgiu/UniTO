@@ -40,7 +40,7 @@ def create_blocks(token_seq, k):
     for i in range(0, len(token_seq), k):
         blocks.append(token_seq[i: i+k])
         for seq in token_seq[i: i+k]:
-            if 'fabioandrea' in seq:
+            if 'giuliapeppia' in seq:
                 par_tr.append(len(blocks) - 1)
     return blocks, par_tr
 

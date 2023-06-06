@@ -4,19 +4,8 @@ import tarfile
 import smart_open
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
-# Compute bigrams.
 from gensim.models import Phrases
-# Train LDA model.
 from gensim.models import LdaModel
-
-
-def extract_documents(url='https://cs.nyu.edu/~roweis/data/nips12raw_str602.tgz'):
-    with smart_open.open(url, "rb") as file:
-        with tarfile.open(fileobj=file) as tar:
-            for member in tar.getmembers():
-                if member.isfile() and re.search(r'nipstxt/nips\d+/\d+\.txt', member.name):
-                    member_bytes = tar.extractfile(member).read()
-                    yield member_bytes.decode('utf-8', errors='replace')
 
 
 def extract_documents_csv(file_path="spacenews-december-2022.csv", col_name='content'):
@@ -56,7 +45,7 @@ def find_bigrams(docs):
 
 def training(corpus, dictionary, num_topics=10, chunksize=200, passes=20, iterations=400, eval_every=None):
     # Make an index to word dictionary.
-    temp = dictionary[0]  # This is only to "load" the dictionary.
+    # temp = dictionary[0]  # This is only to "load" the dictionary.
     id2word = dictionary.id2token
 
     model = LdaModel(
@@ -77,7 +66,3 @@ def training(corpus, dictionary, num_topics=10, chunksize=200, passes=20, iterat
     avg_topic_coherence = sum([t[1] for t in top_topics]) / num_topics
     print('Average topic coherence: %.4f.' % avg_topic_coherence)
     return top_topics
-
-
-def grafico(topics):
-    return
