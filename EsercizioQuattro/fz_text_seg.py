@@ -73,26 +73,24 @@ def lexical_score(blocks_list, word_list):
     return scores, _smoothing(scores)
 
 
-def depth_side_score(ls_score, gap_i, left):
-    depth_score_side = 0
-    index = gap_i
-    while ls_score[index] - ls_score[gap_i] >= depth_score_side:
-        depth_score_side = ls_score[index] - ls_score[gap_i]
-        index = index - 1 if left else index + 1
-        if (index < 0 and left) or (index == len(ls_score) and not left):
-            break
-    return depth_score_side
-
-
-def get_depth_score(ls_score):
-    depth_scores = []
-    for i, score in enumerate(ls_score):
-        depthScore = depth_side_score(ls_score, i, True) + depth_side_score(ls_score, i, False)
-        if i != 0 and i != len(ls_score)-1:
-            depth_scores.append((depthScore, i))
-    return depth_scores
-
-
 def find_boundaries(ls_score, num_cuts):
+    def depth_side_score(_ls_score, gap_i, left):
+        depth_score_side = 0
+        index = gap_i
+        while _ls_score[index] - _ls_score[gap_i] >= depth_score_side:
+            depth_score_side = _ls_score[index] - _ls_score[gap_i]
+            index = index - 1 if left else index + 1
+            if (index < 0 and left) or (index == len(_ls_score) and not left):
+                break
+        return depth_score_side
+
+    def get_depth_score(_ls_score):
+        depth_scores = []
+        for i, score in enumerate(_ls_score):
+            depthScore = depth_side_score(_ls_score, i, True) + depth_side_score(_ls_score, i, False)
+            if i != 0 and i != len(_ls_score) - 1:
+                depth_scores.append((depthScore, i))
+        return depth_scores
+
     depth_score = sorted(get_depth_score(ls_score), reverse=True)
     return depth_score[0:num_cuts]
