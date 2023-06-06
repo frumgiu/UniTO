@@ -9,9 +9,8 @@ def tokenization(file_path, w):
     def create_token_seq(text_, w_):
         tokens = word_tokenize(text_)
         sequences = []
-        # TODO: sbagliato penso
         for i in range(0, len(tokens) - w_ + 1, w):
-            sequences.append(tokens[i:i + w_ - 1])
+            sequences.append(tokens[i:i + w_])
         return sequences
 
     def find_paragraph_breaks(text_):
@@ -57,11 +56,7 @@ def lexical_score(token_seq, word_list, k):
         block1 = token_seq[index - window_size: index]
         block2 = token_seq[index: index + window_size]
         ls_blocks_score.append(block_score(block1, block2, word_list, window_size))
-        window = np.ones(window_size) / window_size
-        # Smoothing
-        result = np.convolve(ls_blocks_score, window, mode='same')
-        print(result)
-    return ls_blocks_score
+    return ls_blocks_score, np.convolve(ls_blocks_score, np.ones(k) / k, mode='same')   # Smoothing
 
 
 def depth_cutoff(ls_score, liberal=True):
@@ -73,17 +68,26 @@ def depth_cutoff(ls_score, liberal=True):
         return np.mean(ls_score) - np.std(ls_score) / 2
 
 
-def depth_left_score(ls_score, gap_i):
+def depth_side_score(ls_score, gap_i, left):
     depth_score_side = 0
     index = gap_i
-    return 0
+    while ls_score[index] - ls_score[gap_i] >= depth_score_side:
+        depth_score_side = ls_score[index] - ls_score[gap_i]
+        index = index - 1 if left else index + 1
+        if (index < 0 and left) or (index == len(ls_score) and not left):
+            break
+    return depth_score_side
 
 
-def depth_score(ls_score):
-    # Calcolo il depth_cutoff
-    cutoff = depth_cutoff(ls_score)
-    # Calcolo il left_score del gap
-    # Calcolo il right_score del gap
-    # depth_score(i) = (left_score - i_score) + (right_score - i_score)
-    # Faccio il taglio solo se il depth_score(i) > depth_cutoff(i)
-    return
+def get_depth_score(ls_score):
+    depth_scores = []
+    for i, score in enumerate(ls_score):
+        depthScore = depth_side_score(ls_score, i, True) + depth_side_score(ls_score, i, False)
+        depth_scores.append(depthScore)
+    return depth_scores
+
+
+def find_boundaries(ls_score, num_cuts):
+    depth_score = sorted(get_depth_score(ls_score), reverse=True)
+    return depth_score
+
