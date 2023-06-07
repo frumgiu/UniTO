@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import nltk
 import spacy
 from nltk.corpus import brown
@@ -11,6 +10,9 @@ W = ['what', 'where', 'when', 'why', 'which', 'who', 'it', 'itself', 'that']
 
 
 def extract_sentences_with_verb(verb, num_sentences):
+    def _is_verb(v, w):
+        return w.lower() == v[0] or w.lower() == v[1] or w.lower() == v[2] or w.lower() == v[3] or w.lower() == v[4]
+
     verb_sentences = []
     verb_pos_tags = {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}  # PoS tag per i verbi a diversi tempi
 
@@ -18,8 +20,7 @@ def extract_sentences_with_verb(verb, num_sentences):
         pos_tags = nltk.pos_tag(sentence)
         if any(tag in verb_pos_tags for (_, tag) in pos_tags):
             for word, pos in pos_tags:
-                if (word.lower() == verb[0] or word.lower() == verb[1] or word.lower() == verb[2] or word.lower() ==
-                    verb[3] or word.lower() == verb[4]) and pos in verb_pos_tags:
+                if (_is_verb(verb, word)) and pos in verb_pos_tags:
                     verb_sentences.append(' '.join(sentence))
 
         if len(verb_sentences) >= num_sentences:
@@ -27,38 +28,52 @@ def extract_sentences_with_verb(verb, num_sentences):
     return verb_sentences[:num_sentences]
 
 
-def find_supersense(word, context):
-    if word.lower() in C:
-        return 'noun.person'
-    if word.lower() in W:
-        return 'noun.communication'
-    else:
-        s = lesk(context, word, 'n')
-        if s is not None:
-            return s.lexname()
-        else:
-            return s
-
-
 def extract_subject_object_pairs(verb, sentences):
+    def _find_supersense(word, context):
+        if word.lower() in C:
+            return 'noun.person'
+        if word.lower() in W:
+            return 'noun.communication'
+        else:
+            _s = lesk(context, word, 'n')
+            return _s.lexname() if _s is not None else _s
+
     subject_object_pairs = []
-    for s in sentences:
-        doc = parser(s)
+    for i in range(0, 3):
+        for s in sentences:
+            doc = parser(s)
 
-        for token in doc:
-            if token.lemma_ == verb[0]:
-                subj = None
-                obj = None
+            for token in doc:
+                if token.lemma_ == verb[0]:
+                    subj = None
+                    obj = None
+                    # Prima tutte le frasi attive dirette
+                    for child in token.children:
+                        if child.dep_ == 'nsubj' or child.dep_ == 'nsubjpass':
+                            subj = child.text
+                        elif child.dep_ == 'dobj':
+                            obj = child.text
+                    # Frasi attive non dirette
+                    if subj is None:
+                        for child in token.head.children:
+                            if child.dep_ == 'nsubj':
+                                subj = child.text
+                    if obj is None:
+                        for child in token.children:
+                            if child.dep_ == 'prep':
+                                for c in child.children:
+                                    if c.dep_ == 'pobj':
+                                        obj = c.text
+                                        break
+                            elif child.dep_ == 'ccomp':
+                                for c in child.children:
+                                    if c.dep_ == 'expl':
+                                        obj = c.text
+                                        break
 
-                for child in token.children:
-                    if child.dep_ == 'nsubj':
-                        subj = child.text
-                    elif child.dep_ == 'dobj':
-                        obj = child.text
-
-                if subj and obj:
-                    subject_object_pairs.append((find_supersense(subj, s), find_supersense(obj, s), s))
-                    sentences.remove(s)
+                    if subj and obj:
+                        subject_object_pairs.append((_find_supersense(subj, s), _find_supersense(obj, s), s))
+                        sentences.remove(s)
 
     return [c for c in subject_object_pairs if c[0] is not None and c[1] is not None], sentences
 
@@ -85,34 +100,3 @@ def analyze_semantic_clusters(clusters):
         cluster_frequencies[cluster] = frequency
 
     return cluster_frequencies
-
-
-def create_image(cluster_frequencies):
-    x_values = []
-    y_values = []
-
-    for cluster, frequency in cluster_frequencies.items():
-        subj, obj = cluster
-        x_values.append(f"{subj} - {obj}")
-        y_values.append(frequency)
-
-    # Creazione di una scala di colori in base alle frequenze
-    min_freq = min(y_values)
-    max_freq = max(y_values)
-    norm = plt.Normalize(min_freq, max_freq)
-    colors = plt.cm.viridis(norm(y_values))
-    # Creazione del grafico a barre
-    plt.figure(figsize=(22, 8))
-    bars = plt.bar(x_values, y_values, color=colors)
-    plt.xticks(rotation=45, ha='right')
-    plt.xlabel('Cluster')
-    plt.ylabel('Frequenza')
-    plt.title('Frequenze dei cluster semantici')
-
-    for i, bar in enumerate(bars):
-        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), str(y_values[i]),
-                 ha='center', va='bottom', fontsize=6)
-
-    plt.tight_layout()
-    # Visualizzazione del grafico
-    plt.show()
