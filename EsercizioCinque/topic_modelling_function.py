@@ -1,7 +1,4 @@
-import re
 import csv
-import tarfile
-import smart_open
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
 from gensim.models import Phrases
@@ -38,14 +35,13 @@ def find_bigrams(docs):
     for idx in range(len(docs)):
         for token in bigram[docs[idx]]:
             if '_' in token:
-                # Token is a bigram, add to document.
                 docs[idx].append(token)
     return docs
 
 
 def training(corpus, dictionary, num_topics=10, chunksize=200, passes=20, iterations=400, eval_every=None):
     # Make an index to word dictionary.
-    # temp = dictionary[0]  # This is only to "load" the dictionary.
+    temp = dictionary[0]  # This is only to "load" the dictionary.
     id2word = dictionary.id2token
 
     model = LdaModel(
