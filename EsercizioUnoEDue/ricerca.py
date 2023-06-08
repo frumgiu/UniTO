@@ -4,10 +4,8 @@ from def_overlap_funcs import filter_words
 
 
 def get_genus(term):
-    synsets = wordnet.synsets(term, pos=wordnet.NOUN)
-    if not synsets:
-        return []
-    return synsets
+    syn_list = wordnet.synsets(term, pos=wordnet.NOUN)
+    return [] if not syn_list else syn_list
 
 
 def create_context(h):
@@ -19,19 +17,23 @@ def create_context(h):
     return filter_words(word_list)
 
 
-def get_ordered_hyponyms(term, definitions):
-    synsets = get_genus(term)
-    hyponyms = []
+def get_ordered_words(terms, definitions):
+    def _find_similarity(def_list, h, h_list):
+        similarity = len(set(create_context(h)) & set(def_list))
+        if (h.lemmas()[0].name(), similarity) not in h_list:
+            h_list.append((h.lemmas()[0].name(), similarity))
 
-    for synset in synsets:
-        # print(synset, synset.max_depth())
-        if synset.max_depth() > 6:              # Che valore usare
-            for hyponym in synset.hyponyms():
-                word_list = create_context(hyponym)
-                similarity = len(set(word_list) & set(definitions))
-                hyponyms.append((hyponym, similarity))
+    hyponyms = []
+    for i in range(len(terms)):
+        syn_list = get_genus(terms[i][0])
+
+        for synset in syn_list:
+            if synset.max_depth() > 6:
+                for hyponym in synset.hyponyms():
+                    _find_similarity(definitions, hyponym, hyponyms)
+                for meronym in synset.part_meronyms():
+                    _find_similarity(definitions, meronym, hyponyms)
 
     hyponyms.sort(key=lambda x: x[1], reverse=True)
-    ordered_hyponyms = [hyponym[0] for hyponym in hyponyms]
+    return hyponyms
 
-    return ordered_hyponyms
