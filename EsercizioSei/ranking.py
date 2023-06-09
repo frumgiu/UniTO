@@ -7,6 +7,15 @@ def get_lemmas_len(lista):
     return lemma_list
 
 
+def get_lemmas_len_avg(lista):
+    result = []
+    for el in lista:
+        sense_list = wn.synsets(el)
+        lemma_list = [len(t.name()) for s in sense_list for t in s.lemmas()]
+        result.append(round(sum(lemma_list)/len(lemma_list), 4))
+    return result
+
+
 def get_hyponyms(lista):
     result = []
     for i in range(len(lista)):
