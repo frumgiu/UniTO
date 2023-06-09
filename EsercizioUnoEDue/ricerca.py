@@ -3,11 +3,16 @@ from nltk.tokenize import word_tokenize
 from def_overlap_funcs import filter_words
 
 
+# Questo metodo restituisce una lista di sinonimi del termine specificato che sono sostantivi
+# Utilizza la libreria wordnet per ottenere i sinonimi
 def get_synset_genus(term):
     syn_list = wordnet.synsets(term, pos=wordnet.NOUN)
     return [] if not syn_list else syn_list
 
 
+# Questo metodo crea un contesto associato a un synset
+# Prende in input un oggetto 'h' che rappresenta un synset
+# Restituisce una lista di parole che compongono il contesto
 def create_context(h):
     word_list = []
     definition_words = word_tokenize(h.definition())
@@ -17,12 +22,18 @@ def create_context(h):
     return filter_words(word_list)
 
 
+# Questo metodo calcola la similarità tra il contesto di un synset e una lista di definizioni
+# Prende in input una lista di definizioni 'def_list', un oggetto 'h' che rappresenta un synset e una lista 'h_list'
+# contenente coppie di synset e punteggi di similarità
 def compute_similarity(def_list, h, h_list):
     sim = len(set(create_context(h)) & set(def_list))
     if (h, sim) not in h_list:
         h_list.append((h, sim))
 
 
+# Questo metodo restituisce una lista ordinata di parole iponimi basata su termini e definizioni specificati.
+# Prende in input una lista di termini 'terms' e una lista di definizioni 'definitions'.
+# Restituisce una lista di tuple contenenti la parola iponimo e il punteggio di similarità.
 def get_ordered_words(terms, definitions):
     hyponyms = []
 
@@ -36,6 +47,10 @@ def get_ordered_words(terms, definitions):
     return [(h[0].lemmas()[0].name(), h[1]) for h in hyponyms]
 
 
+# Questo metodo restituisce una lista ordinata di parole iponimi basata su termini, definizioni e limite di
+# profondità specificati. Prende in input una lista di termini 'terms', una lista di definizioni 'definitions' e un
+# limite di profondità 'depth_limit'. Restituisce una lista di tuple contenenti la parola iponimo e il punteggio di
+# similarità
 def get_ordered_words_2(terms, definitions, depth_limit):
     hyponyms = []
 

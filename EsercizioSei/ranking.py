@@ -1,12 +1,18 @@
 from nltk.corpus import wordnet as wn
 
 
+# Questo metodo restituisce la lunghezza dei lemmi per una lista di parole.
+# Prende in input una lista di parole 'lista'.
+# Restituisce una lista con la lunghezza dei lemmi corrispondenti.
 def get_lemmas_len(lista):
     sense_list = [wn.synsets(l)[0] for l in lista]
     lemma_list = [len(t.lemmas()[0].name()) for t in sense_list]
     return lemma_list
 
 
+# Questo metodo calcola la media della lunghezza dei lemmi per una lista di parole.
+# Prende in input una lista di parole 'lista'.
+# Restituisce una lista con la media della lunghezza dei lemmi corrispondenti.
 def get_lemmas_len_avg(lista):
     result = []
     for el in lista:
@@ -16,6 +22,9 @@ def get_lemmas_len_avg(lista):
     return result
 
 
+# Questo metodo restituisce il numero di iponimi per una lista di parole.
+# Prende in input una lista di parole 'lista'.
+# Restituisce una lista con il numero di iponimi corrispondenti per ogni parola.
 def get_hyponyms(lista):
     result = []
     for i in range(len(lista)):
@@ -25,6 +34,9 @@ def get_hyponyms(lista):
     return result
 
 
+# Questo metodo restituisce le frequenze dei lemmi per una lista di parole.
+# Prende in input una lista di parole 'lista'.
+# Restituisce una lista con le frequenze dei lemmi corrispondenti.
 def get_frequencies(lista):
     sense_list = [wn.synsets(l)[0] for l in lista]
     lemma_list = [t.lemmas()[0].count() for t in sense_list]

@@ -5,6 +5,9 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 
 
+# Questo metodo esegue la tokenizzazione di un file di testo e restituisce sequenze di token e parole uniche.
+# Prende in input il percorso del file 'file_path' e la dimensione delle finestre 'w'.
+# Restituisce una tupla contenente le sequenze di token e le parole uniche.
 def tokenization(file_path, w):
     def _clean_tokens(tokens):
         return [token.lower() for token in tokens if token.isalpha()]
@@ -34,6 +37,9 @@ def tokenization(file_path, w):
     return tokens_seq_stem, unique_words
 
 
+# Questo metodo crea blocchi di token a partire da una sequenza di token e identifica i blocchi che contengono una
+# parola specifica. Prende in input la sequenza di token 'token_seq' e la dimensione del blocco 'k'. Restituisce una
+# tupla contenente i blocchi di token e un elenco di indici che indicano i blocchi contenenti la parola 'giuliapeppia'.
 def create_blocks(token_seq, k):
     blocks = []
     par_tr = []
@@ -45,6 +51,9 @@ def create_blocks(token_seq, k):
     return blocks, par_tr
 
 
+# Questo metodo calcola il punteggio di similarità lessicale tra i blocchi di token.
+# Prende in input una lista di blocchi di token 'blocks_list' e una lista di parole 'word_list'.
+# Restituisce una tupla contenente i punteggi di similarità lessicale e i punteggi sottoposti a smoothing.
 def lexical_score(blocks_list, word_list):
     def _blocks_score(block1, block2):
         numerator = 0
@@ -73,6 +82,9 @@ def lexical_score(blocks_list, word_list):
     return scores, _smoothing(scores)
 
 
+# Questo metodo trova i punti di taglio nel punteggio di similarità lessicale.
+# Prende in input il punteggio di similarità lessicale 'ls_score' e il numero di punti di taglio desiderati 'num_cuts'.
+# Restituisce una lista contenente i punti di taglio ottimali.
 def find_boundaries(ls_score, num_cuts):
     def depth_side_score(_ls_score, gap_i, left):
         depth_score_side = 0

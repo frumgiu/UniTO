@@ -5,6 +5,9 @@ from gensim.models import Phrases
 from gensim.models import LdaModel
 
 
+# Questo metodo estrae i documenti da un file CSV.
+# Prende in input il percorso del file CSV 'file_path' e il nome della colonna 'col_name' contenente i documenti.
+# Restituisce una lista contenente i documenti estratti.
 def extract_documents_csv(file_path="spacenews-december-2022.csv", col_name='content'):
     rows = []
     with open(file_path, 'r') as csvfile:
@@ -14,6 +17,9 @@ def extract_documents_csv(file_path="spacenews-december-2022.csv", col_name='con
     return rows
 
 
+# Questo metodo effettua il pre-processing dei documenti.
+# Prende in input una lista di documenti 'docs'.
+# Restituisce i documenti pre-processati.
 def pre_processing(docs):
     lemmatizer = WordNetLemmatizer()
     tokenizer = RegexpTokenizer(r'\w+')
@@ -29,6 +35,9 @@ def pre_processing(docs):
     return docs
 
 
+# Questo metodo trova i bigrammi all'interno dei documenti.
+# Prende in input i documenti pre-processati 'docs'.
+# Restituisce i documenti con i bigrammi aggiunti.
 def find_bigrams(docs):
     # Add bigrams and trigrams to docs (only ones that appear 20 times or more).
     bigram = Phrases(docs, min_count=20)
