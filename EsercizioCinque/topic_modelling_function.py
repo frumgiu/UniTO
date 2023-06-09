@@ -61,4 +61,4 @@ def training(corpus, dictionary, num_topics=10, chunksize=200, passes=20, iterat
     # Average topic coherence is the sum of topic coherences of all topics, divided by the number of topics.
     avg_topic_coherence = sum([t[1] for t in top_topics]) / num_topics
     print('Average topic coherence: %.4f.' % avg_topic_coherence)
-    return top_topics
+    return top_topics, avg_topic_coherence
