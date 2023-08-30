@@ -40,7 +40,7 @@ def get_ordered_words(terms, definitions):
     for i in range(len(terms)):
         syn_list = get_synset_genus(terms[i][0])
         for synset in syn_list:
-            if synset.max_depth() > 6:
+            if synset.max_depth() > 3:
                 [compute_similarity(definitions, hyponym, hyponyms) for hyponym in synset.hyponyms()]
                 # [find_words(definitions, meronym, hyponyms) for meronym in synset.part_meronyms()]
     hyponyms.sort(key=lambda x: x[1], reverse=True)
@@ -57,7 +57,7 @@ def get_ordered_words_2(terms, definitions, depth_limit):
     for i in range(len(terms)):
         syn_list = get_synset_genus(terms[i][0])
         for synset in syn_list:
-            if synset.max_depth() > 6:
+            if synset.max_depth() > 3:
                 [compute_similarity(definitions, hyponym, hyponyms) for hyponym in synset.hyponyms()]
     # Dopo aver provato con tutti i sensi degli iponimi del genus provo a fare i sensi degli iponimi
     for i in range(0, depth_limit):
