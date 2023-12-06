@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+
+.root {
+    -fx-font-family: 'Ubutntu', sans-serif;
+    -fx-background-color: rgba(204, 204, 236, 0.50);
+}
+
+.text_fields_newEmail {
+}
+
+#emailTextArea {
+    -fx-background-color: #fff;
+    -fx-font-size: 14;
+    -fx-border-color: #fff;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+#toLabel, #subjectLabel, #fromLabel {
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+}
+
+#subjectLabel {
+    -fx-font-weight: bold;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+}
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.text-area .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+.text-area:focused {
+    -fx-highlight-fill: rgba(98, 180, 227, 0.85);
+}
+
+.text-area .scroll-bar:vertical .increment-arrow,
+.text-area .scroll-bar:vertical .decrement-arrow,
+.text-area .scroll-bar:vertical .increment-button,
+.text-area .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+}
+.text-area .scroll-bar:vertical {
+    -fx-background-color: #fff;
+}
+
+.text-area .scroll-bar:vertical .thumb {
+    -fx-background-color: #292a2d;
+    -fx-background-insets: 8, 2, 0;
+    -fx-background-radius: 5;
+}
+
+#sendButton {
+    -fx-shape: "M3.4 20.4l17.45-7.48c.81-.35.81-1.49 0-1.84L3.4 3.6c-.66-.29-1.39.2-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z";
+    -fx-background-color: rgb(139, 202, 103);
+}
+
+#sendButton:hover {
+    -fx-background-color: #bae8ac;
+}
+
+.text-field  {
+    -fx-focus-color: #107869;
+}

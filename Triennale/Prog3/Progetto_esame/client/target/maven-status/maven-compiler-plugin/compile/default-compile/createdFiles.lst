@@ -1,0 +1,13 @@
+com\prog3\project\client\controllers\RootController.class
+com\prog3\project\client\controllers\ListController.class
+com\prog3\project\client\NewEmail.class
+com\prog3\project\client\connection\Connection.class
+com\prog3\project\client\controllers\NewEmailController.class
+com\prog3\project\client\controllers\NewEmailController$1.class
+com\prog3\project\client\model\Client.class
+com\prog3\project\client\controllers\ContentController.class
+com\prog3\project\client\ClientLauncher.class
+com\prog3\project\client\Regex.class
+com\prog3\project\client\connection\Connection$1.class
+com\prog3\project\client\controllers\EmailListViewCell.class
+com\prog3\project\client\controllers\MenuController.class

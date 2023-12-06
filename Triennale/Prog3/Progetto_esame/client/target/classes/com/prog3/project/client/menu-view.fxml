@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="menuViewPane" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="150.0" spacing="50.0" stylesheets="@stylesheet/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.prog3.project.client.controllers.MenuController">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+         <children>
+            <Label fx:id="clientImage" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" />
+            <Label fx:id="clientEmail" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="email" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+         </VBox.margin>
+      </VBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="6.0" VBox.vgrow="ALWAYS">
+         <children>
+         
+               <Label fx:id="inboxLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onClickInbox" styleClass="menu-view-text" text="   Ricevute">
+               <graphic>
+                  <Button fx:id="btnInboxLabel" maxHeight="18.0" maxWidth="18.0" minHeight="18.0" minWidth="18.0" mnemonicParsing="false">
+         </Button>
+               </graphic>
+            </Label>
+         
+               <Label fx:id="sentLabel" maxWidth="1.7976931348623157E308" onMouseClicked="#onClickOutbox" styleClass="menu-view-text" text="   Inviate">
+               <graphic>
+                  <Button fx:id="btnSentLabel" maxHeight="18.0" maxWidth="18.0" minHeight="18.0" minWidth="18.0" mnemonicParsing="false">
+         </Button>
+               </graphic>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+         </VBox.margin>
+      </VBox>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Label fx:id="serverStatusImg" maxHeight="18.0" maxWidth="18.0" minHeight="18.0" minWidth="18.0" prefHeight="18.0" prefWidth="18.0" styleClass="server-off" HBox.hgrow="NEVER" />
+            <Label fx:id="serverStatusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Stato server - spento" HBox.hgrow="NEVER" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="4.0" right="4.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
