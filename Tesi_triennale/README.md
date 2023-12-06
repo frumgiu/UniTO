@@ -1,5 +1,4 @@
 ## Progetto di tesi della studentessa Frumento Giulia
-### Contact: giuliafrumento23@gmail.com
 
 ---
 
