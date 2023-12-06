@@ -1,0 +1,40 @@
+S
+tlhIngan Hol Dajatlh'a’ ? puq vIlegh jIH pa'Daq jIHtaH tlhIngan maH !
+S NP VP N Nominal V P Symbol
+S VP NP
+S VP Symbol
+S NP V
+VP NP V
+VP vIlegh
+VP jIHtaH
+VP Dajatlh'a'
+VP maH
+NP Nominal P
+NP Nominal N
+NP puq
+NP pa'Daq
+NP tlhIngan
+NP Hol
+NP jIH
+NP maH
+Nominal Nominal N
+Nominal puq
+Nominal jIH
+Nominal maH
+Nominal pa'Daq
+Nominal tlhIngan
+Nominal Hol
+N puq
+N jIH
+N maH
+N pa'Daq
+N tlhIngan
+N Hol
+P jIH
+P maH
+V vIlegh
+V jIHtaH
+V Dajatlh'a'
+V maH
+Symbol ?
+Symbol !
