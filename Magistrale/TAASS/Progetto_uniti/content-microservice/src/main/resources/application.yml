@@ -1,0 +1,45 @@
+#---------------------------------------------------------------------------------------------------------
+#                                             Server Configuration
+#---------------------------------------------------------------------------------------------------------
+server:
+  port: 8082
+  forward-headers-strategy: framework
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Spring Configuration
+#-------------------------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: content-service
+
+  datasource:
+    url: jdbc:postgresql://db-contents:5432/contentsDB
+    username: admin
+    password: admin
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: 'false'
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: update
+
+  rabbitmq:
+    host: rabbitmq
+    username: guest
+    password: guest
+#    port: 15672
+    port: 5672
+    exchange: user.exchange
+    queue: user.queue
+    routingkey: user.routingkey
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Eureka Configuration
+#-------------------------------------------------------------------------------------------------------------------
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

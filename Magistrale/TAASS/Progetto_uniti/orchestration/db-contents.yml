@@ -1,0 +1,67 @@
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Deployment      --------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: db-contents
+    name: db-contents
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: db-contents
+    template:
+        metadata:
+            labels:
+                app: db-contents
+        spec:
+            containers:
+            - name: db-contents
+              image: postgres
+              ports:
+                  - containerPort: 5432
+              env:
+                  - name: POSTGRES_PASSWORD
+                    value: "admin"
+                  - name: POSTGRES_USER
+                    value: "admin"
+                  - name: POSTGRES_DB
+                    value: "contentsDB"
+              volumeMounts:
+                  - mountPath: /var/lib/postgresql/data
+                    name: db-contents-data
+            volumes:
+                - name: db-contents-data
+                  persistentVolumeClaim:
+                    claimName: db-contents-data
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Persistence      -------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-contents-data
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 100Mi
+---
+#-------------------------------------------------------------------------------------------------------------
+#------------------------------------       Service      -----------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-contents
+spec:
+    selector:
+        app: db-contents
+    ports:
+        - protocol: TCP
+          port: 5432
+          targetPort: 5432
