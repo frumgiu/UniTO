@@ -1,0 +1,409 @@
+########################
+## PROPOSE rules
+########################
+
+## ------------------------------------------------------
+## Propose COMBINE two item to create a new item (a tool)
+## ------------------------------------------------------
+sp {propose*combine
+    (state <s>  ^name escape
+                # Location must be equal to Final Location (window)
+                ^location <l>
+                ^final_location <l>
+                ^window.condition <wc> {<wc> > 0}
+                ^item <item1>
+                ^item <item2> {<item1> <> <item2>})
+    (state <s> -^item (^item1 <itemA> ^item2 <itemB>))
+-->
+    (<s> ^operator <op> +)
+    (<op>   ^name combine
+            ^item1 <item1>
+            ^item2 <item2>)
+}
+
+
+## -------------------------------
+## Propose DESTROY an item (tool)
+## -------------------------------
+sp {propose*destroy
+    (state <s>  ^name escape
+                ^window.condition <wc> {<wc> > 0}
+                ^item (<tool>   ^kind tool
+                                ^item1 (<item1> ^kind base)
+                                ^item2 (<item2> ^kind base)))
+-->
+    (<s> ^operator <op> +)
+    (<op>   ^name destroy
+            ^item1 <item1>
+            ^item2 <item2>
+            ^tool <tool>)
+}
+
+
+
+
+
+##########################################
+## RL (Reinforcement Learning) operators
+##########################################
+
+## ------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for COMBINE SLINGSHOT
+##                                      (sprig & rubber_band)
+## (Numeric indifferent)
+## ------------------------------------------------------------
+sp {RL*combine*SLINGSHOT
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name combine
+            ^item1 <item1>
+            ^item2 <item2>)
+    (<item1> ^name << sprig rubber_band >>)
+    (<item2> ^name << rubber_band sprig >>)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## ---------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for COMBINE SILLY_TOOL_1
+##                                              (sprig & pebble)
+## (Numeric indifferent)
+## ---------------------------------------------------------------
+sp {RL*combine*SILLY_TOOL_1
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name combine
+            ^item1 <item1>
+            ^item2 <item2>)
+    (<item1> ^name << sprig pebble >>)
+    (<item2> ^name << pebble sprig >>)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## ---------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for COMBINE SILLY_TOOL_2
+##                                          (rubber_band & pebble)
+## (Numeric indifferent)
+## ---------------------------------------------------------------
+sp {RL*combine*SILLY_TOOL_2
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name combine
+            ^item1 <item1>
+            ^item2 <item2>)
+    (<item1> ^name << rubber_band pebble >>)
+    (<item2> ^name << pebble rubber_band >>)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## ------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for DESTROY SLINGSHOT
+## (Numeric indifferent)
+## ------------------------------------------------------------
+sp {RL*destroy*SLINGSHOT
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name destroy
+            ^tool <tool>)
+    (<tool> ^name slingshot ^kind tool)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## --------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for DESTROY SILLY_TOOL_1
+## (Numeric indifferent)
+## --------------------------------------------------------------
+sp {RL*destroy*SILLY_TOOL_1
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name destroy
+            ^tool <tool>)
+    (<tool> ^name silly_tool_1 ^kind tool)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## --------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for DESTROY SILLY_TOOL_2
+## (Numeric indifferent)
+## --------------------------------------------------------------
+sp {RL*destroy*SILLY_TOOL_2
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name destroy
+            ^tool <tool>)
+    (<tool> ^name silly_tool_2 ^kind tool)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+
+
+
+########################
+## APPLICATION rules
+########################
+
+## ---------------------------------------------
+## Apply COMBINE SLINGSHOT (sprig & rubber_band)
+## ---------------------------------------------
+sp {apply*combine*SLINGSHOT
+    (state <s>  ^name escape
+                ^operator <op>
+                ^last_op <lop>        
+                ^item <item1>
+                ^item <item2> {<item1> <> <item2>}
+                -^item (^kind tool ^item1 <item1> ^item2 <item2>)
+                -^item (^kind tool ^item1 <item2> ^item2 <item1>))
+    (<op> ^name combine
+         ^item1 <item1>
+         ^item2 <item2>)
+
+    (<item1>    ^name << sprig rubber_band >>
+                ^tag <tag1>)
+    (<item2>    ^name << rubber_band sprig >>
+                ^tag <tag2>)
+-->
+    (<s> ^item <item1> -)
+    (<s> ^item <item2> -)
+    (<s> ^item <res> +)
+
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name combine ^tool slingshot)
+    
+    (<res>  ^name slingshot
+            ^kind tool
+            ^power 1
+            ^tag |SLINGSHOT|
+            ^item1 <item1>
+            ^item2 <item2>)
+    (write |------------->> Robot CREATE NEW TOOL:| (crlf))
+    (write |------------->> COMBINE | <tag1> | and | <tag2> | and obtain SLINGSHOT| (crlf))
+    (write (crlf) | |)
+}
+
+
+## -------------------------------------------
+## Apply COMBINE SILLY_TOOL_1 (sprig & pebble)
+## -------------------------------------------
+sp {apply*combine*SILLY_TOOL_1
+    (state <s>  ^name escape
+                ^operator <op>
+                ^last_op <lop>                
+                ^item <item1>
+                ^item <item2> {<item1> <> <item2>}
+                -^item (^kind tool ^item1 <item1> ^item2 <item2>)
+                -^item (^kind tool ^item1 <item2> ^item2 <item1>))
+    (<op> ^name combine
+         ^item1 <item1>
+         ^item2 <item2>)
+    (<item1>    ^name << sprig pebble >>
+                ^tag <tag1>)
+    (<item2>    ^name << pebble sprig >>
+                ^tag <tag2>)
+-->
+    (<s> ^item <item1> -)
+    (<s> ^item <item2> -)
+    (<s> ^item <res> +)
+
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name combine ^tool silly_tool_1)
+
+    (<res>  ^name silly_tool_1
+            ^kind tool
+            ^power 1
+            ^tag |SILLY TOOL (1)|
+            ^item1 <item1>
+            ^item2 <item2>)
+    (write |------------->> Robot CREATE NEW TOOL:| (crlf))
+    (write |------------->> COMBINE | <tag1> | and | <tag2> | and obtain a SILLY TOOL (1)| (crlf))
+    (write (crlf) | |)
+}
+
+
+## -------------------------------------------------
+## Apply COMBINE SILLY_TOOL_2 (rubber_band & pebble)
+## -------------------------------------------------
+sp {apply*combine*SILLY_TOOL_2
+    (state <s>  ^name escape
+                ^operator <op>
+                ^last_op <lop>
+                ^item <item1>
+                ^item <item2> {<item1> <> <item2>}
+                -^item (^kind tool ^item1 <item1> ^item2 <item2>)
+                -^item (^kind tool ^item1 <item2> ^item2 <item1>))
+    (<op> ^name combine
+         ^item1 <item1>
+         ^item2 <item2>)
+    (<item1>    ^name << pebble rubber_band >>
+                ^tag <tag1>)
+    (<item2>    ^name << rubber_band pebble >>
+                ^tag <tag2>)
+-->
+    (<s> ^item <item1> -)
+    (<s> ^item <item2> -)
+    (<s> ^item <res> +)
+
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name combine ^tool silly_tool_2)
+
+    (<res>  ^name silly_tool_2
+            ^kind tool
+            ^power 1
+            ^tag |SILLY TOOL 2|
+            ^item1 <item1>
+            ^item2 <item2>)
+    (write |------------->> Robot CREATE NEW TOOL:| (crlf))
+    (write |------------->> COMBINE | <tag1> | and | <tag2> | and obtain a SILLY TOOL (2)| (crlf))
+    (write (crlf) | |)
+}
+
+
+## -------------------------------------------------
+## Apply DESTROY an item (must have kind TOOL)
+## -------------------------------------------------
+sp {apply*destroy 
+    (state <s>  ^name escape
+                ^operator <op>
+                ^last_op <lop>
+                ^item (<tool> ^kind tool ^item1 <item1> ^item2 <item2>))
+    (<op>   ^name destroy
+            ^tool <tool>
+            ^item1 <item1>
+            ^item2 <item2>)
+    
+    (<item1> ^kind base)
+    (<item2> ^kind base)
+
+    (<tool> ^name <toolname> ^tag <tag-tool>)
+    (<item1> ^tag <tag1>)
+    (<item2> ^tag <tag2>)
+-->
+    (<s> ^item <tool> -)
+    (<s> ^item <item1> +)
+    (<s> ^item <item2> +)
+
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name destroy ^tool <toolname>)
+
+    (write |------------->> Robot DESTROY a TOOL:| (crlf))
+    (write |------------->> DESTROY tool | <tag-tool> | and obtain back items | <tag1> | and | <tag2> (crlf))
+    (write (crlf) | |)
+}
+
+
+
+
+
+#######################################
+# Elaboration Rules: Rewards
+#######################################
+
+## -----------------------------------------
+## Elaboration rewards for COMBINE SLINGSHOT
+## (+) Positive reward
+## -----------------------------------------
+sp {RL*elaborate*reward*combine*SLINGSHOT
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name combine ^tool slingshot)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (+ 0 1))
+    # (write |------------->> Reward combine SLINGSHOT: +1| (crlf))
+}
+
+
+## --------------------------------------------
+## Elaboration rewards for COMBINE SILLY_TOOL_1
+## (-) Negative reward
+## --------------------------------------------
+sp {RL*elaborate*reward*combine*SILLY_TOOL_1
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+            #    ^item <tool>)
+    # (<tool> ^name silly_tool_1 ^kind tool)
+    (<lop> ^name combine ^tool silly_tool_1)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+    # (write |------------->> Reward combine SILLY TOOL (1) : -1| (crlf))
+}
+
+
+## --------------------------------------------
+## Elaboration rewards for COMBINE SILLY_TOOL_2
+## (-) Negative reward
+## --------------------------------------------
+sp {RL*elaborate*reward*combine*SILLY_TOOL_2
+    (state <s> ^name escape
+               ^reward-link <r>
+            #    ^item <tool>)
+            ^last_op <lop>)
+    # (<tool> ^name silly_tool_2 ^kind tool)
+    (<lop> ^name combine ^tool silly_tool_2)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+    # (write |------------->> Reward combine SILLY TOOL (2) : -1| (crlf))
+}
+
+
+## -----------------------------------------
+## Elaboration rewards for DESTROY SLINGSHOT
+## (-) Negative reward
+## -----------------------------------------
+sp {RL*elaborate*reward*destroy*SLINGSHOT
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name destroy ^tool slingshot)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 2))
+    # (write |------------->> Reward destroy SLINGSHOT : -2| (crlf))
+}
+
+
+## -----------------------------------------------------
+## Elaboration rewards for DESTROY SILLY_TOOLS (1 and 2)
+## (+) Positive reward
+## -----------------------------------------------------
+sp {RL*elaborate*reward*destroy*SILLY_TOOL1
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name destroy ^tool silly_tool_1)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+    # (write |------------->> Reward combine SILLY TOOL (1) : -1| (crlf))
+}
+
+sp {RL*elaborate*reward*destroy*SILLY_TOOL2
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name destroy ^tool silly_tool_2)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+    # (write |------------->> Reward combine SILLY TOOL (2) : -1| (crlf))
+}
+
+
+
+###---------------------------------------------------------------
+###                       END OF FILE
+###---------------------------------------------------------------

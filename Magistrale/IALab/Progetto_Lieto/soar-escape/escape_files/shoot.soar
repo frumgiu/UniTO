@@ -1,0 +1,266 @@
+########################
+## PROPOSE rules
+########################
+
+## -------------------------------------------
+## Propose to SHOOT on the EDGE of the window
+## (with the SLINGSHOT)
+## - <weapon> is the tool created (launcher)
+## - <bullet> is the base item (launched)
+## - <target> refers to where you want to shoot
+##              (EDGE / CENTER of the window)
+## -------------------------------------------
+sp {propose*shoot
+    (state <s>  ^name escape
+                ^window <w>
+                ^location <l>
+                ^final_location <l>
+                ^item <weapon>
+                ^item <bullet>)
+    (<w>    ^condition <w-cond> {<w-cond> > 0}
+            ^target.name <target>)
+    (<weapon> ^kind tool ^name slingshot)
+    (<bullet> ^kind base ^name pebble)
+--> 
+    (<s> ^operator <op> +)
+    (<op>   ^name shoot
+            ^target <target>
+            ^shoot-power (ifeq <target> edge (+(* (rand-int 10) 10) 50) (+ (rand-int 4) 1))
+            ^weapon <weapon>
+            ^bullet <bullet>)
+}
+
+
+## ---------------------------------------------------------
+## Propose to THROW throw an object towards the window
+## NB:  In the case of shoot, a tool is used (slingshot). 
+##      In this case no tools are used.
+##      The thrown item can be "^kind base" or "^kind tool"
+## ---------------------------------------------------------
+sp {propose*throw
+    (state <s>  ^name escape
+                ^window <w>
+                ^location <l>
+                ^final_location <l>
+                ^item <item>)
+    (<w> ^condition <wc> {<wc> > 0})
+-->
+    (<s> ^operator <op> +)
+    (<op>   ^name throw
+            ^item <item>)
+}
+
+
+
+
+
+##########################################
+## RL (Reinforcement Learning) operators
+##########################################
+
+## -----------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for SHOOT to the EDGE
+## (Numeric indifferent)
+## -----------------------------------------------------------
+sp {RL*shoot*edge
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name shoot
+            ^target edge)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+## -------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for SHOOT to the CENTER
+## (Numeric indifferent)
+## -------------------------------------------------------------
+sp {RL*shoot*center
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name shoot
+            ^target center)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## ---------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for THROW an item
+## (Numeric indifferent)
+## ---------------------------------------------------------
+sp {RL*throw
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name throw)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+
+
+
+########################
+## APPLICATION rules
+########################
+
+## --------------------------
+## Apply SHOOT
+## --------------------------
+sp {apply*shoot
+        (state <s>  ^name escape
+                ^window <w>
+                ^item <weapon>
+                ^item <bullet>
+                ^last_op <lop>
+                ^operator <op>)
+
+    (<w> ^condition <wc> {<wc> > 0})
+    
+    (<weapon> ^kind tool ^name slingshot)
+    (<bullet> ^kind base ^name pebble)
+    (<op>   ^name shoot
+            ^weapon <weapon>
+            ^target <tname>
+            ^bullet <bullet>
+            ^shoot-power <s-pow>)
+    (<w> ^target <t>)
+    (<t> ^name <tname> ^tag <tag-w>)
+-->
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name shoot ^target <tname>)
+
+    (<w> ^condition <wc> -)
+    (<w> ^condition (- <wc> <s-pow>))
+    (write |------------->> Robot SHOOTS at the | <tag-w> | of the window! | (crlf))
+    (write |------------->> The shot has destruction power | <s-pow> |%| (crlf))
+    (write |------------->> The window condition was | <wc> |% AND NOW IS | (- <wc> <s-pow>) |%| (crlf))
+    (write (crlf) | |)
+}
+
+
+
+## --------------------
+## Apply THROW an item
+## --------------------
+sp {apply*throw
+    (state <s>  ^name escape
+                ^window <w>
+                ^item <item>
+                ^last_op <lop>
+                ^operator <op>)
+    (<w> ^condition <wc> {<wc> > 0})
+    (<op>   ^name throw
+            ^item <item>)
+    (<item> ^power <ipower>
+            ^tag <tag>)
+
+-->
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name throw)
+    (<w> ^condition <wc> -)
+    (<w> ^condition (- <wc> <ipower>))
+    (write |------------->> Robot THROWS the | <tag> | to the window! | (crlf))
+    (write |------------->> The | <tag> | has destruction power | <ipower> |%| (crlf))
+    (write |------------->> The window condition was | <wc> |% AND NOW IS | (- <wc> <ipower>) |%| (crlf))
+    (write (crlf) | |)
+}
+
+
+
+
+
+#######################################
+# Elaboration Rules: Rewards
+#######################################
+
+## --------------------------------------------
+## Elaboration rewards for SHOOT EDGE of window
+## (+) Positive reward
+## --------------------------------------------
+sp {RL*elaborate*reward*shoot*EDGE
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name shoot ^target edge)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (+ 0 1))
+}
+
+
+## -----------------------------------------------
+## Elaboration rewards for SHOOT CENTER of window
+## (+) Positive reward (small)
+## -----------------------------------------------
+sp {RL*elaborate*reward*shoot*CENTER
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name shoot ^target center)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (/ 1 10))
+}
+
+
+## ---------------------------------------------------
+## Elaboration rewards for THROW an item to the window
+## (+) Positive reward (very small)
+## ---------------------------------------------------
+sp {escape*elaborate*reward*throw
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name throw)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (/ 1 100))
+}
+
+
+#######################################
+# Compare Rules
+#######################################
+
+## --------------------------------------------
+## If the robot has a SLINGSHOT and a PEBBLE, 
+## it's better shoot than throw an object
+## --------------------------------------------
+sp {better*shoot
+    (state <s>  ^name         
+                ^item <weapon>
+                ^item <bullet>)
+    (<weapon> ^kind tool ^name slingshot)
+    (<bullet> ^kind base ^name pebble)
+    (<s> ^operator <op-shoot> +)
+    (<op-shoot> ^name shoot)
+    (<s> ^operator <op-throw> +)
+    (<op-throw> ^name throw)
+-->
+    (<s> ^operator <op-shoot> > <op-throw>)
+}
+
+
+
+#######################################
+# Just OUTPUT
+#######################################
+sp {output*window
+    (state <s>  ^name escape
+                ^window <w>
+                ^last_op <lop>)
+    (<lop> ^name << shoot throw >>)
+    (<w> ^condition <wc> {<wc> <= 0})
+-->
+    (write |------------->> THE WINDOW is BROKEN!! |)
+    (write (crlf) | |)
+}
+
+
+
+
+###---------------------------------------------------------------
+###                       END OF FILE
+###---------------------------------------------------------------

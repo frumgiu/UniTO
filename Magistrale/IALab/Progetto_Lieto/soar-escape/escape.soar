@@ -1,0 +1,3 @@
+pushd escape_files
+source escape_source.soar
+popd

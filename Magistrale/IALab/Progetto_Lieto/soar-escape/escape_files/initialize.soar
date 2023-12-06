@@ -1,0 +1,78 @@
+## ----------------------
+## Propose the top space
+## ----------------------
+sp {propose*initialize-escape
+    (state <s> ^superstate nil
+                -^name)
+-->
+    (<s> ^operator <o> +)
+    (<o> ^name initialize-escape)
+}
+
+
+
+## -------------------------
+## Initialize the top state
+## -------------------------
+sp {apply*initialize-escape
+    (state <s> ^operator <op>)
+    (<op> ^name initialize-escape)
+-->
+    (<s>    ^name escape 
+            ^final_location est
+            ^bot_info <bot-info>
+            ^direction <d1> <d2> <d3> <d4>
+            ^item <i1> <i2> <i3>
+            ^window <w>
+            ^trunk <tr1> <tr2>
+            ^trunk_method <trm1> <trm2>
+            ^location center
+            ^last_op nil)
+
+    ## Robot Information
+    (<bot-info> ^height 150.0 ^current_height 150.0 ^is_out false)
+
+    ## Directions
+    (<d1> ^name nord ^reward -1 ^tag |NORD ⬆︎|)
+    (<d2> ^name sud ^reward -1 ^tag |SUD ⬇︎|)
+    (<d3> ^name est ^reward 1 ^tag |EST ⮕|)
+    (<d4> ^name ovest ^reward -1 ^tag |OVEST ⬅︎|)
+
+    ## Items
+    (<i1> ^name sprig ^kind base ^power (/ 1 20) ^tag |SPRIG|)
+    (<i2> ^name pebble ^kind base ^power (/ 1 2) ^tag |PEBBLE|)
+    (<i3> ^name rubber_band ^kind base ^power (/ 1 50) ^tag |RUBBER-BAND|)
+
+    ## Window
+    (<w>    ^name window 
+            ^condition 100.0 ## Health of the window [0-100%]
+            ^target <t1> <t2>
+            ^height 350.0)
+    ## Window targets
+    (<t1> ^name center ^tag |CENTER|)
+    (<t2> ^name edge ^tag |EDGE|)
+
+    ##Trunks
+    (<tr1> ^name trunk1 ^height 100.0 ^diameter 30.0 ^tag |TRUNK n.1|)
+    (<tr2> ^name trunk2 ^height 100.0 ^diameter 30.0 ^tag |TRUNK n.2|)
+    (<trm1> ^name horizontal ^tag |HORIZONTAL|)
+    (<trm2> ^name vertical ^tag |VERTICAL|)
+
+
+    # JUST OUTPUT
+    (write (crlf) (crlf))
+    (write |*************************************************************************| (crlf))
+    (write |********************* Initialize ESCAPE GAME *********************| (crlf))
+    (write |*************************************************************************| (crlf))
+    (write |The robot has to leave the environment it's in.| (crlf))
+    (write |The robot has with him:| (crlf))
+    (write |+  Rubber-band| (crlf))
+    (write |+  Pebble| (crlf))
+    (write |+  Sprig| (crlf))
+    (write (crlf) | |)
+}
+
+
+###---------------------------------------------------------------
+###                       END OF FILE
+###---------------------------------------------------------------

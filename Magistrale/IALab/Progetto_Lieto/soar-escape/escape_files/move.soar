@@ -1,0 +1,168 @@
+########################
+## PROPOSE rules
+########################
+
+## ----------------------------------------------------
+## Propose moving in any available direction (n-s-o-e)
+## (except center)
+## ----------------------------------------------------
+sp {propose*move
+    (state <s>  ^name escape
+                ^direction <d>
+                ^location center)
+    (<d> ^name <dir>)
+-->
+    (<s> ^operator <op> +)
+    (<op>   ^name move
+            ^dir <dir>)
+}
+
+
+## -----------------------------
+## Propose moving back to center
+## -----------------------------
+sp {propose*move*back
+    (state <s>  ^name escape
+                ^location <loc> {<loc> <> center}
+                ^final_location <fl> {<fl> <> <loc>})
+-->
+    (<s> ^operator <op> +)
+    (<op> ^name move_back)
+}
+
+
+
+
+
+##########################################
+## RL (Reinforcement Learning) operators
+##########################################
+
+## -----------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for moving NORD
+## (Numeric indifferent)
+## -----------------------------------------------------
+sp {RL*move*nord
+   (state <s> ^name escape
+              ^operator <op> +)
+   (<op> ^name move
+         ^dir nord)
+-->
+   (<s> ^operator <op> = 0)
+}
+
+## ----------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for moving SUD
+## (Numeric indifferent)
+## ----------------------------------------------------
+sp {RL*move*sud
+   (state <s> ^name escape
+              ^operator <op> +)
+   (<op> ^name move
+         ^dir sud)
+-->
+   (<s> ^operator <op> = 0)
+}
+
+## ------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for moving OVEST
+## (Numeric indifferent)
+## ------------------------------------------------------
+sp {RL*move*ovest
+   (state <s> ^name escape
+              ^operator <op> +)
+   (<op> ^name move
+         ^dir ovest)
+-->
+   (<s> ^operator <op> = 0)
+}
+
+## ----------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for moving EST
+## (Numeric indifferent)
+## ----------------------------------------------------
+sp {RL*move*est
+   (state <s> ^name escape
+              ^operator <op> +)
+   (<op> ^name move
+         ^dir est)
+-->
+   (<s> ^operator <op> = 0)
+}
+
+
+
+
+
+########################
+## APPLICATION rules
+########################
+
+## -----------------------------------------------------
+## Apply move
+## -----------------------------------------------------
+sp {apply*move
+    (state <s>  ^operator <op>
+                ^location center
+                ^final_location <fl>
+                ^direction <d>
+                ^last_op <lop>)
+    (<op>   ^name move
+            ^dir <dir>)
+    (<d>    ^name <dir>
+            ^tag <tag>)
+-->
+    (<s> ^location center - <dir> +)
+    (<s> ^last_op <lop> - move +)
+    (write |------------->> Robot MOVE: | <tag> (crlf))
+    (write |------------->> Robot | (ifeq <dir> <fl>
+                                            |FOUND the window!! :)|
+                                            |DID NOT FIND the window :(|) (crlf))
+    (write (crlf) | |)
+}
+
+
+
+## ---------------------------
+## Apply move back to center
+## ---------------------------
+sp {apply*move*back
+    (state <s>  ^operator <op>
+                ^location <l> {<l> <> center}
+                ^last_op <lop>)
+    (<op>   ^name move_back)
+-->
+    (<s> ^last_op <lop> - move_back +)
+    (<s> ^location <l> - center +)
+    (write |------------->> Robot MOVE BACK to CENTER ◼︎| (crlf))
+    (write (crlf) | |)
+}
+
+
+
+
+
+#######################################
+# Elaboration Rules: Rewards
+#######################################
+
+## ---------------------------
+## Elaboration MOVE rewards
+## ---------------------------
+sp {RL*elaborate*reward*move
+    (state <s>  ^name escape
+                ^reward-link <r>
+                ^location <d-name>
+                ^last_op move
+                ^direction <dir>)
+    (<dir> ^name <d-name> ^reward <d-reward>)
+-->
+    # (write |------------->> REWARD for: | <d-name> | of: |<d-reward> (crlf))
+    (<r> ^reward <rr>)
+    (<rr> ^value <d-reward>)
+}
+
+
+###---------------------------------------------------------------
+###                       END OF FILE
+###---------------------------------------------------------------

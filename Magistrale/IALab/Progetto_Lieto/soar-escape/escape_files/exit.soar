@@ -1,0 +1,277 @@
+########################
+## PROPOSE rules
+########################
+
+## -----------------------------------------------
+## Propose CREATE a ladder with trunk1 and trunk2
+## -----------------------------------------------
+sp {propose*create*ladder
+    (state <s>  ^name escape
+                ^location <l>
+                ^final_location <l>            
+                ^window <w>
+                ^trunk <trunk1> 
+                ^trunk <trunk2> {<trunk2> <> <trunk1>}
+                ^trunk_method.name <trunk-method>)
+    (state <s> -^trunk (^name ladder))
+    (<w> ^condition <wc> {<wc> <= 0})
+-->
+    (<s> ^operator <op> +)
+    (<op>   ^name create-ladder
+            ^trunk1 <trunk1>
+            ^trunk2 <trunk2>
+            ^trunk_method <trunk-method>)
+}
+
+
+## -------------------------
+## Propose DESTROY a ladder
+## -------------------------
+sp {propose*destroy*ladder
+    (state <s>  ^name escape
+                ^location <l>
+                ^final_location <l>            
+                ^window <w>
+                ^bot_info <bot-info>
+                ^trunk <ladder>)
+    (<w> ^condition <wc> {<wc> <= 0})
+    (<bot-info> ^current_height <bot-curr-height> { <bot-curr-height> < 350})
+    (<ladder> ^name ladder)
+--> 
+    (<s> ^operator <op> +)
+    (<op>   ^name destroy-ladder
+            ^item <ladder>)
+}
+
+
+
+
+
+##########################################
+## RL (Reinforcement Learning) operators
+##########################################
+
+## --------------------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for CREATE LADDER in horizontal way
+## (Numeric indifferent)
+## --------------------------------------------------------------------------
+sp {RL*create*LADDER*horizontal
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name create-ladder
+            ^trunk1 <trunk1>
+            ^trunk2 <trunk2>
+            ^trunk_method horizontal)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## -----------------------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for CREATE LADDER in vertical way
+## (Numeric indifferent)
+## -----------------------------------------------------------------------
+sp {RL*create*LADDER*vertical
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name create-ladder
+            ^trunk1 <trunk1>
+            ^trunk2 <trunk2>
+            ^trunk_method vertical)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+## ----------------------------------------------------------
+## Soar-RL (Reinforcement Learning) rule for DESTROY LADDER 
+## (Numeric indifferent)
+## ----------------------------------------------------------
+sp {RL*destroy*LADDER
+    (state <s>  ^name escape
+                ^operator <op> +)
+    (<op>   ^name destroy-ladder
+            ^item <ladder>)
+-->
+    (<s> ^operator <op> = 0)
+}
+
+
+
+
+
+########################
+## APPLICATION rules
+########################
+
+## --------------------
+## Apply CREATE LADDER
+## --------------------
+sp {apply*create*LADDER
+    (state <s>  ^name escape
+                ^operator <op>
+                ^location <l>
+                ^final_location <l>            
+                ^window.height <w-h>
+                ^trunk <trunk1>
+                ^trunk <trunk2> {<trunk1> <> <trunk2>}
+                ^trunk_method <trm>
+                ^last_op <lop>
+                ^bot_info <bot-info>)
+    (state <s> -^trunk (^name ladder))
+    (<bot-info> ^height <bot-height> ^current_height <bot-curr-height>)
+    (<op>   ^name create-ladder
+            ^trunk1 <trunk1>
+            ^trunk2 <trunk2>
+            ^trunk_method <trunk-method>)
+    (<trunk1> ^height <tr1h> ^diameter <tr1d>)
+    (<trunk2> ^height <tr2h> ^diameter <tr2d>)
+    (<trm> ^name <trunk-method> ^tag <trm-t>)
+-->
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name create-ladder ^method <trunk-method>)
+
+    (<bot-info> ^current_height <bot-curr-height> - )
+    (<bot-info> ^current_height (ifeq <trunk-method> vertical   (+(+ <tr1h> <tr2h>)<bot-height>) # then
+                                                                (+(+ <tr1d> <tr2d>) <bot-height>))) # else
+
+    (<s> ^trunk <trunk1> -)
+    (<s> ^trunk <trunk2> -)
+    (<s> ^trunk <res> +)
+    (<res>  ^name ladder
+            ^item1 <trunk1>
+            ^item2 <trunk2>)
+
+    (write |------------->> Robot created a LADDER with trunks in a | <trm-t> | way of height |
+                            (ifeq <trunk-method> vertical (+ <tr1h> <tr2h>) (+ <tr1d> <tr2d>)) |cm.| (crlf))
+    (write |------------->> Robot has height: | <bot-height> |cm. Window has height: | <w-h> |cm.| (crlf))
+    (write (crlf) | |)
+}
+
+
+## --------------------
+## Apply DESTROY LADDER
+## --------------------
+sp {apply*destroy*ladder
+    (state <s>  ^name escape
+                ^operator <op>
+                ^location <l>
+                ^final_location <l>            
+                ^window <w>
+                ^trunk <ladder>
+                ^bot_info.current_height <bch>
+                ^last_op <lop>)   
+    (<op>   ^name destroy-ladder
+            ^item <ladder>)
+    (<ladder> ^name ladder ^item1 <trunk1> ^item2 <trunk2>)
+-->
+    (<s> ^last_op <lop> - <newop> +)
+    (<newop> ^name destroy-ladder)
+
+    (<s> ^trunk <ladder> -)
+    (<s> ^trunk <trunk1> +)
+    (<s> ^trunk <trunk2> +)
+    (write |------------->> The ladder is too low to reach the window. Maximum reachable height: | <bch> |cm.| (crlf))
+    (write |------------->> Robot has DESTROYED the ladder.| (crlf))
+    (write (crlf) | |)
+}
+
+
+
+
+
+#######################################
+# Elaboration Rules: Rewards
+#######################################
+
+## --------------------------------------------------------
+## Elaboration rewards for CREATE LADDER in horizontal way
+## (-) Negative reward
+## --------------------------------------------------------
+sp {RL*elaborate*reward*create*LADDER*horizontal
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name create-ladder ^method horizontal)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+}
+
+
+## --------------------------------------------------------
+## Elaboration rewards for CREATE LADDER in vertical way
+## (+) Positive reward
+## --------------------------------------------------------
+sp {RL*elaborate*reward*create*LADDER*vertical
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name create-ladder ^method vertical)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (+ 0 1))
+}
+
+
+## ---------------------------------------
+## Elaboration rewards for DESTROY LADDER 
+## (-) Negative reward
+## ---------------------------------------
+sp {RL*elaborate*reward*destroy*LADDER
+    (state <s> ^name escape
+               ^reward-link <r>
+               ^last_op <lop>)
+    (<lop> ^name destroy-ladder)
+-->
+    (<r> ^reward <rr>)
+    (<rr> ^value (- 0 1))
+}
+
+
+
+
+
+#######################################
+#######################################
+
+# Elaboration Rules: Rewards
+
+#######################################
+#######################################
+
+sp {robot*out
+    (state <s>  ^name escape
+                ^bot_info <bot-info>)
+    (<bot-info> ^current_height <bot-curr-height> { <bot-curr-height> >= 350})
+-->
+    (<bot-info> ^is_out false - true +)
+    (write |------------->> Robot CLIMB the LADDER and goes out the window: FREEDOM !! | (crlf))
+}
+
+
+
+
+sp {elaborate*done
+   (state <s>   ^name escape
+                ^final_location <fl>
+                ^location <fl>
+                ^window <w>
+                ^bot_info <bot-info>)
+
+    (<w> ^condition <wc> {<wc> <= 0})
+    (<bot-info> ^is_out true)
+            
+-->
+    (write (crlf) (crlf))
+    (write |*************************************************************************| (crlf))
+    (write |********************* Finish ESCAPE GAME *********************| (crlf))
+    (write |*************************************************************************| (crlf))
+   (halt)
+}
+
+
+
+###---------------------------------------------------------------
+###                       END OF FILE
+###---------------------------------------------------------------

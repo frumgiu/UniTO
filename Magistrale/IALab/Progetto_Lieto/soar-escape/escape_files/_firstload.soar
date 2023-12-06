@@ -1,0 +1,4 @@
+rl -s learning on
+# indifferent-selection --stats
+indifferent-selection -g
+indifferent-selection -e 0.1

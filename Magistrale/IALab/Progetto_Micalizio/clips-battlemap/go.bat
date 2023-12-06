@@ -1,0 +1,7 @@
+(load 0_Main.clp)
+(load 1_Env.clp)
+(load ./maps/4_information.clp)
+(load 3_MyAgent_1.clp)
+(reset)
+(run)
+(clear)
