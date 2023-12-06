@@ -1,0 +1,115 @@
+/* BASE */
+.filter-sidebar-container {
+    position: fixed!important;
+    top: 0; right: 0;
+    margin-top: 1.4rem;
+    margin-right: 1.4rem;
+    z-index: 9;
+    overflow: auto;
+    background-color: transparent;
+    border-radius: 0.8rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0.122rem 0.122rem 0.163rem;
+}
+
+.filter-sidebar-inner {
+    height: 100%;
+    width: 100%;
+    border-radius: 0.8rem;
+    background: rgba(255,255,255, 0.4);
+    padding: 0.5rem 0.8rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.filter-title {
+    width: fit-content;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: black;
+    vertical-align: middle;
+    cursor: default;
+}
+
+.filter-icon {
+    width: fit-content;
+    vertical-align: middle;
+    margin: 0 0.3rem;
+    cursor: default;
+}
+
+.title-list{
+    width: fit-content;
+    max-width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: default;
+}
+
+/* RESPONSIVE */
+@media screen and (min-width: 1281px) {
+    .filter-sidebar-container {
+        display: block;
+        width: 28%;
+        max-width: 35%;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1280px){
+    .filter-sidebar-container {
+        display: block;
+        width: 30%;
+        max-width: 50%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .filter-sidebar-container {
+        display: none;
+        width: 40%;
+        max-width: 45%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .filter-sidebar-container {
+        display: none;
+        width: 40%;
+        max-width: 45%;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 767px) {
+    .filter-sidebar-container {
+        display: none;
+        width: 70%;
+        max-width: 70%;
+        margin-top: 4rem;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .filter-sidebar-container {
+        display: none;
+        width: 70%;
+        max-width: 70%;
+        margin-top: 4rem;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) and (orientation: landscape) {
+    .filter-sidebar-container {
+        display: none;
+        width: 70%;
+        max-width: 70%;
+        margin-top: 2rem;
+    }
+}
+
+@media screen and (max-width: 319px) {
+    .filter-sidebar-container {
+        display: none;
+        width: 75%;
+        max-width: 75%;
+        margin-top: 5.2rem;
+    }
+}

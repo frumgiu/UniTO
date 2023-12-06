@@ -1,0 +1,10 @@
+/dist
+/build
+server/node_modules
+client/node_modules
+.vscode
+.idea
+photo-map-*.tgz
+client/src/components/HelloWorld.vue
+server/package-lock.json
+client/package-lock.json
