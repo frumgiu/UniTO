@@ -1,0 +1,17 @@
+{   read(x);
+    read(y);
+    cond
+        when(== x y) do print(*(x 1 2 3))
+        when(> x y) do print(1)
+        else print(y);
+    print(2)
+ }
+ /*
+{   = x 5;
+    while (> x 0) {
+            = x - x 1;
+            print(x)
+        };
+        print(*(1 2 3 - 4 3))
+}
+*/

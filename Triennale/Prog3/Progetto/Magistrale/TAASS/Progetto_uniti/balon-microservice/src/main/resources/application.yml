@@ -1,0 +1,39 @@
+#---------------------------------------------------------------------------------------------------------
+#                                             Server Configuration
+#---------------------------------------------------------------------------------------------------------
+server:
+  port: 8085
+  forward-headers-strategy: framework
+
+
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Spring Configuration
+#-------------------------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: balon-service
+
+  datasource:
+    url: jdbc:postgresql://db-saleads:5432/saleadsDB
+    username: admin
+    password: admin
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: 'false'
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: update
+
+
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Eureka Configuration
+#-------------------------------------------------------------------------------------------------------------------
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

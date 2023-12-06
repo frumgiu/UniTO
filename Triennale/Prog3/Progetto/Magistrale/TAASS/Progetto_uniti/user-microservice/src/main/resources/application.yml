@@ -1,0 +1,38 @@
+#---------------------------------------------------------------------------------------------------------
+#                                             Server Configuration
+#---------------------------------------------------------------------------------------------------------
+server:
+  port: 8083
+  forward-headers-strategy: framework
+  
+  
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Spring Configuration
+#-------------------------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://db-users:5432/usersDB
+    username: admin
+    password: admin
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: 'false'
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: update
+
+
+#-------------------------------------------------------------------------------------------------------------------
+#                                             Eureka Configuration
+#-------------------------------------------------------------------------------------------------------------------
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
