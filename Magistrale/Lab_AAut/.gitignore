@@ -1,0 +1,10 @@
+.idea
+
+*.xml
+*.pdf
+*.gv
+*.csv
+*.txt
+
+my_iris_predictions
+Lab_AAut.iml
